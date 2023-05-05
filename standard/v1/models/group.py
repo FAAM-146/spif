@@ -1,0 +1,211 @@
+
+from __future__ import annotations
+from typing import Optional
+
+from cfunits import Units
+from pydantic import BaseModel
+from vocal.netcdf.mixins import GroupNetCDFMixin
+from vocal.validation import (
+    re_root_validator as root_validator,
+    variable_exists_factory as variable_exists,
+    dimension_exists_factory as dimension_exists,
+    group_exists_factory as group_exists,
+    variable_has_types_factory as variable_has_types,
+    variable_has_dimensions_factory as variable_has_dimensions,
+    substitutor,
+    _randomize_object_name
+)
+
+from ..attributes import GroupAttributes, InstrumentGroupAttributes
+
+from .dimension import Dimension
+from .variable import Variable
+
+# Define some data types for use in the group schema validators
+FLOATS = [f'<float{i}>' for i in [16, 32, 64, 128]]
+INTS = [f'<int{i}>' for i in [8, 16, 32, 64]]
+UINT8 = ['<uint8>', '<ubyte>']
+INT8 = ['<int8>', '<byte>']
+UINTS = UINT8 + [f'<uint{i}>' for i in [16, 32, 64]]
+UINT64 = ['<uint64>']
+
+
+def core_group(func):
+    """
+    A decorator which will only apply a validator to the 'core' group
+    """
+    def wrapper(cls, values):
+        name = values.get('meta').name
+        if name != 'core':
+            return values
+        return func(cls, values)
+    return _randomize_object_name(wrapper)
+    
+
+
+class GroupMeta(BaseModel):
+    class Config:
+        title = 'Group Metadata'
+
+    name: str
+
+
+class Group(BaseModel, GroupNetCDFMixin):
+    class Config:
+        title = 'Group Schema'
+
+    meta: GroupMeta
+    attributes: GroupAttributes
+    dimensions: Optional[list[Dimension]]
+    variables: list[Variable]
+    groups: Optional[list[None]]
+
+    # Ensure that the 'core' group has the required variables
+    check_for_image_variable = root_validator(core_group(variable_exists('image')))
+    check_for_timestamp_variable = root_validator(core_group(variable_exists('timestamp')))
+    check_for_startpixel_variable = root_validator(core_group(variable_exists('startpixel')))
+    check_for_width_variable = root_validator(core_group(variable_exists('width')))
+    check_for_height_variable = root_validator(core_group(variable_exists('height')))
+    check_for_overload_variable = root_validator(core_group(variable_exists('overload')))
+
+    # Ensure that the 'core' group has the required dimensions
+    check_for_image_num_dimension = root_validator(core_group(dimension_exists('image_num')))
+    check_for_pixel_dimension = root_validator(core_group(dimension_exists('pixel')))
+
+    # Ensure that variables have the correct dimensions
+    check_image_dims = root_validator(core_group(variable_has_dimensions('image', ['pixel'])))
+    check_timestamp_dims = root_validator(core_group(variable_has_dimensions('timestamp', ['image_num'])))
+    check_startpixel_dims = root_validator(core_group(variable_has_dimensions('startpixel', ['image_num'])))
+    check_width_dims = root_validator(core_group(variable_has_dimensions('width', ['image_num'])))
+    check_height_dims = root_validator(core_group(variable_has_dimensions('height', ['image_num'])))
+    
+    # Check that variables have the correct type
+    image_has_correct_type = root_validator(core_group(variable_has_types('image', UINT8)))
+    timestamp_has_correct_type = root_validator(core_group(variable_has_types('timestamp', UINT64)))
+    startpixel_has_correct_type = root_validator(core_group(variable_has_types('startpixel', UINTS)))
+    width_has_correct_type = root_validator(core_group(variable_has_types('width', UINTS)))
+    height_has_correct_type = root_validator(core_group(variable_has_types('height', UINTS)))
+    overload_has_correct_type = root_validator(core_group(variable_has_types('overload', INT8)))
+
+    # Ensure that required dimensions are unlimited size
+    @root_validator
+    @core_group
+    def check_unlimited_dimensions(cls, values):
+        dimensions = values.get('dimensions')
+        if dimensions is None:
+            return values # No dimensions to check - this will be caught in the dimension_exists validator
+        name = values.get('meta').name
+        for dim in dimensions:
+            if dim.name in ['image_num', 'pixel']:
+                if dim.size != None:
+                    raise ValueError(f'{name} - The \'{dim.name}\' dimension must be unlimited size')
+        return values
+
+    @root_validator 
+    @core_group
+    def check_time_units_valid(cls, values):
+        variables = values.get('variables', [])
+        valid_unit = Units('seconds since 1970-01-01 00:00:00')
+        if variables is None:
+            return values
+        for var in variables:
+            if var.meta.name == 'timestamp':
+                units = getattr(var.attributes, 'units', None)
+                if units is None:
+                    raise ValueError(f'\'timestamp\' variable must have a units attribute')
+                if not Units(units).isvalid:
+                    raise ValueError(f'\'timestamp\' variable units not valid (got {units})')
+                if not Units(units).equivalent(valid_unit):
+                    raise ValueError(f'\'timestamp\' variable units must be equivalent to \'{valid_unit}\'')
+        return values
+
+    @root_validator
+    @core_group
+    def check_timestamp_variable_standard_name(cls, values):
+        variables = values.get('variables', [])
+        if variables is None:
+            return values
+        for var in variables:
+            if var.meta.name == 'timestamp':
+                standard_name = getattr(var.attributes, 'standard_name', None)
+                if standard_name is None:
+                    raise ValueError(f'\'timestamp\' variable must have a standard_name attribute')
+                if standard_name != 'time':
+                    raise ValueError(f'\'timestamp\' variable standard_name must be \'time\'')
+        return values
+    
+    @substitutor
+    def substitute_time_units(cls, values):
+        """
+        Replace the timestamp units with a valid units string if it is specified
+        as being derived from file
+        """
+        variables = values.get('variables', [])
+        for var in variables:
+            if var['meta']['name'] == 'timestamp':
+                units = var.get('attributes', {}).get('units', None)
+                if units is not None and 'derived_from_file' in units:
+                    var['attributes']['units'] = 'seconds since 1970-01-01T00:00:00Z'
+        return values
+
+
+class InstrumentGroup(BaseModel, GroupNetCDFMixin):
+    class Config:
+        title = 'Instrument Group Schema'
+
+    meta: GroupMeta
+    attributes: InstrumentGroupAttributes
+    dimensions: Optional[list[Dimension]]
+    groups: list[Group]
+    variables: list[Variable]
+
+    # Ensure that the 'core' group exists
+    check_core_group_exists = root_validator(group_exists('core'))
+
+    # Ensure that the 'instrument' group has the correct variables
+    check_color_value_variable_exists = root_validator(variable_exists('color_value'))
+    check_array_size_variable_exists = root_validator(variable_exists('array_size'))
+    check_image_size_variable_exists = root_validator(variable_exists('image_size'))
+    check_resolution_variable_exists = root_validator(variable_exists('resolution'))
+    check_wavelength_variable_exists = root_validator(variable_exists('wavelength'))
+    check_pathlength_variable_exists = root_validator(variable_exists('pathlength'))
+
+    # Ensure that the 'instrument' group has the correct dimensions
+    check_array_dimensions_dimension_exists = root_validator(dimension_exists('array_dimensions'))
+    check_pixel_colors_dimension_exists = root_validator(dimension_exists('pixel_colors'))
+
+    # Ensure required variables have the correct dimensions
+    check_color_value_dims = root_validator(variable_has_dimensions('color_value', ['pixel_colors']))
+    check_array_size_dims = root_validator(variable_has_dimensions('array_size', ['array_dimensions']))
+    check_image_size_dims = root_validator(variable_has_dimensions('image_size', ['array_dimensions']))
+    check_resolution_dims = root_validator(variable_has_dimensions('resolution', ['array_dimensions']))
+    
+    # Check that variables have the correct type
+    check_color_value_has_correct_type = root_validator(variable_has_types('color_value', FLOATS))
+    check_array_size_has_correct_type = root_validator(variable_has_types('array_size', INTS))
+    check_image_size_has_correct_type = root_validator(variable_has_types('image_size', INTS))
+    check_resolution_has_correct_type = root_validator(variable_has_types('resolution', FLOATS))
+    check_wavelength_has_correct_type = root_validator(variable_has_types('wavelength', FLOATS))
+    check_pathlength_has_correct_type = root_validator(variable_has_types('pathlength', FLOATS))
+
+    @root_validator
+    def array_dimensions_dimension_size_1_or_2(cls, values):
+        """
+        array_dimensions dimension must have a size of 1 or 2
+        """
+        dims = values.get('dimensions')
+
+        fail_msg = (f'The \'array_dimensions\' dimension must have a ' 
+                    'size of 1 or 2')
+
+        try:
+            for dim in dims:
+                if dim.name == 'array_dimensions':
+                    if dim.size not in [1, 2]:
+                        raise ValueError(fail_msg)
+                    return values
+        except Exception:
+            # No dimensions defined, fall through to fail
+            pass
+
+        raise ValueError(fail_msg)
