@@ -1,0 +1,118 @@
+meta:
+  file_pattern: spif_example.nc
+  short_name: spif
+  canonical_name: A SPIF example dataset
+  description: >-
+    Provides a minimal example of a SPIF dataset
+  references:
+  - ['Example dataset documentation', 'https://some.url/']
+attributes:
+  Conventions: SPIF-1
+# No variables or dimensions are required in the root group
+variables: []
+dimensions: []
+groups:
+# These top level groups are the instrument groups, as defined in the SPIF
+# specification.
+- meta:
+    name: instrument_1_group
+  dimensions:
+  # Required instrument group dimensions
+  - name: array_dimensions
+    size: 2
+  - name: pixel_colors
+    size: 3
+  attributes:
+    # Required instrument group attributes
+    instrument_name: instrument_1
+    instrument_long_name: instrument_1 with a more descriptive name
+  variables:
+  # Required instrument group variables
+  - meta:
+      name: color_value
+      datatype: <float32>
+      required: true
+    attributes:
+      attribute1: Testing a variable attribute not in the SPIF spec
+    dimensions: ['pixel_colors']
+  - meta:
+      name: array_size
+      datatype: <int32>
+      required: true
+    dimensions: ['array_dimensions']
+    attributes: {}
+  - meta:
+      name: image_size
+      datatype: <int32>
+      required: true
+    dimensions: ['array_dimensions']
+    attributes: {}
+  - meta:
+      name: resolution
+      datatype: <float32>
+      required: true
+    dimensions: ['array_dimensions']
+    attributes: {}
+  - meta:
+      name: wavelength
+      datatype: <float32>
+      required: true
+    dimensions: []
+    attributes: {}
+  - meta:
+      name: pathlength
+      datatype: <float32>
+      required: true
+    dimensions: []
+    attributes: {}
+  groups: # instrument_1_group sub-groups. A core group is required.
+  - meta:
+      name: core
+    attributes: {}
+    variables:
+    # Required core group variables
+    - meta:
+        name: timestamp
+        datatype: <uint64>
+        required: true
+      attributes:
+        attribute1: testing a variable attribute not in the SPIF spec
+        standard_name: time
+        units: "<str: derived_from_file>"
+      dimensions: ['image_num']
+    - meta:
+        name: image
+        datatype: <uint8>
+        required: true
+      dimensions: ['pixel']
+      attributes: {}
+    - meta:
+        name: startpixel
+        datatype: <uint8>
+        required: true
+      dimensions: ['image_num']
+      attributes: {}
+    - meta:
+        name: width
+        datatype: <uint8>
+        required: true
+      dimensions: ['image_num']
+      attributes: {}
+    - meta:
+        name: height
+        datatype: <uint8>
+        required: true
+      dimensions: ['image_num']
+      attributes: {}
+    - meta:
+        name: overload
+        datatype: <byte>
+        required: true
+      dimensions: ['image_num']
+      attributes: {}
+    dimensions:
+    # Required core group dimensions, both UNLIMITED in dimension size
+    - size: null
+      name: image_num
+    - size: null
+      name: pixel
