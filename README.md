@@ -1,6 +1,15 @@
 # SPIF
 Single Particle Image Format data standard
 
+## Names of stuff
+
+  - ***vocal*:** The netCDF standards compliance checking package (all lower case?)  
+  - ***vocal* project:** code repository that contains vocabulary definitions of netCDF standard  
+  - **standard vocabulary:** The defined file structure and component criteria of a standard. Stored as JSON?  
+  - **product definition:** The defined file structure and component criteria of a netCDF file that follows the standard vocabulary and so satisfies the standard. Stored as yaml?  
+ 
+  
+
 ## Standard compliance checking
 The easiest way to create reference SPIF files and check the compliance of existing files is to use *[Vocal](https://github.com/FAAM-146/vocal)* and the SPIF *Vocal project*.
 
