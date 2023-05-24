@@ -3,12 +3,13 @@ Single Particle Image Format data standard
 
 ## Names of stuff
 
-  - ***vocal*:** The netCDF standards compliance checking package (all lower case?)  
-  - ***vocal* project:** code repository that contains vocabulary definitions of netCDF standard  
-  - **standard vocabulary:** The defined file structure and component criteria of a standard. Stored as JSON?  
-  - **product definition:** The defined file structure and component criteria of a netCDF file that follows the standard vocabulary and so satisfies the standard. Stored as yaml?  
+  - ***vocal*:** The netCDF vocabulary management and standards compliance checking package
+  - **vocabulary:** Attribute, group, and variable naming rules of a standard.  
+  - ***vocal* project:** code repository that contains vocabulary definitions, file structure, and compliance rules. Contained in py file defs in project
+  - **product definition:** Definition of the file contents that are compliant with the rules as specified by the *vocal* project. Minimal example may be included in project or a more complete file defined by user. Definition may have attrs not in std (if allowed by the std) but must satisfy all rules of std  
+  - **product:** A netCDF that is described by the product definition
  
-  
+  Describe what is in v1/dirs
 
 ## Standard compliance checking
 The easiest way to create reference SPIF files and check the compliance of existing files is to use *[Vocal](https://github.com/FAAM-146/vocal)* and the SPIF *Vocal project*.
