@@ -1,15 +1,18 @@
 # SPIF
 Single Particle Image Format data standard
 
-## Names of stuff
+## Terms and Usage
 
   - ***vocal*:** The netCDF vocabulary management and standards compliance checking package
   - **vocabulary:** Attribute, group, and variable naming rules of a standard.  
-  - ***vocal* project:** code repository that contains vocabulary definitions, file structure, and compliance rules. Contained in py file defs in project
+  - ***vocal* project:** code repository containing vocabulary definitions, file structure, and compliance rules. See [Project Contents](#project-contents).  
   - **product definition:** Definition of the file contents that are compliant with the rules as specified by the *vocal* project. Minimal example may be included in project or a more complete file defined by user. Definition may have attrs not in std (if allowed by the std) but must satisfy all rules of std  
   - **product:** A netCDF that is described by the product definition
- 
+
+## *vocal* project contents
   Describe what is in v1/dirs
+   
+   + Contained in py file defs in project
 
 ## Standard compliance checking
 The easiest way to create reference SPIF files and check the compliance of existing files is to use *[Vocal](https://github.com/FAAM-146/vocal)* and the SPIF *Vocal project*.
