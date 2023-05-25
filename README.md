@@ -23,12 +23,37 @@ The easiest way to create reference SPIF files and check the compliance of exist
 * Clone the SPIF *vocal project definition*
 * Create a *vocal project*
 
-      vocal create_vocabs <how_to_specify_project> -v <version> -o <where_should_this_go>
-  
+      $ vocal create_vocabs <how_to_specify_project> -v <version> -o <where_should_this_go>
+      $ vocal create_vocabs /home/graeme/git/spif-std/standard/v1 -v 0.1 -o .
+      $ ls products/latest/
+      dataset_schema.json  spif_example.json  test.json
+      
   This creates the versioned project definition.
 * Create a empty reference SPIF file
 
-    vocal eg_data -p <project_name> -d <definition> -o <output_file>
+      $ vocal eg_data -p <project_name> -d <definition> -o <output_file>
+      $ vocal eg_data -p /home/graeme/git/spif-std/standard/v1 -d spif_example.json -o spif_example.nc
+  
+This is a bare-bones file.
 
-* This is a bare-bones file.
+* Check the generated bare-bones file for compliance
 
+      $ vocal check spif_example.nc -p /home/graeme/git/spif-std/standard/v1
+      --------------------------------------------------
+      Checking spif_example.nc against standard... OK!
+      --------------------------------------------------
+
+      $ vocal check spif_example.nc -p /home/graeme/git/spif-std/standard/v1 -d products/latest/spif_example.json
+      --------------------------------------------------
+      Checking spif_example.nc against standard... OK!
+      --------------------------------------------------
+      Checking dimension array_dimensions is in definition... OK!
+      etc
+      etc
+      etc
+      Checking variable /instrument_1_group/core/overload exists in definition... OK!
+      ==================================================
+      66 checks.
+      0 warnings.
+      1 errors found.
+      ==================================================
