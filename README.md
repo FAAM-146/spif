@@ -42,27 +42,31 @@ The easiest way to create reference SPIF files and check the compliance of exist
 * Clone the SPIF *vocal project*
 * Create a versioned product definition from the working copy. In this example a minimal product is created using the included definition. The version of the definition can be specified, this is seperate from the version of the standard.
 
+```
   $ vocal create_version <project_path> -v <defintion_version> -o <definition_path>
-  
+```
   So to create a version 0.1 product definition stored in `spif/products` based on the version 1 standard;
-
+```
   $ vocal create_version standard/v1 -v 0.1 -o .
   $ ls products/latest/
   dataset_schema.json  spif_example.json
-      
-* Create a minimal reference SPIF file (data is random).
+```
 
+* Create a minimal reference SPIF file (data is random).
+```
   $ vocal eg_data -p <project_path> -d <definition_filename> -o <output_filename>
-  
+```
+
+```  
   $ vocal eg_data -p standard/v1 -d products/latest/spif_example.json -o spif_example.nc
-  
+```  
 
 * Check the generated bare-bones file for compliance.
-
+```
   $ vocal check <output_filename> -p <project_path> -d <definition_filename>
+```
 
-
-
+```
   $ vocal check spif_example.nc -p standard/v1
   --------------------------------------------------
   Checking spif_example.nc against standard... OK!
@@ -83,3 +87,4 @@ The easiest way to create reference SPIF files and check the compliance of exist
   0 errors found.
   ==================================================
 
+```
