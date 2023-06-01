@@ -62,7 +62,7 @@ The easiest way to illustrate the compliance checking is to use *vocal* to creat
   $ vocal create_version <project_path> -v <defintion_version> -o <definition_path>
 ```
 
-    So to create a version 0.1 product definition stored in `spif/products` based on the version 1 standard;
+  So to create a version 0.1 product definition stored in `spif/products` based on the version 1 standard;
 
 ```shell
   $ vocal create_version standard/v1 -v 0.1 -o .
