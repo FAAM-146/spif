@@ -1,11 +1,9 @@
 
-import netCDF4 # type: ignore
-import numpy as np
-import numpy.typing
-from pydantic import BaseModel, Field, root_validator
+from pydantic import BaseModel
 from typing import List
 
 from vocal.netcdf.mixins import VariableNetCDFMixin
+from vocal.field import Field
 
 from ..attributes import VariableAttributes
 

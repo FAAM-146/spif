@@ -1,12 +1,14 @@
 
 from typing import Optional
-from pydantic import Field, BaseModel
+from pydantic import BaseModel, ConfigDict
+from vocal.field import Field
 
 class GroupAttributes(BaseModel):
-    class Config:
+    model_config = ConfigDict(
         # Configuration options here
-        title = 'Group Attributes'
-        extra = 'allow'
+        title='Group Attributes',
+        extra='allow'
+    )
 
     # Add your attributes here, e.g.
     #
@@ -16,10 +18,11 @@ class GroupAttributes(BaseModel):
     # )
 
 class InstrumentGroupAttributes(BaseModel):
-    class Config:
+    model_config = ConfigDict(
         # Configuration options here
-        title = 'Instrument Group Attributes'
-        extra = 'allow'
+        title='Instrument Group Attributes',
+        extra='allow'
+    )
 
     # Add your attributes here, e.g.
     #
@@ -39,35 +42,42 @@ class InstrumentGroupAttributes(BaseModel):
 
     instrument_serial_number: Optional[str] = Field(
         description='Serial number or instrument identifier.',
-        example='instrument_serial_number_value'
+        example='instrument_serial_number_value',
+        default=None
     )
 
     instrument_firmware: Optional[str] = Field(
         description='Instrument firmware version.',
-        example='instrument_firmware_value'
+        example='instrument_firmware_value',
+        default=None
     )
 
     instrument_software: Optional[str] = Field(
         description='Name and version of the data acquisition software interfacing with the instrument.',
-        example='instrument_software_value'
+        example='instrument_software_value',
+        default=None
     )
 
     instrument_manufacturer: Optional[str] = Field(
         description='Name of the instrument manufacturer.',
-        example='instrument_manufacturer_value'
+        example='instrument_manufacturer_value',
+        default=None
     )
 
     platform: Optional[str] = Field(
         description='Name of the platform on which the instrument is mounted.',
-        example='platform_value'
+        example='platform_value',
+        default=None
     )
 
     raw_filenames: Optional[str] = Field(
         description='List of raw filenames used to create this dataset.',
-        example='raw_filenames_value'
+        example='raw_filenames_value',
+        default=None
     )
 
     references: Optional[str] = Field(
         description='Link to webpage. publications, or other references for this instrument.',
-        example='references_value'
+        example='references_value',
+        default=None
     )

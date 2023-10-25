@@ -1,11 +1,13 @@
 from typing import Optional
-from pydantic import Field, BaseModel
+from pydantic import BaseModel, ConfigDict
+from vocal.field import Field
 
 class VariableAttributes(BaseModel):
-    class Config:
+    model_config = ConfigDict(
         # Configuration options here
-        title = 'Variable Attributes'
-        extra = 'allow'
+        title='Variable Attributes',
+        extra='allow'
+    )
 
     # Add your attributes here, e.g.
     #
@@ -15,7 +17,8 @@ class VariableAttributes(BaseModel):
     # )
     standard_name: Optional[str] = Field(
         description='Standard name for this variable',
-        example='standard_name_value'
+        example='standard_name_value',
+        default=None
     )
 
     # blah: str = Field(
