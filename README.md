@@ -86,23 +86,26 @@ The easiest way to illustrate the compliance checking is to use *vocal* to creat
 
 ```shell
   $ vocal check spif_example.nc -p standard/v1
-  --------------------------------------------------
-  Checking spif_example.nc against standard... OK!
-  --------------------------------------------------
+  
+  Checking spif_example.nc against v1 standard... OK!
+  
 
   $ vocal check spif_example.nc -p standard/v1 -d products/latest/spif_example.json
-  --------------------------------------------------
+  
   Checking spif_example.nc against standard... OK!
-  --------------------------------------------------
-  Checking dimension array_dimensions is in definition... OK!
+
+  Checking spif_example.nc against spif_example.json specification... OK!
+  
+  ✔ Checking attribute /.author exists
   :
   :
   :
-  Checking variable /instrument_1_group/core/overload exists in definition... OK!
+  ✔ Checking variable /instrument_1_group/core/overload exists in definition
+
   ==================================================
-  66 checks.
-  0 warnings.
-  0 errors found.
+  ✔ 67 checks.
+  ! 0 warnings.
+  ✗ 0 errors found.
   ==================================================
 
 ```
