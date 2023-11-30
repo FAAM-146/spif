@@ -109,3 +109,7 @@ The easiest way to illustrate the compliance checking is to use *vocal* to creat
   ==================================================
 
 ```
+
+### Creating an in-house format definition for SPIF files
+
+vocal eg_data -p /home/graeme/git/faam-data/faam_data -d products/latest/faam_spif_CIP15-1.json -o test.nc
