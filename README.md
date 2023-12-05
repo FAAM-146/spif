@@ -155,7 +155,7 @@ netcdf std_spif_example {
 An in-house standard definition such as that used by [FAAM](https://github.com/FAAM-146/faam-data/faam_data/definitions/core-cloud-phy_faam_YYYYmmdd_v001_rN_xNNN_cip15-1.yaml) for a DMT CIP15 may produce a [netCDF file](docs/source/examples/faam_spif_example.txt), the head of which looks like;
 
 
-```shell
+```ncl
 
 netcdf faam_spif_example {
   // global attributes:
@@ -178,7 +178,7 @@ netcdf faam_spif_example {
 
 In order to test the compliance of this file to both the SPIF standard (version 0.1) and the FAAM definition (which complies with the SPIF structure rules) the product and definition can be different.
 
-```shell
+```bash
   $ vocal check faam_spif_example.nc -p standard/v1 -d path_to/faam-data/faam_data
 ```
 
