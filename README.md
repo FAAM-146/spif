@@ -2,9 +2,13 @@
 
 **Check that this is not too similar to paper text**
 
-The SPIF file uses the [NetCDF4 format](https://www.unidata.ucar.edu/software/netcdf/). NetCDF4 is a structured binary file format capable of containing large datasets and has automatic compression utilities. NetCDF4 is widely supported on a variety of platforms and environments.
+**Intro para for SPIF** Main SPIF info in paper etc(?)
+
+The SPIF file standard uses the [NetCDF4 format](https://www.unidata.ucar.edu/software/netcdf/). NetCDF4 is a structured binary file format capable of containing large datasets and has automatic compression utilities. NetCDF4 is widely supported on a variety of platforms and environments.
 
 In a similar fashion to the [CF (Climate and Forecast) Conventions](http://cfconventions.org/), the SPIF conventions define a minimum structure, in terms of groups, variables, and attributes, for compliance. Any additional data contained within the file is optional but should not conflict with the standards. In this documentation any suggested but optional data for inclusion are given in *italics*. Due to the focussed type of data, SPIF conventions are more demanding of variable and attribute names than the CF conventions are. SPIF follows the CF [scoping guidelines](http://cfconventions.org/Data/cf-conventions/cf-conventions-1.8/cf-conventions.html#groups) in that dimensions are visible to all child groups.
+
+**This describes the vocal SPIF project...**etc 
 
 
 ## Terms and Usage
@@ -176,7 +180,7 @@ netcdf faam_spif_example {
 
 ```
 
-In order to test the compliance of this file to both the SPIF standard (version 0.1) and the FAAM definition (which complies with the SPIF structure rules) the product and definition can be different.
+In order to test the compliance of this file to both the SPIF standard (version 1.0) and the FAAM definition (which complies with the SPIF structure rules) the product and definition can be different.
 
 ```shell
   $ vocal check faam_spif_example.nc -p standard/v1 -d path_to/faam-data/faam_data
