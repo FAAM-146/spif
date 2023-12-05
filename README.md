@@ -114,14 +114,14 @@ The easiest way to illustrate the compliance checking is to use *vocal* to creat
 
 A common usage will be testing a netCDF file against two 'standards' at the same time. For example, an organisation may have an in-house file structure for their SPIF files which includes specific attributes and variables. These files include metadata and data that is optional under the SPIF standard but mandatory in the in-house definition. In-house standard definitions are created with a yaml file and these are described in the _vocal_ [README](https://github.com/FAAM-146/vocal#specifying-data-products).
 
-The standard SPIF [definition file](https://github.com/FAAM-146/spif/blob/main/standard/v1/definitions/spif_example.yaml) may produce a [netCDF file] which looks like;
+The standard SPIF [definition file](https://github.com/FAAM-146/spif/blob/main/standard/v1/definitions/spif_example.yaml) may produce a [netCDF file](docs/source/examples/std_spif_example.txt) which looks like;
 
 
 ```shell
 
 netcdf std_spif_example {
   // global attributes:
-      :Conventions = "SPIF-0.1" ;
+      :Conventions = "SPIF-1.0" ;
 
   group: instrument_1 {
     dimensions:
@@ -152,14 +152,14 @@ netcdf std_spif_example {
 }
 ```
 
-An in-house standard definition such as that used by [FAAM](faam_data/definitions/core-cloud-phy_faam_YYYYmmdd_v001_rN_xNNN_cip15-1.yaml) for a DMT CIP15 may produce a [netCDF file], the head of which looks like;
+An in-house standard definition such as that used by [FAAM](faam_data/definitions/core-cloud-phy_faam_YYYYmmdd_v001_rN_xNNN_cip15-1.yaml) for a DMT CIP15 may produce a [netCDF file](docs/source/examples/faam_spif_example.txt), the head of which looks like;
 
 
 ```shell
 
 netcdf faam_spif_example {
   // global attributes:
-      :Conventions = "CF-1.9 ACDD-1.3 SPIF-0.1" ;
+      :Conventions = "CF-1.9 ACDD-1.3 SPIF-1.0" ;
       :acknowledgement = "Airborne data was obtained using the BAe-146-301 Atmospheric Research Aircraft [ARA] flown by Airtask Ltd and managed by FAAM Airborne Laboratory, jointly operated by UKRI and the University of Leeds" ;
       :creator_address = "Building 146, Cranfield University, College Road, Cranfield, Bedford. MK43 0AL. UK." ;
       :creator_email = "creator@faam.ac.uk" ;
