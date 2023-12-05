@@ -114,7 +114,7 @@ The easiest way to illustrate the compliance checking is to use *vocal* to creat
 
 A common usage will be testing a netCDF file against two 'standards' at the same time. For example, an organisation may have an in-house file structure for their SPIF files which includes specific attributes and variables. These files include metadata and data that is optional under the SPIF standard but mandatory in the in-house definition. In-house standard definitions are created with a yaml file and these are described in the _vocal_ [README](https://github.com/FAAM-146/vocal#specifying-data-products).
 
-The standard SPIF [definition file](https://github.com/FAAM-146/spif/blob/main/standard/v1/definitions/spif_example.yaml) may produce a [netCDF file](docs/source/examples/std_spif_example.txt) which looks like;
+The standard SPIF [definition file](https://github.com/FAAM-146/spif/standard/v1/definitions/spif_example.yaml) may produce a [netCDF file](docs/source/examples/std_spif_example.txt) which looks like;
 
 
 ```shell
@@ -134,7 +134,7 @@ netcdf std_spif_example {
       float resolution(array_dimensions) ;
       float wavelength ;
       float pathlength ;
-   group: core {
+    group: core {
       dimensions:
         image_num = UNLIMITED ;
         pixel = UNLIMITED ;
@@ -149,10 +149,10 @@ netcdf std_spif_example {
         byte overload(image_num) ;
       } // group core
     } // group instrument_1_group
-}
+  }
 ```
 
-An in-house standard definition such as that used by [FAAM](faam_data/definitions/core-cloud-phy_faam_YYYYmmdd_v001_rN_xNNN_cip15-1.yaml) for a DMT CIP15 may produce a [netCDF file](docs/source/examples/faam_spif_example.txt), the head of which looks like;
+An in-house standard definition such as that used by [FAAM](https://github.com/FAAM-146/faam-data/faam_data/definitions/core-cloud-phy_faam_YYYYmmdd_v001_rN_xNNN_cip15-1.yaml) for a DMT CIP15 may produce a [netCDF file](docs/source/examples/faam_spif_example.txt), the head of which looks like;
 
 
 ```shell
@@ -172,7 +172,7 @@ netcdf faam_spif_example {
       :flight_number = "a001" ;
       :
       :etc
-
+  }
 
 ```
 
@@ -184,6 +184,3 @@ In order to test the compliance of this file to both the SPIF standard (version 
 
 This will check against the latest version of the in-house definition by default.
 
-```shell
-  $ vocal check faam_spif_example.nc -p standard/v1 -d path_to/faam-data/faam_data
-```
