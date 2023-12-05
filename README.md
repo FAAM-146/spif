@@ -117,7 +117,7 @@ A common usage will be testing a netCDF file against two 'standards' at the same
 The standard SPIF [definition file](https://github.com/FAAM-146/spif/standard/v1/definitions/spif_example.yaml) may produce a [netCDF file](docs/source/examples/std_spif_example.txt) which looks like;
 
 
-```shell
+```ncl
 
 netcdf std_spif_example {
   // global attributes:
@@ -178,7 +178,7 @@ netcdf faam_spif_example {
 
 In order to test the compliance of this file to both the SPIF standard (version 0.1) and the FAAM definition (which complies with the SPIF structure rules) the product and definition can be different.
 
-```bash
+```shell
   $ vocal check faam_spif_example.nc -p standard/v1 -d path_to/faam-data/faam_data
 ```
 
