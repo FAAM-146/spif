@@ -112,10 +112,78 @@ The easiest way to illustrate the compliance checking is to use *vocal* to creat
 
 ### Creating an in-house format definition for SPIF files
 
-vocal eg_data -p /home/graeme/git/faam-data/faam_data -d products/latest/faam_spif_CIP15-1.json -o test.nc
+A common usage will be testing a netCDF file against two 'standards' at the same time. For example, an organisation may have an in-house file structure for their SPIF files which includes specific attributes and variables. These files include metadata and data that is optional under the SPIF standard but mandatory in the in-house definition. In-house standard definitions are created with a yaml file and these are described in the _vocal_ [README](https://github.com/FAAM-146/vocal#specifying-data-products).
+
+The standard SPIF [definition file](https://github.com/FAAM-146/spif/blob/main/standard/v1/definitions/spif_example.yaml) may produce a [netCDF file] which looks like;
 
 
-VOCAL_DEBUG=true vocal create_version /home/graeme/git/faam-data/faam_data -v .666 -o .
+```shell
+
+netcdf std_spif_example {
+  // global attributes:
+      :Conventions = "SPIF-0.1" ;
+
+  group: instrument_1 {
+    dimensions:
+      array_dimensions = 2 ;
+      pixel_colors = 3 ;
+    variables:
+      float color_value(pixel_colors) ;
+      int array_size(array_dimensions) ;
+      int image_size(array_dimensions) ;
+      float resolution(array_dimensions) ;
+      float wavelength ;
+      float pathlength ;
+   group: core {
+      dimensions:
+        image_num = UNLIMITED ;
+        pixel = UNLIMITED ;
+      variables:
+        uint64 timestamp(image_num) ;
+          timestamp:standard_name = "time" ;
+          timestamp:units = "seconds since 1970-01-01 00:00:00 +0000" ;
+        ubyte image(pixel) ;
+        ubyte startpixel(image_num) ;
+        ubyte width(image_num) ;
+        ubyte height(image_num) ;
+        byte overload(image_num) ;
+      } // group core
+    } // group instrument_1_group
+}
+```
+
+An in-house standard definition such as that used by [FAAM](faam_data/definitions/core-cloud-phy_faam_YYYYmmdd_v001_rN_xNNN_cip15-1.yaml) for a DMT CIP15 may produce a [netCDF file], the head of which looks like;
 
 
-vocal check test.nc -p /home/graeme/git/spif-std/standard/v1  /home/graeme/git/faam-data/faam_data
+```shell
+
+netcdf faam_spif_example {
+  // global attributes:
+      :Conventions = "CF-1.9 ACDD-1.3 SPIF-0.1" ;
+      :acknowledgement = "Airborne data was obtained using the BAe-146-301 Atmospheric Research Aircraft [ARA] flown by Airtask Ltd and managed by FAAM Airborne Laboratory, jointly operated by UKRI and the University of Leeds" ;
+      :creator_address = "Building 146, Cranfield University, College Road, Cranfield, Bedford. MK43 0AL. UK." ;
+      :creator_email = "creator@faam.ac.uk" ;
+      :creator_institution = "FAAM Airborne Laboratory" ;
+      :creator_name = "A. N. Other" ;
+      :creator_type = "person" ;
+      :date = "1970-01-01" ;
+      :date_created = "1970-01-01 06:00:00+00:00" ;
+      :flight_date = "1970-01-01" ;
+      :flight_number = "a001" ;
+      :
+      :etc
+
+
+```
+
+In order to test the compliance of this file to both the SPIF standard (version 0.1) and the FAAM definition (which complies with the SPIF structure rules) the product and definition can be different.
+
+```shell
+  $ vocal check faam_spif_example.nc -p standard/v1 -d path_to/faam-data/faam_data
+```
+
+This will check against the latest version of the in-house definition by default.
+
+```shell
+  $ vocal check faam_spif_example.nc -p standard/v1 -d path_to/faam-data/faam_data
+```
