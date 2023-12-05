@@ -15,7 +15,7 @@ meta:
 
 # Global attributes
 attributes:
-  Conventions: SPIF-1
+  Conventions: SPIF-1.0
 
 # No variables or dimensions are required in the root group
 variables: []
