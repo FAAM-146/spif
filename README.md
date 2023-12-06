@@ -1,13 +1,12 @@
 # SPIF - Single Particle Image Format data standard
 
-The Single Particle Image Format (SPIF) is a format for the [FAIR](https://doi.org/10.1038/sdata.2016.18) storage of particle image data. This has been designed with in situ measurements of atmospheric particles with imaging probes (see [Baumgardner et al. 2017](https:
-//doi.org/10.1175/AMSMONOGRAPHS-D-16-0011.1) for example) such as the [2DC](https://doi.org/10.1175/1520-0426(1997)014%3C1224:ACFOAP%3E2.0.CO;2) and [CPI](http://www.specinc.com/cloud-particle-imager). The data from these probes has traditionally been stored in specialised binary formats; once decoded the raw data can be stored in SPIF files, improving access and usability of the data. The format is flexible enough to hold other sources of image data.
+The Single Particle Image Format (SPIF) is a file format for the [FAIR](https://doi.org/10.1038/sdata.2016.18) storage of particle image data. This has been designed with in situ measurements of atmospheric particles with imaging probes (see [Baumgardner et al. 2017](https://doi.org/10.1175/AMSMONOGRAPHS-D-16-0011.1) for example) such as the [2DC](https://doi.org/10.1175/1520-0426(1997)014%3C1224:ACFOAP%3E2.0.CO;2) and [CPI](http://www.specinc.com/cloud-particle-imager). The data from these probes has traditionally been stored in specialised binary formats; once decoded the raw data can be stored in SPIF files, improving access and usability of the data. The format is flexible enough to hold other sources of image data.
 
-For further information see [paper_placeholder].
+For further information see [paper_placeholder](https://github.com/graemenott/spif-paper).
 
 The SPIF file standard uses the [NetCDF4 format](https://www.unidata.ucar.edu/software/netcdf/). NetCDF4 is a structured binary file format capable of containing large datasets and has automatic compression utilities. NetCDF4 is widely supported on a variety of platforms and environments.
 
-In a similar fashion to the [CF (Climate and Forecast) Conventions](http://cfconventions.org/), the SPIF conventions define a minimum structure, in terms of groups, variables, and attributes, for compliance. Any additional data contained within the file is optional but should not conflict with the requirements of the standard. Due to the focussed type of data, SPIF conventions are more demanding of variable and attribute names than the CF conventions are. SPIF follows the CF [scoping guidelines](http://cfconventions.org/Data/cf-conventions/cf-conventions-1.8/cf-conventions.html#groups) in that dimensions are visible to all child groups.
+In a similar fashion to the [CF (Climate and Forecast) Conventions](http://cfconventions.org/), the SPIF convention defines a minimum structure, in terms of groups, variables, and attributes, for compliance. Any additional data contained within the file is optional but should not conflict with the requirements of the standard. Due to the focussed type of data, SPIF conventions are more demanding of variable and attribute names than the CF conventions are. SPIF follows the CF [scoping guidelines](http://cfconventions.org/Data/cf-conventions/cf-conventions-1.8/cf-conventions.html#groups) in that dimensions are visible to all child groups.
 
 
 ## The *vocal* SPIF project
