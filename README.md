@@ -1,14 +1,20 @@
 # SPIF - Single Particle Image Format data standard
 
-**Check that this is not too similar to paper text**
+The Single Particle Image Format (SPIF) is a format for the [FAIR](https://doi.org/10.1038/sdata.2016.18) storage of particle image data. This has been designed with in situ measurements of atmospheric particles with imaging probes (see [Baumgardner et al. 2017](https:
+//doi.org/10.1175/AMSMONOGRAPHS-D-16-0011.1) for example) such as the [2DC](https://doi.org/10.1175/1520-0426(1997)014%3C1224:ACFOAP%3E2.0.CO;2) and [CPI](http://www.specinc.com/cloud-particle-imager). The data from these probes has traditionally been stored in specialised binary formats; once decoded the raw data can be stored in SPIF files, improving access and usability of the data. The format is flexible enough to hold other sources of image data.
 
-**Intro para for SPIF** Main SPIF info in paper etc(?)
+For further information see [paper_placeholder].
 
 The SPIF file standard uses the [NetCDF4 format](https://www.unidata.ucar.edu/software/netcdf/). NetCDF4 is a structured binary file format capable of containing large datasets and has automatic compression utilities. NetCDF4 is widely supported on a variety of platforms and environments.
 
-In a similar fashion to the [CF (Climate and Forecast) Conventions](http://cfconventions.org/), the SPIF conventions define a minimum structure, in terms of groups, variables, and attributes, for compliance. Any additional data contained within the file is optional but should not conflict with the standards. In this documentation any suggested but optional data for inclusion are given in *italics*. Due to the focussed type of data, SPIF conventions are more demanding of variable and attribute names than the CF conventions are. SPIF follows the CF [scoping guidelines](http://cfconventions.org/Data/cf-conventions/cf-conventions-1.8/cf-conventions.html#groups) in that dimensions are visible to all child groups.
+In a similar fashion to the [CF (Climate and Forecast) Conventions](http://cfconventions.org/), the SPIF conventions define a minimum structure, in terms of groups, variables, and attributes, for compliance. Any additional data contained within the file is optional but should not conflict with the requirements of the standard. Due to the focussed type of data, SPIF conventions are more demanding of variable and attribute names than the CF conventions are. SPIF follows the CF [scoping guidelines](http://cfconventions.org/Data/cf-conventions/cf-conventions-1.8/cf-conventions.html#groups) in that dimensions are visible to all child groups.
 
-**This describes the vocal SPIF project...**etc 
+
+## The *vocal* SPIF project
+
+This [repository](https://github.com/FAAM-146/spif) is the ***vocal*** project for the SPIF standard. This is not the only way to construct files that follow the standard but it gives an easy way to check files for compliance with the standard.
+
+Below are described the project and how it may be used.
 
 
 ## Terms and Usage
@@ -59,7 +65,7 @@ Conventions: SPIF-1.0
 The easiest way to illustrate the compliance checking is to use *vocal* to create a reference SPIF file and then check its compliance.
 
 * If not already done so install *vocal* using the instructions [here](https://github.com/FAAM-146/vocal).
-* Clone the SPIF *vocal project*, ie this repository.
+* Clone the SPIF *vocal* project, ie this [repository](https://github.com/FAAM-146/spif).
 * Create a versioned product definition from the working copy. In this example a minimal product is created using the included definition. The version of the definition can be specified, this is seperate from the version of the standard.
 
 ```shell
@@ -116,7 +122,7 @@ The easiest way to illustrate the compliance checking is to use *vocal* to creat
 
 ### Creating an in-house format definition for SPIF files
 
-A common usage will be testing a netCDF file against two 'standards' at the same time. For example, an organisation may have an in-house file structure for their SPIF files which includes specific attributes and variables. These files include metadata and data that is optional under the SPIF standard but mandatory in the in-house definition. In-house standard definitions are created with a yaml file and these are described in the _vocal_ [README](https://github.com/FAAM-146/vocal#specifying-data-products).
+A common usage will be testing a netCDF file against both the SPIF standard and organisational requirements at the same time. For example, an organisation may have an in-house vocabulary for their image data files. These files include metadata and data that is optional under the SPIF standard but mandatory in the in-house definition. In-house definitions are created with a yaml file and these are described in the *vocal* [README](https://github.com/FAAM-146/vocal#specifying-data-products). Note that the in-house definition will be stored elsewhere and so be (version) controlled by the organisation in question and not as part of the SPIF project repository.
 
 The standard SPIF [definition file](https://github.com/FAAM-146/spif/standard/v1/definitions/spif_example.yaml) may produce a [netCDF file](docs/source/examples/std_spif_example.txt) which looks like;
 
@@ -156,7 +162,7 @@ netcdf std_spif_example {
   }
 ```
 
-An in-house standard definition such as that used by [FAAM](https://github.com/FAAM-146/faam-data/faam_data/definitions/core-cloud-phy_faam_YYYYmmdd_v001_rN_xNNN_cip15-1.yaml) for a DMT CIP15 may produce a [netCDF file](docs/source/examples/faam_spif_example.txt), the head of which looks like;
+An in-house definition such as that used by [FAAM](https://github.com/FAAM-146/faam-data/faam_data/definitions/core-cloud-phy_faam_YYYYmmdd_v001_rN_xNNN_cip15-1.yaml) for a DMT CIP15 may produce a [netCDF file](docs/source/examples/faam_spif_example.txt), the head of which looks like;
 
 
 ```ncl
