@@ -13,17 +13,24 @@ meta:
   canonical_name: 'Decoded image data from a theoretical OAP'
   version: 20231212
   description: >-
-    This is an example SPIF dataset for a theoretical optical array probe.
-    The definition is designed to satisfy requirements of the SPIF standard
+    This is an example SPIF netCDF definition for a theoretical optical array
+    probe. The definition is designed to satisfy requirements of the SPIF standard
     as well as the in-house requirements of an arbitrary organisation that
-    produces the data.
+    produces the data. The in-house requirements include additional global
+    attributes, a 'platform' group which includes some aircraft state data that
+    will aid interpretation of the processed particle image data, and an
+    'OAP100/auxillary' group which includes some instrument housekeeping data
+    that may be useful for flagging issues with instrument performance. The
+    variables in these two groups are recommended but not required by the
+    in-house standards.
+
   references:
     - ['data documentation', 'https://www.arbitrary.org/data_standards/']
     - ['SPIF standard', 'https://github.com/FAAM-146/spif']
 
 # ------------------------------------------------------------------------------
 attributes:
-  Conventions: '<str: derived_from_file>'
+  Conventions: CF-1.9, ACDD-1.3, SPIF-1.0
   title: '<str: derived_from_file>'
   summary: '<str: derived_from_file>'
   references: '<str: derived_from_file>'
