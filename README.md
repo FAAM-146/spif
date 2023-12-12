@@ -11,7 +11,7 @@ In a similar fashion to the [CF (Climate and Forecast) Conventions](http://cfcon
 
 ## The *vocal* SPIF project
 
-***[Vocal](https://github.com/FAAM-146/vocal)*** is a tool for managing netCDF data product standards and associated data product specifications. This [repository](https://github.com/FAAM-146/spif) is the ***vocal*** project for the SPIF data standard. This is not the only way to construct files that follow the standard but it gives an easy way to check files for compliance with the standard.
+*[Vocal](https://github.com/FAAM-146/vocal)* is a tool for managing netCDF data product standards and associated data product specifications. This [repository](https://github.com/FAAM-146/spif) is the *vocal* project for the SPIF data standard. This is not the only way to construct files that follow the standard but it gives an easy way to check files for compliance with the standard.
 
 Below are described the project and how it may be used.
 
