@@ -173,7 +173,7 @@ class InstrumentGroup(BaseModel, GroupNetCDFMixin):
     check_core_group_exists = validator(group_exists('core'))
 
     # Ensure that the 'instrument' group has the correct variables
-    check_color_value_variable_exists = validator(variable_exists('color_value'))
+    check_color_level_variable_exists = validator(variable_exists('color_level'))
     check_array_size_variable_exists = validator(variable_exists('array_size'))
     check_image_size_variable_exists = validator(variable_exists('image_size'))
     check_resolution_variable_exists = validator(variable_exists('resolution'))
@@ -185,13 +185,13 @@ class InstrumentGroup(BaseModel, GroupNetCDFMixin):
     check_pixel_colors_dimension_exists = validator(dimension_exists('pixel_colors'))
 
     # Ensure required variables have the correct dimensions
-    check_color_value_dims = validator(variable_has_dimensions('color_value', ['pixel_colors']))
+    check_color_level_dims = validator(variable_has_dimensions('color_level', ['pixel_colors']))
     check_array_size_dims = validator(variable_has_dimensions('array_size', ['array_dimensions']))
     check_image_size_dims = validator(variable_has_dimensions('image_size', ['array_dimensions']))
     check_resolution_dims = validator(variable_has_dimensions('resolution', ['array_dimensions']))
     
     # Check that variables have the correct type
-    check_color_value_has_correct_type = validator(variable_has_types('color_value', FLOATS))
+    check_color_level_has_correct_type = validator(variable_has_types('color_level', FLOATS))
     check_array_size_has_correct_type = validator(variable_has_types('array_size', INTS))
     check_image_size_has_correct_type = validator(variable_has_types('image_size', INTS))
     check_resolution_has_correct_type = validator(variable_has_types('resolution', FLOATS))
