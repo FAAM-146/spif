@@ -41,6 +41,7 @@ groups:
     attributes:
       instrument_name: instrument_1
       instrument_long_name: instrument_1 with a more descriptive name
+      spif_group_type: instrument 
     
     # Required instrument group dimensions
     dimensions:
@@ -100,7 +101,8 @@ groups:
           name: core
         
         # No instrument/core mandatory attributes
-        attributes: {}
+        attributes:
+          spif_group_type: core
         
         # instrument/core group dimensions. Both are UNLIMITED
         dimensions:

@@ -1,9 +1,9 @@
 
-from typing import Optional
+from typing import Optional, Literal
 from pydantic import BaseModel, ConfigDict
 from vocal.field import Field
 
-class GroupAttributes(BaseModel):
+class GenericGroupAttributes(BaseModel):
     model_config = ConfigDict(
         # Configuration options here
         title='Group Attributes',
@@ -16,6 +16,25 @@ class GroupAttributes(BaseModel):
     #   description='A description of my attribute',
     #   example='my_attribute_value'
     # )
+    spif_group_type: Literal['other']
+
+class CoreGroupAttributes(BaseModel):
+    model_config = ConfigDict(
+        title='Core Group Attributes',
+        extra='allow'
+    )
+
+    spif_group_type: Literal['core']
+
+
+class PlatformGroupAttributes(BaseModel):
+    model_config = ConfigDict(
+        title='PlatformGroupAttributes',
+        extra='allow'
+    )
+
+    spif_group_type: Literal['platform']
+
 
 class InstrumentGroupAttributes(BaseModel):
     model_config = ConfigDict(
@@ -30,6 +49,8 @@ class InstrumentGroupAttributes(BaseModel):
     #   description='A description of my attribute',
     #   example='my_attribute_value'
     # )
+    spif_group_type: Literal['instrument']
+
     instrument_name: str = Field(
         description='Short name of the instrument. May be the same as the group name.',
         example='instrument_name_value'

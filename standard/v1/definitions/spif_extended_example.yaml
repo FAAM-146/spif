@@ -95,6 +95,7 @@ groups:
       description: Data from platform that is used to process image data
   
     attributes:
+      spif_group_type: platform
       comment: '<str: derived_from_file optional>' 
 
     dimensions:
@@ -198,6 +199,7 @@ groups:
 
     attributes:
       # instrument information
+      spif_group_type: instrument
       instrument: '<str: derived_from_file optional>'
       instrument_name: OAP100
       instrument_long_name: Optical Array Probe - 100um
@@ -326,7 +328,8 @@ groups:
           name: core
           description: Decompressed raw image data
 
-        attributes: {}
+        attributes:
+          spif_group_type: core
 
         # instrument/core group dimensions. Both are UNLIMITED
         dimensions:
@@ -413,6 +416,7 @@ groups:
             These are simple timeseries.
 
         attributes:
+          spif_group_type: other
           comment: Data and housekeeping obtained from the auxillary datafile/s
           raw_filenames: '<str: derived_from_file optional>'
 

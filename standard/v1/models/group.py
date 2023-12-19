@@ -1,6 +1,6 @@
 
 from __future__ import annotations
-from typing import Optional
+from typing import Optional, Literal
 
 from cfunits import Units
 from pydantic import BaseModel, ConfigDict
@@ -16,7 +16,10 @@ from vocal.validation import (
     _randomize_object_name,
 )
 
-from ..attributes import GroupAttributes, InstrumentGroupAttributes
+from ..attributes import (
+    CoreGroupAttributes, GenericGroupAttributes, InstrumentGroupAttributes,
+    PlatformGroupAttributes
+)
 
 from .dimension import Dimension
 from .variable import Variable
@@ -50,17 +53,24 @@ class GroupMeta(BaseModel):
 
     name: str
 
-
-class Group(BaseModel, GroupNetCDFMixin):
+class CoreGroupMeta(BaseModel):
     model_config = ConfigDict(
-        title='Group Schema'
+        title='Core Group Metadata'
     )
 
-    meta: GroupMeta
-    attributes: GroupAttributes
+    name: Literal['core']
+
+
+class CoreGroup(BaseModel, GroupNetCDFMixin):
+    model_config = ConfigDict(
+        title='Core Group Schema'
+    )
+
+    meta: CoreGroupMeta
+    attributes: CoreGroupAttributes
     dimensions: Optional[list[Dimension]] = None
     variables: list[Variable]
-    groups: Optional[list[None]] = None
+    groups: Optional[list[GenericGroup]] = None
 
     # Ensure that the 'core' group has the required variables
     check_for_image_variable = validator(core_group(variable_exists('image')))
@@ -158,6 +168,38 @@ class Group(BaseModel, GroupNetCDFMixin):
         return values
 
 
+class GenericGroup(BaseModel, GroupNetCDFMixin):
+    model_config = ConfigDict(
+        title='Group Schema'
+    )
+
+    meta: GroupMeta
+    attributes: GenericGroupAttributes
+    dimensions: Optional[list[Dimension]] = None
+    variables: list[Variable]
+    groups: Optional[list[GenericGroup]] = None
+
+
+class PlatformGroupMeta(BaseModel):
+    model_config = ConfigDict(
+        title='Platform Group Metadata'
+    )
+
+    name: Literal['platform']
+
+
+class PlatformGroup(BaseModel, GroupNetCDFMixin):
+    model_config = ConfigDict(
+        title='Platform Group'
+    )
+
+    meta: PlatformGroupMeta
+    attributes: PlatformGroupAttributes
+    dimensions: Optional[list[Dimension]] = None
+    groups: Optional[list[GenericGroup]] = None
+    variables: list[Variable]
+
+
 class InstrumentGroup(BaseModel, GroupNetCDFMixin):
     model_config = ConfigDict(
         title='Instrument Group Schema'
@@ -166,7 +208,7 @@ class InstrumentGroup(BaseModel, GroupNetCDFMixin):
     meta: GroupMeta
     attributes: InstrumentGroupAttributes
     dimensions: Optional[list[Dimension]] = None
-    groups: list[Group]
+    groups: list[GenericGroup | CoreGroup]
     variables: list[Variable]
 
     # Ensure that the 'core' group exists
