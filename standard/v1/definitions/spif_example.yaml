@@ -1,19 +1,29 @@
-# Example spif definition file
+# Minimal example spif definition file.
 # Use with SPIF vocal project to create/check netCDF files
+#
+# Provides a minimal example of a SPIF dataset including mandatory
+# requirements only.
+#
 # see;
 #    https://github.com/FAAM-146/spif
+#
+# Definition version: 20231219
+# Creates version: 1.0
+# Example filename: spif_example.nc
+#
 meta:
   file_pattern: spif_example.nc
   short_name: spif
-  canonical_name: A SPIF example dataset
+  long_name: A SPIF example dataset
   description: >-
-    Provides a minimal example of a SPIF dataset including mandatory
-    requirements only.
+    This dataset contains the minimum required contents to satisfy the SPIF
+    requirements.
   references:
     - ['SPIF standard', 'https://github.com/FAAM-146/spif']
     - ['Example dataset documentation', 'https://some.url/']
 
 # Global attributes
+# ------------------------------------------------------------------------------
 attributes:
   Conventions: SPIF-1.0
 
@@ -21,8 +31,9 @@ attributes:
 variables: []
 dimensions: []
 
-# Top-level instrument group
+# ------------------------------------------------------------------------------
 groups:
+  # Top-level instrument group
   - meta:
       name: instrument_1_group
 
@@ -31,7 +42,7 @@ groups:
       instrument_name: instrument_1
       instrument_long_name: instrument_1 with a more descriptive name
     
-      # Required instrument group dimensions
+    # Required instrument group dimensions
     dimensions:
       - name: array_dimensions
         size: 2
@@ -83,23 +94,22 @@ groups:
         dimensions: []
         attributes: {}
 
-
     groups:
-    # instrument_1/core group is required.
+      # instrument/core group is required.
       - meta:
           name: core
         
-        # No instrument_1/core mandatory attributes
+        # No instrument/core mandatory attributes
         attributes: {}
         
-        # instrument_1/core group dimensions. Both are UNLIMITED
+        # instrument/core group dimensions. Both are UNLIMITED
         dimensions:
           - name: image_num
             size: null
           - name: pixel
             size: null
 
-        # Required instrument_1/core group variables
+        # Required instrument/core group variables
         variables:
         
           - meta:
