@@ -176,7 +176,7 @@ netcdf spif_extended_example {
       :Conventions = "CF-1.9 ACDD-1.3 SPIF-1.0" ;
       :title = "Raw image data from the OAP100" ;
       :creator_address = "A Building, Campus District, Town, Country." ;
-      :creator_email = "creator@faam.ac.uk" ;
+      :creator_email = "info@arbitrary.org" ;
       :creator_institution = "Abitrary Research Organisation" ;
       :creator_name = "ARO" ;
       :creator_type = "institution" ;
