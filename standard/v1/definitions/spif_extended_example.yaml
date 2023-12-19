@@ -51,7 +51,7 @@ attributes:
   # data source information
   source: In situ probe; optical array probe.
   instrument: OAP100
-  project: ACD - Arbitrary Cloud Detachment
+  project: ACC - Arbitrary Cloud Campaign
   platform: Good Airplane v3
   platform_type: aircraft
   deployment_mode: air
@@ -208,12 +208,11 @@ groups:
       instrument_orientation: '<str: derived_from_file>'
       instrument_manufacturer: OAP Instruments ltd
       instrument_model: OAP100-GS
-      instrument_serial_number: 001
+      instrument_serial_number: '001'
       instrument_software: '<str: derived_from_file optional>'
       instrument_software_version: '<str: derived_from_file optional>'
       instrument_fimware: '<str: derived_from_file optional>'
-      references: >    ## Or maybe this should be FAAM instr page thing
-        https://www.OAP_instruments.com/manuals
+      references: https://www.OAP_instruments.com/manuals
       raw_filenames: '<str: derived_from_file optional>'
 
     # instrument group dimensions
