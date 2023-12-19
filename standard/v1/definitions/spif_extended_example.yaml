@@ -114,7 +114,7 @@ groups:
           standard_name: time
           calendar: gregorian
           coverage_content_type: coordinate
-          frequency: 1
+          frequency: 32
           units: '<str: derived_from_file>'
           _FillValue: -9999
 
@@ -190,7 +190,7 @@ groups:
           _FillValue: -9999.
 
 
-  # -------------------------------------------------
+  # ----------------------------------------------------------------------------
   # Top-level instrument group
   - meta:
       name: OAP100
@@ -237,8 +237,8 @@ groups:
           _FillValue: -9999.
           comment: >-
             Obscuration/grayscale/color level corresponding to each value of
-            pixel_colors. For example, a grayscale OAP may have lower-bound shadow
-            levels of [0, 0.25, 0.5, 0.75].
+            pixel_colors. For example, a grayscale OAP may have lower-bound
+            shadow levels of [0, 0.25, 0.5, 0.75].
 
       - meta:
           name: array_size
@@ -261,7 +261,8 @@ groups:
           coverage_content_type: auxiliaryInformation
           units: '1'
           _FillValue: -9999
-          comment: If variable size images are produced by probe then is _FillValue.
+          comment: >-
+            If variable size images are produced by probe then is _FillValue.
 
       - meta:
           name: resolution
@@ -404,7 +405,6 @@ groups:
               flag_values: '<Array[byte]: derived_from_file>'
               flag_meanings: '<str: derived_from_file>'
               _FillValue: -127
-
 
       # instrument/auxillary group
       - meta:
