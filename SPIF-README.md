@@ -1,7 +1,9 @@
 
 # SPIF - Single Particle Image Format
 
-information see [paper_placeholder](https://github.com/graemenott/spif-paper).
+<!--
+For full information on the SPIF data standard and usage examples see [paper_placeholder](https://github.com/graemenott/spif-paper).
+-->
 
 ## Background and Motivation
 
@@ -9,18 +11,14 @@ The SPIF data standard was conceived as an open and accessible means of storing 
 
 Image data from such probes is produced in proprietry and instrument- or system-specific formats. Binary formats have evoluved around the limitations of legacy hardware and bandwidth limitations. This means that there may be a significant barrier to new users of image data, particularly for users that are not from fields that have traditionally used such cloud data. Fields such as remote sensing and atmospheric process modelling may well benefit by being able to ingest cloud particle data into their processing streams.
 
-The SPIF standard has been designed so that decoded raw binary data can stored in a [NetCDF4 format](https://www.unidata.ucar.edu/software/netcdf/) file structure with a standardised vocabulary in accordance with [FAIR Guiding Principles](https://www.go-fair.org/fair-principles/) \[[Wilkinson et al., 2016](https://www.nature.com/articles/sdata201618)\]. It is hoped that this will improve access to this data for users from a wide range of fields and facilitate the sharing, refinement, and standardisation of data processing routines \[for a discussion on inconsistencies between current particle processing routines see [McFarquhar et al., 2017](https://doi.org/10.1175/AMSMONOGRAPHS-D-16-0007.1)\].
+The SPIF standard has been designed so that decoded raw binary data can stored in a [NetCDF4](https://www.unidata.ucar.edu/software/netcdf/) file structure with a standardised vocabulary in accordance with [FAIR Guiding Principles](https://www.go-fair.org/fair-principles/) \[[Wilkinson et al., 2016](https://www.nature.com/articles/sdata201618)\]. It is hoped that this will improve access to this data for users from a wide range of fields and facilitate the sharing, refinement, and standardisation of data processing routines \[for a discussion on inconsistencies between current particle processing routines see [McFarquhar et al., 2017](https://doi.org/10.1175/AMSMONOGRAPHS-D-16-0007.1)\].
 
 
-## SPIF File Structure
+## SPIF Files
 
-
-
-
-
+[NetCDF4](https://www.unidata.ucar.edu/software/netcdf/) files are widely used in the atmospheric science community as they can be made fully self-describing with metadata relating to the entire file, subsets of the file contents, and individual data variables may be carried within the file. and so is supported on a variety of platforms, environments, and programming languages and commonly used in environmental science communities
 
 
 
-,
 
-[FAIR](https://doi.org/10.1038/sdata.2016.18)
+
