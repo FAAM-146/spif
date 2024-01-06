@@ -54,9 +54,9 @@ root
 
 There is only one required global attribute which is ``Conventions``. This must include the text "SPIF-m.n", where "m.n" are the major and minor versions. Other conventions strings can also be included with as a space- (recommended) or comma-separated list.
 
-_Mandatory Attributes:_
+#### Mandatory Attributes:
 
-  **Conventions:** A space or comma delineated list of conventions given in a single string. Must include "SPIF-m.n" where m.n is the version number.
+    **Conventions:** A space or comma delineated list of conventions given in a single string. Must include "SPIF-m.n" where m.n is the version number.
 
 There are many recommended global attributes, users may refer to the [ACDD](https://wiki.esipfed.org/Attribute_Convention_for_Data_Discovery_1-3) which lists many.
 
@@ -67,32 +67,59 @@ It is envisaged that SPIF files will normally contain data from a single instrum
 
 The instrument group contains variables with information about the probe size, resolution, and other data required for interpreting the raw images.
 
-_Mandatory Attributes:_
+#### Mandatory Attributes:
 
-  **instrument_name:** Short name of the instrument. If may be the same as the group name.
+> _instrument_name:_ Short name of the instrument. If may be the same as the group name.
 
-  **instrument_long_name:** Full descriptive name of instrument.
+_instrument_long_name:_ Full descriptive name of instrument.
 
-_Recommended Attributes:_
+#### Recommended Attributes:
 
-  **instrument_description:** Further description of the instrument
+    **instrument_description:** Further description of the instrument
 
-  **instrument_manufacturer:** Instrument manufacturer
+    **instrument_manufacturer:** Instrument manufacturer
 
-  **instrument_model:** Manufacturer's model designation
+    **instrument_model:** Manufacturer's model designation
 
-  **instrument_serial_number:** Instrument serial number
+    **instrument_serial_number:** Instrument serial number
 
-  **instrument_software:** Name of data acquisition software interfacing with instrument
+    **instrument_software:** Name of data acquisition software interfacing with instrument
 
-  **instrument_software_version:** Version of data acquisition software interfacing with instrument
+    **instrument_software_version:** Version of data acquisition software interfacing with instrument
 
-  **instrument_firmware:** Firmware version of instrument
+    **instrument_firmware:** Firmware version of instrument
 
-  **raw_filenames:** List of filename of raw binary image data from which this data was obtained
+    **raw_filenames:** List of filename of raw binary image data from which this data was obtained
+
+#### Mandatory Variables:
+
+> `float32` **color_level**(pixel_colors): Lower bound of fractional obscuration/grayscale/color level of photodiode array for each color_value. Gives the number of shadow/gray/color levels in the image.
+
+`int32` **array_size**(array_dimensions): Number of pixels on the detector.
+
+
+`int32` **image_size**(array_dimensions): Number of pixels across an image. If fixed size then will be number of pixels, if variable size then use `_FillValue`.
+
+`float32` **resolution**(array_dimensions): Image resolution of instrument for each dimension.
+
+`float32` **wavelength**(): Operating wavelength of laser used for shadowing/imaging the particles.
+
+`float32` **pathlength**(): Optical path length of imaging region.
+
+#### Recommended Variables:
+
+> `float32` **color_value**(pixel_colors): Value of each color used in image. Usually these will be contiguous but the does not have to be. Can be included to facilitate arbitrary values to be used in the "image" variable.
+
+`float32` **resolution_error**(array_dimensions): Uncertainty of the image resolution of instrument for each dimension.
+
 
 
 ### Instrument Core group
+
+The instrument Core group is where the flattened image data is stored. There are two unlimited dimensions in the core group, "image_num" and "pixel". The maximum value of the coordinate variable "image_num" is the number of images in the dataset while the maximum of "pixel" is the total number of pixels in the image array.
+
+The arrival time of each image is given by "timestamp" in a recognised time, usually nanoseconds, from a reference time. Time variables have a units string attribute that conforms to the [UDUNITS recommendation](https://cfconventions.org/Data/cf-conventions/cf-conventions-1.11/cf-conventions.html#time-coordinate), for example “nanoseconds since 2024-01-01 00:00:00 +0”. The "timestamp" variable has
+a ``standard_name`` attribute "time". It's worth mentioning that due to the random nature of cloud sampling, the data in "timestamp" will be highly irregular and different from what one may expect from timeseries data.
 
 
 ## Image Data
