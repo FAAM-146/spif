@@ -56,7 +56,7 @@ There is only one required global attribute which is ``Conventions``. This must 
 
 #### Mandatory Attributes:
 
-    **Conventions:** A space or comma delineated list of conventions given in a single string. Must include "SPIF-m.n" where m.n is the version number.
+> _Conventions:_ A space or comma delineated list of conventions given in a single string. Must include "SPIF-m.n" where m.n is the version number.
 
 There are many recommended global attributes, users may refer to the [ACDD](https://wiki.esipfed.org/Attribute_Convention_for_Data_Discovery_1-3) which lists many.
 
@@ -71,46 +71,46 @@ The instrument group contains variables with information about the probe size, r
 
 > _instrument_name:_ Short name of the instrument. If may be the same as the group name.
 
-_instrument_long_name:_ Full descriptive name of instrument.
+> _instrument_long_name:_ Full descriptive name of instrument.
 
 #### Recommended Attributes:
 
-    **instrument_description:** Further description of the instrument
+> _instrument_description:_ Further description of the instrument
 
-    **instrument_manufacturer:** Instrument manufacturer
+> _instrument_manufacturer:_ Instrument manufacturer
 
-    **instrument_model:** Manufacturer's model designation
+> _instrument_model:_ Manufacturer's model designation
 
-    **instrument_serial_number:** Instrument serial number
+> _instrument_serial_number:_ Instrument serial number
 
-    **instrument_software:** Name of data acquisition software interfacing with instrument
+> _instrument_software:_ Name of data acquisition software interfacing with instrument
 
-    **instrument_software_version:** Version of data acquisition software interfacing with instrument
+> _instrument_software_version:_ Version of data acquisition software interfacing with instrument
 
-    **instrument_firmware:** Firmware version of instrument
+> _instrument_firmware:_ Firmware version of instrument
 
-    **raw_filenames:** List of filename of raw binary image data from which this data was obtained
+> _raw_filenames:_ List of filename of raw binary image data from which this data was obtained
 
 #### Mandatory Variables:
 
 > `float32` **color_level**(pixel_colors): Lower bound of fractional obscuration/grayscale/color level of photodiode array for each color_value. Gives the number of shadow/gray/color levels in the image.
 
-`int32` **array_size**(array_dimensions): Number of pixels on the detector.
+> `int32` **array_size**(array_dimensions): Number of pixels on the detector.
 
 
-`int32` **image_size**(array_dimensions): Number of pixels across an image. If fixed size then will be number of pixels, if variable size then use `_FillValue`.
+> `int32` **image_size**(array_dimensions): Number of pixels across an image. If fixed size then will be number of pixels, if variable size then use `_FillValue`.
 
-`float32` **resolution**(array_dimensions): Image resolution of instrument for each dimension.
+> `float32` **resolution**(array_dimensions): Image resolution of instrument for each dimension.
 
-`float32` **wavelength**(): Operating wavelength of laser used for shadowing/imaging the particles.
+> `float32` **wavelength**(): Operating wavelength of laser used for shadowing/imaging the particles.
 
-`float32` **pathlength**(): Optical path length of imaging region.
+> `float32` **pathlength**(): Optical path length of imaging region.
 
 #### Recommended Variables:
 
 > `float32` **color_value**(pixel_colors): Value of each color used in image. Usually these will be contiguous but the does not have to be. Can be included to facilitate arbitrary values to be used in the "image" variable.
 
-`float32` **resolution_error**(array_dimensions): Uncertainty of the image resolution of instrument for each dimension.
+> `float32` **resolution_error**(array_dimensions): Uncertainty of the image resolution of instrument for each dimension.
 
 
 
