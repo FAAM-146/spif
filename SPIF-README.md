@@ -24,20 +24,20 @@ The SPIF standard is a standardised vocabulary for storing image data and metada
 SPIF files use NetCDF4 groups to divide instruments and different logical groups of image and other data. Some of these groups and their contents are required,
 
 
-  root
-  ├── <instrument-1>
-  │   ├── **core**
-  │   │   └── v1
-  │   │       ├── attributes
-  │   │       ├── definitions
-  │   │       └── models
-  │   └── example
-  │
-  ├── ***<instrument-2>***
-  │   ├── **core**
-  └── products
-      ├── v1
-      └── latest
+  root\
+  ├── <instrument-1>\
+  │   ├── **core**\
+  │   │   └── v1\
+  │   │       ├── attributes\
+  │   │       ├── definitions\
+  │   │       └── models\
+  │   └── example\
+  │\
+  ├── ***<instrument-2>***\
+  │   ├── **core**\
+  └── products\
+      ├── v1\
+      └── latest\
 
 
 
