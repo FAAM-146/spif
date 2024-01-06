@@ -54,10 +54,9 @@ root
 
 There is only one required global attribute which is ``Conventions``. This must include the text "SPIF-m.n", where "m.n" are the major and minor versions. Other conventions strings can also be included with as a space- (recommended) or comma-separated list.
 
-**Mandatory Attributes**
+_Mandatory Attributes:_
 
-  Conventions
-  :   A space or comma delineated list of conventions given in a single string. Must include "SPIF-m.n" where m.n is the version number.
+  **Conventions:** A space or comma delineated list of conventions given in a single string. Must include "SPIF-m.n" where m.n is the version number.
 
 There are many recommended global attributes, users may refer to the [ACDD](https://wiki.esipfed.org/Attribute_Convention_for_Data_Discovery_1-3) which lists many.
 
@@ -68,31 +67,29 @@ It is envisaged that SPIF files will normally contain data from a single instrum
 
 The instrument group contains variables with information about the probe size, resolution, and other data required for interpreting the raw images.
 
-**Mandatory Attributes**
+_Mandatory Attributes:_
 
-  instrument_name
-  :   Short name of the instrument. If may be the same as the group name.
-  instrument_long_name
-  :   Full descriptive name of instrument.
+  **instrument_name:** Short name of the instrument. If may be the same as the group name.
 
-**Recommended Attributes**
+  **instrument_long_name:** Full descriptive name of instrument.
 
-  instrument_description
-  :   Further description of the instrument
-  instrument_manufacturer
-  :   Instrument manufacturer
-  instrument_model
-  :   Manufacturer's model designation
-  instrument_serial_number
-  :   Instrument serial number
-  instrument_software
-  :   Name of data acquisition software interfacing with instrument
-  instrument_software_version
-  :   Version of data acquisition software interfacing with instrument
-  instrument_firmware
-  :   Firmware version of instrument
-  raw_filenames
-  :   List of filename of raw binary image data from which this data was obtained
+_Recommended Attributes:_
+
+  **instrument_description:** Further description of the instrument
+
+  **instrument_manufacturer:** Instrument manufacturer
+
+  **instrument_model:** Manufacturer's model designation
+
+  **instrument_serial_number:** Instrument serial number
+
+  **instrument_software:** Name of data acquisition software interfacing with instrument
+
+  **instrument_software_version:** Version of data acquisition software interfacing with instrument
+
+  **instrument_firmware:** Firmware version of instrument
+
+  **raw_filenames:** List of filename of raw binary image data from which this data was obtained
 
 
 ### Instrument Core group
