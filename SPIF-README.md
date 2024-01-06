@@ -11,12 +11,38 @@ The SPIF data standard was conceived as an open and accessible means of storing 
 
 Image data from such probes is recorded in proprietry and instrument- or system-specific formats. Binary formats have evolved due to the limitations of legacy hardware and limited system bandwidths. This means that is a significant barrier to new users of image data, particularly for users that are not from fields that have traditionally used such cloud data. Fields such as remote sensing and atmospheric process modelling may well benefit by being able to ingest raw cloud particle data into their processing streams as these applications may require specialised or different processing options to those normally used by those in the cloud measurement community.
 
-The SPIF standard has been designed so that decoded raw binary data can stored in a [NetCDF4](https://www.unidata.ucar.edu/software/netcdf/) file structure with a standardised vocabulary in accordance with [FAIR Guiding Principles](https://www.go-fair.org/fair-principles/) \[[Wilkinson et al., 2016](https://www.nature.com/articles/sdata201618)\]. It is hoped that this will improve access to this data for users from a wide range of fields and facilitate the sharing, refinement, and standardisation of data processing routines \[for a discussion on inconsistencies between current particle processing routines see [McFarquhar et al., 2017](https://doi.org/10.1175/AMSMONOGRAPHS-D-16-0007.1)\].
+The SPIF standard has been designed so that decoded raw binary data can stored in a [NetCDF4](https://www.unidata.ucar.edu/software/netcdf/) file structure with a standardised vocabulary in accordance with [FAIR Guiding Principles](https://www.go-fair.org/fair-principles/) \[[Wilkinson et al., 2016](https://www.nature.com/articles/sdata201618)\]. It is hoped that this will improve access to this data for users from a wide range of fields and facilitate the sharing, refinement, and standardisation of data processing routines (for a discussion on inconsistencies between current particle processing routines see [McFarquhar et al., 2017](https://doi.org/10.1175/AMSMONOGRAPHS-D-16-0007.1)).
 
 
 ## SPIF Files
 
-The SPIF standard is a standardised vocabulary for storing image data and metadata in [NetCDF4](https://www.unidata.ucar.edu/software/netcdf/) files. NetCDF allows for fully self-describing, archival standard data and is supported on a variety of platforms, environments, and programming languages and commonly used in earth science communities. Conventions and best practice guides such as [Attribute Convention for Dataset Discover (ACDD)](https://wiki.esipfed.org/Attribute_Convention_for_Data_Discovery_1-3) and [CF (Climate and Forecast) Conventions](http://cfconventions.org/) are used to standardise the netCDF4 metadata and variable structures to suit a particular field and so facilitate access, standard workflows, and comparison between datasets. In a similar fashion to the CF Conventions; SPIF defines a minimum vocabulary, that is groups, variables, and attributes, that must be included for compliance. Any additional data contained within the file is optional but should not conflict with the standards. SPIF has been called a format standard, rather than a convention, as it stipulates the form of the variable data as well as variable attributes. It is possible to create a SPIF file that is also compliant with ACDD, CF, and other conventions.
+The SPIF standard is a standardised vocabulary for storing image data and metadata in [NetCDF4](https://www.unidata.ucar.edu/software/netcdf/) files. NetCDF allows for fully self-describing, archival standard data and is supported on a variety of platforms, environments, and programming languages and commonly used in earth science communities. Conventions and best practice guides such as [Attribute Convention for Dataset Discover (ACDD)](https://wiki.esipfed.org/Attribute_Convention_for_Data_Discovery_1-3) and [CF (Climate and Forecast) Conventions](http://cfconventions.org/) are used to standardise the netCDF4 metadata and variable structures to suit a particular field and so facilitate access, standard workflows, and comparison between datasets. In a similar fashion to the CF Conventions; SPIF defines a minimum vocabulary, that is groups, variables, and attributes, that must be included for compliance. Any additional data contained within the file is optional but should not conflict with the standards. SPIF has been called a format standard, rather than a convention, as it stipulates the form of the variable data as well as variable attributes. It is possible to create a SPIF file that is also compliant with ACDD, CF, other conventions, and organisational requirements.
 
+
+## SPIF File Structure
+
+SPIF files use NetCDF4 groups to divide instruments and different logical groups of image and other data. Some of these groups and their contents are required,
+
+
+  root
+  ├── <instrument-1>
+  │   ├── **core**
+  │   │   └── v1
+  │   │       ├── attributes
+  │   │       ├── definitions
+  │   │       └── models
+  │   └── example
+  │
+  ├── ***<instrument-2>***
+  │   ├── **core**
+  └── products
+      ├── v1
+      └── latest
+
+
+
+
+
+## Image Data
 
 
