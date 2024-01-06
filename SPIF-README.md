@@ -21,17 +21,27 @@ The SPIF standard is a standardised vocabulary for storing image data and metada
 
 ## SPIF File Structure
 
-SPIF files use NetCDF4 groups to divide instruments and different logical groups of image and other data. Some of these groups and their contents are required,
-
+SPIF files use NetCDF4 groups to divide instruments and separate image and other data. Some of these groups and their contents are required,
 
   root\
   ├── <instrument-1>\
-  │   ├── **core**\
-  │   │   └── v1\
-  │   │       ├── attributes\
-  │   │       ├── definitions\
-  │   │       └── models\
-  │   └── example\
+      ├ :instrument_name\
+      ├ :instrument_long_name\
+      ├ ``float32`` color_level(pixel_colors)\
+      ├ ``int32`` array_size(array_dimensions)\
+      ├ ``int32`` image_size(array_dimensions)\
+      ├ ``float32`` resolution(array_dimensions)\
+      ├ ``float32`` wavelength()\
+      ├ ``float32`` pathlength()\
+      │
+  │   ├── core\
+  │   ├ ``uint8`` image(pixel)\
+  │   ├ ``uint64`` timestamp(image_num)\
+  │   │  └ :standard_name = "time"\
+      ├ ``uint32`` startpixel(image_num)\
+      ├ ``uint8`` width(image_num)\
+      ├ ``uint8`` height(image_num)\
+      ├ ``byte`` overload(image_num)\
   │\
   ├── ***<instrument-2>***\
   │   ├── **core**\
