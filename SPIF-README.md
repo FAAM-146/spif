@@ -54,11 +54,46 @@ root
 
 There is only one required global attribute which is ``Conventions``. This must include the text "SPIF-m.n", where "m.n" are the major and minor versions. Other conventions strings can also be included with as a space- (recommended) or comma-separated list.
 
+**Mandatory Attributes**
+
+  Conventions
+  :   A space or comma delineated list of conventions given in a single string. Must include "SPIF-m.n" where m.n is the version number.
+
+There are many recommended global attributes, users may refer to the [ACDD](https://wiki.esipfed.org/Attribute_Convention_for_Data_Discovery_1-3) which lists many.
+
+
 ### Instrument group
 
 It is envisaged that SPIF files will normally contain data from a single instrument. However it may make sense to include more than one instrument or an instrument with more than one channel, for example the [SPEC](http://www.specinc.com) [2D-S (Stereo) Probe](http://www.specinc.com/2d-s-stereo-probe-operation) which has two orthogonal OAPs, in the same file. The names of the instrument groups are not prescribed but should be descriptive. Group attributes ``instrument_name`` and ``instrument_long_name`` contain more complete instrument information. In this text the instrument groups are written as ``<instrument-1>``, ``<instrument-2>``, etc where the braces indicate that it is not a literal string.
 
 The instrument group contains variables with information about the probe size, resolution, and other data required for interpreting the raw images.
+
+**Mandatory Attributes**
+
+  instrument_name
+  :   Short name of the instrument. If may be the same as the group name.
+  instrument_long_name
+  :   Full descriptive name of instrument.
+
+**Recommended Attributes**
+
+  instrument_description
+  :   Further description of the instrument
+  instrument_manufacturer
+  :   Instrument manufacturer
+  instrument_model
+  :   Manufacturer's model designation
+  instrument_serial_number
+  :   Instrument serial number
+  instrument_software
+  :   Name of data acquisition software interfacing with instrument
+  instrument_software_version
+  :   Version of data acquisition software interfacing with instrument
+  instrument_firmware
+  :   Firmware version of instrument
+  raw_filenames
+  :   List of filename of raw binary image data from which this data was obtained
+
 
 ### Instrument Core group
 
