@@ -21,37 +21,46 @@ The SPIF standard is a standardised vocabulary for storing image data and metada
 
 ## SPIF File Structure
 
-SPIF files use NetCDF4 groups to divide instruments and separate image and other data. Some of these groups and their contents are required,
+SPIF files use NetCDF4 groups to divide instruments and separate image and other data. Some of these groups and their contents are required and are shown below;
 
 ```
-root\
-  ├ :Conventions = "SPIF-1.0"\
-  ├── \<instrument-1\>\
-  │   ├ :instrument_name\
-  │   ├ :instrument_long_name\
-  │   ├ `float32` color_level(pixel_colors)\
-  │   ├ `int32` array_size(array_dimensions)\
-  │   ├ `int32` image_size(array_dimensions)\
-  │   ├ `float32` resolution(array_dimensions)\
-  │   ├ `float32` wavelength()\
-  │   ├ `float32` pathlength()\
-  │   │
-  │   └── core\
-  │       ├ `uint8` image(pixel)\
-  │       ├ `uint64` timestamp(image_num)\
-  │       │   └ :standard_name = "time"\
-  │       ├ `uint32` startpixel(image_num)\
-  │       ├ `uint8` width(image_num)\
-  │       ├ `uint8` height(image_num)\
-  │       └ `byte` overload(image_num)\
-  │\
-  │\
-  ├── _\<instrument-2\>_\
-  │   └── ...\
-  │\
-  └── ...\
+root
+  ├ :Conventions = "SPIF-1.0"
+  ├── <instrument-1>
+  │   ├ :instrument_name
+  │   ├ :instrument_long_name
+  │   ├ `float32` color_level(pixel_colors)
+  │   ├ `int32` array_size(array_dimensions)
+  │   ├ `int32` image_size(array_dimensions)
+  │   ├ `float32` resolution(array_dimensions)
+  │   ├ `float32` wavelength()
+  │   ├ `float32` pathlength()
+  │   └── core
+  │       ├ `uint8` image(pixel)
+  │       ├ `uint64` timestamp(image_num)
+  │       │   └ :standard_name = "time"
+  │       ├ `uint32` startpixel(image_num)
+  │       ├ `uint8` width(image_num)
+  │       ├ `uint8` height(image_num)
+  │       └ `byte` overload(image_num)
+  │
+  ├── <instrument-2>
+  │   └── ...
+  │
+  └── ...
 ```
 
+### File root
+
+There is only one required global attribute which is ``Conventions``. This must include the text "SPIF-m.n", where "m.n" are the major and minor versions. Other conventions strings can also be included with as a space- (recommended) or comma-separated list.
+
+### Instrument group
+
+It is envisaged that SPIF files will normally contain data from a single instrument. However it may make sense to include more than one instrument or an instrument with more than one channel, for example the [SPEC](http://www.specinc.com) [2D-S (Stereo) Probe](http://www.specinc.com/2d-s-stereo-probe-operation) which has two orthogonal OAPs, in the same file. The names of the instrument groups are not prescribed but should be descriptive. Group attributes ``instrument_name`` and ``instrument_long_name`` contain more complete instrument information. In this text the instrument groups are written as ``<instrument-1>``, ``<instrument-2>``, etc where the braces indicate that it is not a literal string.
+
+The instrument group contains variables with information about the probe size, resolution, and other data required for interpreting the raw images.
+
+### Instrument Core group
 
 
 ## Image Data
