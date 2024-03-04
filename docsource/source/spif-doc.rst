@@ -29,33 +29,67 @@ SPIF Files
 The SPIF standard
 -----------------
 
-The SPIF standard is a standardised vocabulary for storing image data and metadata in `netCDF4 <https://doi.org/10.5065/D6H70CW6>`_ files. NetCDF allows for fully self-describing, archival standard data and is supported on a variety of platforms, environments, and programming languages and commonly used in earth science communities. Conventions and best practice guides such as `Attribute Convention for Dataset Discover <https://wiki.esipfed.org/Attribute_Convention_for_Data_Discovery_1-3>`_ (ACDD) and `CF (Climate and Forecast) Conventions <http://cfconventions.org/>`_ are used to standardise the netCDF4 metadata and variable structures to suit a particular field and so facilitate access, standard workflows, and comparison between datasets.
+The SPIF standard is a standardised vocabulary for storing image data and metadata in `netCDF4 <https://doi.org/10.5065/D6H70CW6>`_ files. NetCDF allows for fully self-describing, archival standard data and is supported on a variety of platforms, environments, and programming languages and commonly used in earth science communities. Conventions and best practice guides such as `Attribute Convention for Dataset Discover <https://wiki.esipfed.org/Attribute_Convention_for_Data_Discovery_1-3>`_ (ACDD) and `CF (Climate and Forecast) Conventions <https://cfconventions.org>`_ are used to standardise the netCDF4 metadata and variable structures to suit a particular field and so facilitate access, standard workflows, and comparison between datasets.
 
-In a similar fashion to the CF Conventions; SPIF defines a minimum vocabulary, that is groups, variables, and attributes, that must be included for compliance. SPIF is referred to here as a format standard, rather than a convention, as it stipulates the form of the variable data as well as variable attributes. This is to ensure that all raw data required for processing is included in a consistent structure. It is possible to create a SPIF file that is also compliant with ACDD, CF, other conventions, and any organisational requirements.
+In a similar fashion to the CF Conventions; SPIF defines a minimum vocabulary, that is groups, variables, and attributes, that must be included for compliance. SPIF is referred to here as a format standard, rather than a convention, as it stipulates the form of the variable data as well as variable attributes. This is to ensure that all raw data required for processing is included in a consistent structure. SPIF has been designed to be compatible with common data conventions so is possible to create a SPIF file that is also compliant with ACDD, CF, other conventions, and any organisational requirements.
 
-Additional data can be stored in a SPIF file along with the required vocabulary to provide ancillary data from other sources, processed data products, or instrument housekeeping data to aid in diagnostic investigations. Any such data contained within the file is optional but should not conflict with the SPIF standard.
+Additional data can be stored in a SPIF file along with the required vocabulary to provide ancillary data from other sources, processed data products, or instrument housekeeping data to aid in diagnostic investigations. Any such data contained within the file is optional but should not conflict with requirements of the SPIF standard.
 
 -------------------
 Standard Compliance
 -------------------
 
-Link here to a page on SPIF *vocal* project.
+This `repository <https://github.com/FAAM-146/spif>`_ contains the *vocal* project for the SPIF data standard. *Vocal* is a tool for managing netCDF data product standards and associated data product specifications. It can be used to check netCDF file compliance to a standard, including SPIF. See the :doc:`SPIF project page <spif-project>` for more details.
+
+The SPIF convention string can be added to the ``Conventions`` global attribute of a netCDF file that is compliant, that is;
+
+.. code-block:: ncl
+
+  Conventions: "SPIF-m.n"
+
+where ``m`` is the major version, and ``n`` the minor version of the SPIF standard.
 
 
 -------------------
 SPIF File Structure
 -------------------
 
-SPIF files use netCDF4 groups to divide multiple instruments and to separate image data from other types of data.
+SPIF files use netCDF4 groups to divide multiple instruments and to separate image data from other types of data. The group structure of a SPIF file will look like;
 
+.. parsed-literal::
+  :name: spif-structure-basic
+
+  **root**
+    │
+    ├── *platform*
+    │
+    ├── **<instrument-1>**
+    │   │
+    │   ├── **core**
+    │   │
+    │   ├── *auxillary*
+    │   │
+    │   ├── *level-0*
+    │   │
+    │   ├── *level-1*
+    │   │
+    │   └── *level-2*
+    │
+    ├── <*instrument-2*>
+    │   │
+    │   └── ...
+    │
+    └── ...
+
+Groups in bold are mandatory while those in italics are optional. The instrument groups are labelled as ``<instrument-1>``, ``<instrument-2>``,...``<instrument-n>`` where the angled braces ``< >`` indicate that the name used in the SPIF file will be some other string. The file structure and required vocabulary are described below.
 
 The SPIF definition is somewhat constrained to ensure that standard-compliant files contain all the information/data required for future processing. SPIF files must contain, as a minimum, a set of mandatory parameters. That is groups, attributes, and (coordinate) variables.
 
-    :doc:`List of Mandatory Parameters <spif_mandatory_params>`
+    :doc:`List of Mandatory Parameters <spif_mandatory_vocab>`
 
 In addition to these mandatory netCDF parameters, a SPIF file can be extended with additional groups, attributes, and (coordinate) variables. It may assist users if these added parameters are familiar and so some suggested optional parameters are given;
 
-    :doc:`List of Optional Parameters <spif_optional_params>`
+    :doc:`List of Optional Parameters <spif_optional_vocab>`
 
 Further information on optional groups and their contents are described in :doc:`spif_extensions`.
 
