@@ -81,21 +81,67 @@ SPIF files use netCDF4 groups to divide multiple instruments and to separate ima
     │
     └── ...
 
-Groups in bold are mandatory while those in italics are optional. The instrument groups are labelled as ``<instrument-1>``, ``<instrument-2>``,...``<instrument-n>`` where the angled braces ``< >`` indicate that the name used in the SPIF file will be some other string. The file structure and required vocabulary are described below.
+Groups in bold are mandatory while those in italics are optional. The instrument groups are labelled as ``<instrument-1>``, ``<instrument-2>``,...``<instrument-n>`` where the angled braces ``< >`` indicate that the name actually used in the SPIF file will be some other string. The file structure and required vocabulary are described below.
 
-The SPIF definition is somewhat constrained to ensure that standard-compliant files contain all the information/data required for future processing. SPIF files must contain, as a minimum, a set of mandatory parameters. That is groups, attributes, and (coordinate) variables.
+The SPIF definition is constrained to ensure that standard-compliant files contain all the information/data required for future processing. SPIF files must contain, as a minimum, a mandatory vocabulary. That is; groups, attributes, and (coordinate) variables.
 
-    :doc:`List of Mandatory Parameters <spif_mandatory_vocab>`
+  Details of the mandatory vocabulary are described in detail :doc:`here <spif_mandatory_vocab>`.
 
 In addition to these mandatory netCDF parameters, a SPIF file can be extended with additional groups, attributes, and (coordinate) variables. It may assist users if these added parameters are familiar and so some suggested optional parameters are given;
 
-    :doc:`List of Optional Parameters <spif_optional_vocab>`
-
-Further information on optional groups and their contents are described in :doc:`spif_extensions`.
+  Further information on optional groups and their contents are described in :doc:`spif_extensions`. :doc:`List of Optional Parameters <spif_optional_vocab>`
 
 
+File root
+^^^^^^^^^
 
-In order to be SPIF-compliant, a file must have a prescribed structure and a set of included parameters. The exact list of mandatory parameters---parameters include netCDF groups, attributes, dimensions and variables---are given :doc:`here <spif_mandatory_params>` [#ParamGenerationFoot]_.
+There is only one required global attribute which is ``Conventions``. This must include the text ``SPIF-m.n``, where ``m.n`` are the major and minor versions. Other conventions strings can also be included with as a space- (recommended) or comma-separated list.
+
+  :Conventions: A space or comma delineated list of conventions given in a single string. Must include "SPIF-m.n" where m.n is the version number.
+
+There are many recommended global attributes, users may refer to the `ACDD <https://wiki.esipfed.org/Attribute_Convention_for_Data_Discovery_1-3>`_ which lists many.
+
+
+Instrument group
+^^^^^^^^^^^^^^^^
+
+However it may make sense to include more than one instrument or an instrument with more than one channel, for example the `SPEC <http://www.specinc.com>`_ `2D-S (Stereo) Probe <http://www.specinc.com/2d-s-stereo-probe-operation>`_ which has two orthogonal OAPs, in the same file. The names of the instrument groups are not prescribed but should be descriptive, for example for the 2D-S the instrument group names may be ``2DS_horizonal`` and 2DS_vertical``. In this text the instrument groups are written as ``<instrument-1>``, ``<instrument-2>``, etc where the braces indicate that it is not a literal string. Group attributes ``instrument_name`` and ``instrument_long_name`` should contain more complete instrument information.
+
+The instrument group contains variables with information about the probe size, resolution, and other data required for interpreting the raw images.
+
+Mandatory instrument group attributes are;
+
+  :instrument_name: Short name of the instrument. If may be the same as the group name.
+  :instrument_long_name: Full descriptive name of instrument.
+
+
+#### Mandatory Variables:
+
+> `float32` **color_level**(pixel_colors): Lower bound of fractional obscuration/grayscale/color level of photodiode array for each color_value. Gives the number of shadow/gray/color levels in the image.
+
+> `int32` **array_size**(array_dimensions): Number of pixels on the detector.
+
+
+> `int32` **image_size**(array_dimensions): Number of pixels across an image. If fixed size then will be number of pixels, if variable size then use `_FillValue`.
+
+> `float32` **resolution**(array_dimensions): Image resolution of instrument for each dimension.
+
+> `float32` **wavelength**(): Operating wavelength of laser used for shadowing/imaging the particles.
+
+> `float32` **pathlength**(): Optical path length of imaging region.
+
+#### Recommended Variables:
+
+> `float32` **color_value**(pixel_colors): Value of each color used in image. Usually these will be contiguous but the does not have to be. Can be included to facilitate arbitrary values to be used in the "image" variable.
+
+> `float32` **resolution_error**(array_dimensions): Uncertainty of the image resolution of instrument for each dimension.
+
+
+
+
+
+
+
 
 
 
@@ -129,15 +175,7 @@ root
   └── ...
 ```
 
-### File root
 
-There is only one required global attribute which is ``Conventions``. This must include the text "SPIF-m.n", where "m.n" are the major and minor versions. Other conventions strings can also be included with as a space- (recommended) or comma-separated list.
-
-#### Mandatory Attributes:
-
-> _Conventions:_ A space or comma delineated list of conventions given in a single string. Must include "SPIF-m.n" where m.n is the version number.
-
-There are many recommended global attributes, users may refer to the [ACDD](https://wiki.esipfed.org/Attribute_Convention_for_Data_Discovery_1-3) which lists many.
 
 
 ### Instrument group
