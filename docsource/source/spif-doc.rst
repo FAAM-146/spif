@@ -115,6 +115,52 @@ Mandatory instrument group attributes are;
   :instrument_long_name: Full descriptive name of instrument.
 
 
+:doc:`Mandatory Parameters <spif_mandatory_vocab>`
+
+
+
+Instrument Core group
+^^^^^^^^^^^^^^^^^^^^^
+
+The instrument Core group is where the flattened image data is stored. There are two unlimited dimensions in the core group, "image_num" and "pixel". The maximum value of the coordinate variable "image_num" is the number of images in the dataset while the maximum of "pixel" is the total number of pixels in the image array.
+
+The arrival time of each image is given by "timestamp" in a recognised time, usually nanoseconds, from a reference time. Time variables have a units string attribute that conforms to the [UDUNITS recommendation](https://cfconventions.org/Data/cf-conventions/cf-conventions-1.11/cf-conventions.html#time-coordinate), for example “nanoseconds since 2024-01-01 00:00:00 +0”. The "timestamp" variable has
+a ``standard_name`` attribute "time". It's worth mentioning that due to the random nature of cloud sampling, the data in "timestamp" will be highly irregular and different from what one may expect from timeseries data.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #### Mandatory Variables:
 
 > `float32` **color_level**(pixel_colors): Lower bound of fractional obscuration/grayscale/color level of photodiode array for each color_value. Gives the number of shadow/gray/color levels in the image.
