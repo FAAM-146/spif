@@ -54,7 +54,7 @@ where ``m`` is the major version, and ``n`` the minor version of the SPIF standa
 SPIF File Structure
 -------------------
 
-SPIF files use netCDF4 groups to divide multiple instruments and to separate image data from other types of data. The group structure of a SPIF file will look like;
+SPIF files use netCDF4 groups to divide multiple imaging instruments and to separate image data from other types of data. The group structure of a SPIF file will look like;
 
 .. parsed-literal::
   :name: spif-structure-basic
@@ -63,7 +63,7 @@ SPIF files use netCDF4 groups to divide multiple instruments and to separate ima
     │
     ├── *platform*
     │
-    ├── **<instrument-1>**
+    ├── **<imager-1>**
     │   │
     │   ├── **core**
     │   │
@@ -75,13 +75,13 @@ SPIF files use netCDF4 groups to divide multiple instruments and to separate ima
     │   │
     │   └── *level-2*
     │
-    ├── <*instrument-2*>
+    ├── <*imager-2*>
     │   │
     │   └── ...
     │
     └── ...
 
-Groups in bold are mandatory while those in italics are optional. The instrument groups are labelled as ``<instrument-1>``, ``<instrument-2>``,...``<instrument-n>`` where the angled braces ``< >`` indicate that the name actually used in the SPIF file will be some other string. The file structure and required vocabulary are described below.
+Groups in bold are mandatory while those in italics are optional. The imaging instrument groups are labelled as ``<imager-1>``, ``<imager-2>``,...``<imager-n>`` where the angled braces ``< >`` indicate that the name actually used in the SPIF file will be some other string. Documentation uses ``imager`` to distinguish these groups from those containing non-imaging instrument data. The file structure and required vocabulary are described below.
 
 The SPIF definition is constrained to ensure that standard-compliant files contain all the information/data required for future processing. SPIF files must contain, as a minimum, a mandatory vocabulary. That is; groups, attributes, and (coordinate) variables.
 
@@ -102,32 +102,31 @@ There is only one required global attribute which is ``Conventions``. This must 
 There are many recommended global attributes, users may refer to the `ACDD <https://wiki.esipfed.org/Attribute_Convention_for_Data_Discovery_1-3>`_ which lists many.
 
 
-Instrument group
+Imager group
 ^^^^^^^^^^^^^^^^
 
-However it may make sense to include more than one instrument or an instrument with more than one channel, for example the `SPEC <http://www.specinc.com>`_ `2D-S (Stereo) Probe <http://www.specinc.com/2d-s-stereo-probe-operation>`_ which has two orthogonal OAPs, in the same file. The names of the instrument groups are not prescribed but should be descriptive, for example for the 2D-S the instrument group names may be ``2DS_horizonal`` and 2DS_vertical``. In this text the instrument groups are written as ``<instrument-1>``, ``<instrument-2>``, etc where the braces indicate that it is not a literal string. Group attributes ``instrument_name`` and ``instrument_long_name`` should contain more complete instrument information.
+However it may make sense to include more than one instrument or an instrument with more than one channel, for example the `SPEC <http://www.specinc.com>`_ `2D-S (Stereo) Probe <http://www.specinc.com/2d-s-stereo-probe-operation>`_ which has two orthogonal OAPs, in the same file. The names of the imager groups are not prescribed but should be descriptive, for example for the 2D-S the imager group names may be ``2DS_horizonal`` and 2DS_vertical``. In this text the imager groups are written as ``<imager-1>``, ``<imager-2>``, etc where the braces indicate that it is not a literal string. Group attributes ``imager_name`` and ``imager_long_name`` should contain more complete instrument information.
 
-The instrument group contains variables with information about the probe size, resolution, and other data required for interpreting the raw images.
+The imager group contains variables with information about the probe size, resolution, and other data required for interpreting the raw images.
 
-Mandatory instrument group attributes are;
+Mandatory imager group attributes are;
 
-  :instrument_name: Short name of the instrument. If may be the same as the group name.
-  :instrument_long_name: Full descriptive name of instrument.
+  :imager_name: Short name of the imaging instrument. If may be the same as the group name.
+  :imager_long_name: Full descriptive name of the imaging instrument.
 
 
 :doc:`Mandatory Parameters <spif_mandatory_vocab>`
 
 
+Imager core group
+^^^^^^^^^^^^^^^^^
 
-Instrument Core group
-^^^^^^^^^^^^^^^^^^^^^
+The imager ``core`` group is where the flattened image data is stored. There are two unlimited dimensions in the ``core`` group, "image_num" and "pixel". The maximum value of the coordinate variable "image_num" is the number of images in the dataset while the maximum of "pixel" is the total number of pixels in the image array.
 
-The instrument Core group is where the flattened image data is stored. There are two unlimited dimensions in the core group, "image_num" and "pixel". The maximum value of the coordinate variable "image_num" is the number of images in the dataset while the maximum of "pixel" is the total number of pixels in the image array.
+The arrival time of each image is given by ``timestamp`` in a recognised time, usually nanoseconds, from a reference time. ``timestamp`` has a ``units`` attribute string that conforms to the `UDUNITS recommendation <https://cfconventions.org/Data/cf-conventions/cf-conventions-1.11/cf-conventions.html#time-coordinate>`_, for example "nanoseconds since 2024-01-01 00:00:00 +0". The ``timestamp`` variable has
+a ``standard_name`` attribute "time". It's worth mentioning that due to the random nature of cloud sampling, the data in ``timestamp`` will be highly irregular and different from what one may expect from timeseries data.
 
-The arrival time of each image is given by "timestamp" in a recognised time, usually nanoseconds, from a reference time. Time variables have a units string attribute that conforms to the [UDUNITS recommendation](https://cfconventions.org/Data/cf-conventions/cf-conventions-1.11/cf-conventions.html#time-coordinate), for example “nanoseconds since 2024-01-01 00:00:00 +0”. The "timestamp" variable has
-a ``standard_name`` attribute "time". It's worth mentioning that due to the random nature of cloud sampling, the data in "timestamp" will be highly irregular and different from what one may expect from timeseries data.
-
-
+Note that different probes may not provide image times in exactly the same way and indeed, image arrival time may in some circumstances be difficult to precisely define. However, the ``timestamp`` variable will always give the image arrival time as accurately as possible, a description of how it was determined from the raw buffer data should be included in the ``comment`` or another variable attribute. One may decide to add a ``timestamp_flag`` as an ancillary variable using the `CF flag <https://cfconventions.org/Data/cf-conventions/cf-conventions-1.11/cf-conventions.html#flags>`_ format to quantify the reliability of each time stamp.
 
 
 
