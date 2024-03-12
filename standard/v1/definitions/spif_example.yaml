@@ -33,14 +33,17 @@ dimensions: []
 
 # ------------------------------------------------------------------------------
 groups:
-  # Top-level instrument group
+  # Top-level imager group
   - meta:
-      name: instrument_1_group
+      name: imager_1_group
+      description: >-
+        Group containing image data from a single instrument or instrument
+        channel.
 
-    # Required instrument group attributes
+    # Required imager group attributes
     attributes:
-      instrument_name: instrument_1
-      instrument_long_name: instrument_1 with a more descriptive name
+      instrument_name: imager_1
+      instrument_long_name: imager_1 with a more descriptive name
     
     # Required instrument group dimensions
     dimensions:
@@ -55,6 +58,9 @@ groups:
           name: color_level
           datatype: <float32>
           required: true
+          description: >-
+            Lower bound of fractional obscuration/grayscale/color level of
+            photo-detectors for each ``color_value``.
         dimensions: ['pixel_colors']
         attributes:
           attribute1: Testing a variable attribute not in the SPIF spec
@@ -63,6 +69,8 @@ groups:
           name: array_size
           datatype: <int32>
           required: true
+          description: >-
+            Number of pixels on the detector.
         dimensions: ['array_dimensions']
         attributes: {}
       
@@ -70,6 +78,9 @@ groups:
           name: image_size
           datatype: <int32>
           required: true
+          description: >-
+            Number of pixels across an image. If fixed size then will be
+            number of pixels, if variable size then use ``_FillValue``.
         dimensions: ['array_dimensions']
         attributes: {}
       
@@ -77,6 +88,8 @@ groups:
           name: resolution
           datatype: <float32>
           required: true
+          description: >-
+            Image resolution of instrument for each dimension.
         dimensions: ['array_dimensions']
         attributes: {}
       
@@ -84,6 +97,9 @@ groups:
           name: wavelength
           datatype: <float32>
           required: true
+          description: >-
+            Operating wavelength of laser used for shadowing/imaging the
+            particles. If white light source then use ``_FillValue``.
         dimensions: []
         attributes: {}
       
@@ -91,6 +107,8 @@ groups:
           name: pathlength
           datatype: <float32>
           required: true
+          description: >-
+            Optical path length of imaging region.
         dimensions: []
         attributes: {}
 
@@ -98,7 +116,10 @@ groups:
       # instrument/core group is required.
       - meta:
           name: core
-        
+          description: >-
+            The imager core group containing the flattened image data and
+            variables needed for reading that data.
+
         # No instrument/core mandatory attributes
         attributes: {}
         
@@ -116,6 +137,8 @@ groups:
               name: image
               datatype: <uint8>
               required: true
+              description: >-
+                Flattened array of image pixel color values.
             dimensions: ['pixel']
             attributes: {}
 
@@ -123,6 +146,9 @@ groups:
               name: timestamp
               datatype: <uint64>
               required: true
+              description: >-
+                Arrival time, relative to a reference start time, of the first
+                pixel of an image.
             dimensions: ['image_num']
             attributes:
               attribute1: testing a variable attribute not in the SPIF spec
@@ -133,6 +159,8 @@ groups:
               name: startpixel
               datatype: <uint32>
               required: true
+              description: >-
+                Array index of first pixel of an image.
             dimensions: ['image_num']
             attributes: {}
 
@@ -140,6 +168,8 @@ groups:
               name: width
               datatype: <uint8>
               required: true
+              description: >-
+                Number of pixels across an image.
             dimensions: ['image_num']
             attributes: {}
 
@@ -147,6 +177,8 @@ groups:
               name: height
               datatype: <uint8>
               required: true
+              description: >-
+                Number of slices/lines in an image.
             dimensions: ['image_num']
             attributes: {}
 
@@ -154,5 +186,7 @@ groups:
               name: overload
               datatype: <byte>
               required: true
+              description: >-
+                Flag indicating an imager overload condition for each image.
             dimensions: ['image_num']
             attributes: {}
