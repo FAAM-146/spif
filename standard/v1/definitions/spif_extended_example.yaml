@@ -194,7 +194,8 @@ groups:
   # Top-level instrument group
   - meta:
       name: OAP100
-      description: Instrument group of raw and processed data for this instrument.
+      description: >-
+        Instrument group of raw and processed data for this instrument.
 
     attributes:
       # instrument information
