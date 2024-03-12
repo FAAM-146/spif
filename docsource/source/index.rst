@@ -3,12 +3,21 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to SPIF's documentation!
-================================
+.. title:: SPIF - Single Particle Image Format
+
+***********************************
+SPIF - Single Particle Image Format
+***********************************
+
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
+
+      spif-doc
+
+
+
 
 
 
