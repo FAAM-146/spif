@@ -99,13 +99,13 @@ There is only one required global attribute which is ``Conventions``. This must 
 
   :Conventions: A space or comma delineated list of conventions given in a single string. Must include "SPIF-m.n" where m.n is the version number.
 
-There are many recommended global attributes, users may refer to the `ACDD <https://wiki.esipfed.org/Attribute_Convention_for_Data_Discovery_1-3>`_ which lists many.
+There are many recommended global attributes, users may refer to the `ACDD <https://wiki.esipfed.org/Attribute_Convention_for_Data_Discovery_1-3>`_ which lists many commonly used attributes.
 
 
 Imager group
-^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^
 
-However it may make sense to include more than one instrument or an instrument with more than one channel, for example the `SPEC <http://www.specinc.com>`_ `2D-S (Stereo) Probe <http://www.specinc.com/2d-s-stereo-probe-operation>`_ which has two orthogonal OAPs, in the same file. The names of the imager groups are not prescribed but should be descriptive, for example for the 2D-S the imager group names may be ``2DS_horizonal`` and 2DS_vertical``. In this text the imager groups are written as ``<imager-1>``, ``<imager-2>``, etc where the braces indicate that it is not a literal string. Group attributes ``imager_name`` and ``imager_long_name`` should contain more complete instrument information.
+The image data from an appropriate instrument is contained within a special group within the SPIF file ``root``. It may make sense to include more than one instrument or an instrument with more than one channel, for example the `SPEC <http://www.specinc.com>`_ `2D-S (Stereo) Probe <http://www.specinc.com/2d-s-stereo-probe-operation>`_ which has two orthogonal OAPs, in the same file. The names of the imager groups are not prescribed but should be descriptive, for example for the 2D-S the imager group names may be ``2DS_horizonal`` and 2DS_vertical``. In this text the imager groups are written as ``<imager-1>``, ``<imager-2>``, etc where the braces indicate that it is not a literal string. Group attributes ``imager_name`` and ``imager_long_name`` should contain more complete instrument information.
 
 The imager group contains variables with information about the probe size, resolution, and other data required for interpreting the raw images.
 
@@ -118,10 +118,14 @@ Mandatory imager group attributes are;
 :doc:`Mandatory Parameters <spif_mandatory_vocab>`
 
 
+
+
 Imager core group
 ^^^^^^^^^^^^^^^^^
 
-The imager ``core`` group is where the flattened image data is stored. There are two unlimited dimensions in the ``core`` group, "image_num" and "pixel". The maximum value of the coordinate variable "image_num" is the number of images in the dataset while the maximum of "pixel" is the total number of pixels in the image array.
+The imager ``core`` group is a sub-group of the ``imager`` group and contains the flattened image data. All image data has been extracted from the raw binary file and presented in a more usable form. No filtering is carried out so potentially corrupt images, repeated images, and noise are all included.
+
+The length of the 1-dimensional image array is the product of the number of images, given by the unlimited dimension ``image_num``, and the width and height of each image. Depending on the type of instrument, the width and/or height may be fixed or variable for each image. The maximum value of the coordinate variable ``image_num`` is the number of images in the dataset while the maximum value of ``pixel`` is the total number of pixels in the image array.
 
 The arrival time of each image is given by ``timestamp`` in a recognised time, usually nanoseconds, from a reference time. ``timestamp`` has a ``units`` attribute string that conforms to the `UDUNITS recommendation <https://cfconventions.org/Data/cf-conventions/cf-conventions-1.11/cf-conventions.html#time-coordinate>`_, for example "nanoseconds since 2024-01-01 00:00:00 +0". The ``timestamp`` variable has
 a ``standard_name`` attribute "time". It's worth mentioning that due to the random nature of cloud sampling, the data in ``timestamp`` will be highly irregular and different from what one may expect from timeseries data.
