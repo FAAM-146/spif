@@ -45,14 +45,14 @@ groups:
       instrument_name: imager_1
       instrument_long_name: imager_1 with a more descriptive name
     
-    # Required instrument group dimensions
+    # Required imager group dimensions
     dimensions:
       - name: array_dimensions
         size: 2
       - name: pixel_colors
         size: 3
     
-    # instrument group mandatory variables
+    # imager group mandatory variables
     variables:
       - meta:
           name: color_level
@@ -64,7 +64,18 @@ groups:
         dimensions: ['pixel_colors']
         attributes:
           attribute1: Testing a variable attribute not in the SPIF spec
-      
+
+      - meta:
+          name: color_value
+          datatype: <uint8>
+          required: false
+          description: >-
+            Value of each color used in image. Usually these will be contiguous
+            but it does not have to be. Can be included to facilitate the use
+            of arbitrary values in the ``core/image`` variable.
+        dimensions: ['pixel_colors']
+        attributes: {}
+
       - meta:
           name: array_size
           datatype: <int32>
@@ -112,25 +123,35 @@ groups:
         dimensions: []
         attributes: {}
 
+      - meta:
+          name: resolution_error
+          datatype: <float32>
+          required: false
+          description: >-
+            Uncertainty of the image resolution of instrument for each dimension.
+        dimensions: ['array_dimensions']
+        attributes: {}
+
+# ------------------------------------------------------------------------------
     groups:
-      # instrument/core group is required.
+      # imager/core group is required.
       - meta:
           name: core
           description: >-
             The imager core group containing the flattened image data and
             variables needed for reading that data.
 
-        # No instrument/core mandatory attributes
+        # No imager/core mandatory attributes
         attributes: {}
         
-        # instrument/core group dimensions. Both are UNLIMITED
+        # imager/core group dimensions. Both are UNLIMITED
         dimensions:
           - name: image_num
             size: null
           - name: pixel
             size: null
 
-        # Required instrument/core group variables
+        # Required imager/core group variables
         variables:
         
           - meta:
