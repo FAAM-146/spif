@@ -118,8 +118,6 @@ Mandatory imager group attributes are;
 :doc:`Mandatory Parameters <spif_mandatory_vocab>`
 
 
-
-
 Imager core group
 ^^^^^^^^^^^^^^^^^
 
