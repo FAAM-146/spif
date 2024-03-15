@@ -17,16 +17,46 @@ import os.path
 import sys
 
 # Directory of spif standard
-# std_dir = os.path.abspath(
-#                 os.path.join(os.path.dirname(__file__), '..', '..', 'standard')
-#                 )
+std_dir = os.path.abspath(
+                os.path.join(os.path.dirname(__file__), '..', '..', 'standard')
+                )
 
-# if src_dir not in sys.path:
-#     sys.path.insert(0,src_dir)
+if std_dir not in sys.path:
+    sys.path.insert(0,std_dir)
 
-# import re
-# import spif
-# import sphinx_rtd_theme
+def setup(app):
+    app.add_config_value(std, None, 'env')
+    app.add_config_value(ver, None, 'env')
+    app.add_config_value(vocab, 'all', 'env')
+
+
+
+
+# std = None
+# ver = None
+# vocab = 'all'
+
+# To modify the defaults when building with Sphinx;
+# shinx-build -D std=1 -D ver=1.2 -D vocab=required,optional source/ build/
+#
+# This will build html output (the default) for v1 of the standard with v1.2
+# products (will fall back to latest if v1.2 does not exist) and include
+# information on required and optional vocabulary.
+
+import pdb
+pdb.set_trace()
+
+from preprocessor import *
+
+
+
+import re
+#import spif
+import sphinx_rtd_theme
+
+
+
+
 
 # -- Project information -----------------------------------------------------
 
@@ -45,7 +75,7 @@ release = '0.1'
 # ones.
 extensions = ['sphinx_rtd_theme',
               'sphinx.ext.autodoc',
-              'sphinx.ext.napoleon'
+              'sphinx.ext.napoleon',
             ]
 
 napoleon_include_init_with_doc = True
@@ -72,7 +102,7 @@ language = None
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path .
-exclude_patterns = ['build']
+exclude_patterns = ['Thumbs.db', '.DS_Store', 'build']
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = 'sphinx'
@@ -101,3 +131,4 @@ html_theme = 'alabaster'
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
+
