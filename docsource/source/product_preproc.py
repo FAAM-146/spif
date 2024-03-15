@@ -4,6 +4,8 @@ import shutil
 from typing import Mapping
 import os
 import sys
+
+# Add standard
 sys.path.append('../../')
 from attributes import GlobalAttributes
 
@@ -88,18 +90,33 @@ def copy_variables() -> None:
         os.path.join(dynamic_dir,  'variables.rst'),
     )
 
-def populate_variables(definition) -> None:
+def populate_variables(definition,
+                       incl_required: bool=True,
+                       incl_optional: bool=False) -> None:
     with open(definition, 'r') as f:
         data = json.load(f)
     variables = sorted(data['variables'], key=lambda x: x['meta']['name'])
     text = ''
     for var in variables:
+
+        if incl_required and incl_optional:
+            pass
+        elif incl_required and var["meta"]["required"]:
+            pass
+        elif incl_optional and not var["meta"]["required"]:
+            pass
+        else:
+            continue
+
         _name =  f'{var["meta"]["name"]}'#' `{var["meta"]["datatype"]}`'
         text += _name + '\n'
         text += '-' * (len(_name)) + '\n'
         # text += f'* **{var["meta"]["name"]}** `{var["meta"]["datatype"]}`\n\n'
         text += f':Datatype: `{var["meta"]["datatype"]}`\n'
-        text += f':Dimensions: {", ".join(var["dimensions"])}\n\n'
+        text += f':Dimensions: {", ".join(var["dimensions"])}\n'
+        text += (f':Description: {var["meta"]["description"]}\n\n'
+                 if var["meta"].get("description")
+                 else '\n')
         #text += '\nAttributes\n'
         #text += '='* len('Attributes') + '\n\n'
         for attr_key, attr_value in var['attributes'].items():
