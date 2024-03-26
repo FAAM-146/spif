@@ -5,6 +5,12 @@ from typing import Mapping
 import os
 import sys
 
+import pdb
+
+# Preprocessor information
+__version__ = 20240326
+
+
 # Path to spif standard dir
 spif_dir = os.path.abspath(os.path.join(os.path.dirname(__file__),
                                         '..',
@@ -13,8 +19,8 @@ spif_dir = os.path.abspath(os.path.join(os.path.dirname(__file__),
 
 # Default variables that can be passed from Sphinx to this script
 STD = 'latest'      # Version of the spif standard. Default is highest v number
-VERSION = 'latest'  # Version of the product. Default is latest
-DOC_TYPES = 'all'   # Type of vocabulary to include in documentation
+PRODUCT = 'latest'  # Version of the product. Default is latest
+VOCAB_TYPES = 'all' # Type of vocabulary to include in documentation
 
 # To modify the defaults when building with Sphinx;
 # shinx-build -D std=1 -D version=1.2 -D doc_types=required,optional source/ build/
@@ -22,54 +28,93 @@ DOC_TYPES = 'all'   # Type of vocabulary to include in documentation
 # This will build html output (the default) for v1 of the standard with v1.2
 # products (will fall back to latest if v1.2 does not exist) and include
 # information on required and optional vocabulary.
-if not std:
-    std = STD
-if not version:
-    version = VERSION
-if not doc_types:
-    doc_types = DOC_TYPES
-
-# Find required version of the standard. Assume directories are v1, v2, etc
-std = str(std).lower()
-std += 'v' if not std.startswith('v'):
-if not glob.glob(std, std_dir):
-    # If requested std does not exist then default to the latest one
-    std_dir = sorted(glob.glob('v*', std_dir))[-1]
-    std = os.path.basename(std_dir)
-else:
-    std_dir = glob.glob(std, std_dir)
-
-# Find required version of the standard.
-# Assume directory names are 'v' num or 'latest'
-version = str(version).lower()
-if version != VERSION and not version.startswith('v'):
-    version += 'v'
-
-# Find required version
-ver_dir = os.path.join(spif_dir, 'products', version)
-if not os.path.isdir(ver_dir):
-    ver_dir = os.path.join(spif_dir, 'products', VERSION)
 
 
 
 
 
-# Determine what type of vocabulary to include in docs
-doc_types = [s.lower() for s in list(doc_types)]
-incl_required = True
-incl_optional = False
 
-if set('all', 'both').union(doc_types):
+
+
+def get_std(std=None):
+    """Determine the version of the standard to include in the preprocessing
+
+    """
+    if not std:
+        std = STD
+
+    # Find required version of the standard. Assume directories are v1, v2, etc
+    std = str(std).lower()
+    std = std if std.startswith('v') else 'v' + std
+    if not glob.glob(std, std_dir):
+        # If requested std does not exist then default to the latest one
+        std_dir = sorted(glob.glob('v*', std_dir))[-1]
+        std = os.path.basename(std_dir)
+    else:
+        std_dir = glob.glob(std, std_dir)
+
+    return std, std_dir
+
+def get_product(product=None):
+    """Determine the version of the product to include in the preprocessing
+
+    """
+
+    if not product:
+        product = PRODUCT
+
+    # Find required version of the standard.
+    # Assume directory names are 'v' num or 'latest'
+    product = str(product).lower()
+    if product != PRODUCT and not product.startswith('v'):
+        product += 'v'
+
+    # Find required version
+    product_dir = os.path.join(spif_dir, 'products', product)
+    if not os.path.isdir(product_dir):
+        product_dir = os.path.join(spif_dir, 'products', PRODUCT)
+
+    return product, product_dir
+
+
+def get_incvocab(vocab=None):
+    """Determine the vocabulary types to include in the preprocessing
+
+    """
+
+    if not vocab:
+        vocab = VOCAB_TYPES
+
+    # Determine what type of vocabulary to include in docs
+    vocab = [s.lower() for s in list(vocab)]
     incl_required = True
-    incl_optional = True
-else:
-    if set(['required', 'mandatory']).union(doc_types):
-        incl_required = True
-    elif set(['optional']).union(doc_types):
-        incl_optional = True
-    elif not set(['required', 'mandatory']).union(doc_types):
-        incl_required = False
+    incl_optional = False
 
+    if set('all', 'both').union(vocab):
+        incl_required = True
+        incl_optional = True
+    else:
+        if set(['required', 'mandatory']).union(vocab):
+            incl_required = True
+        elif set(['optional']).union(vocab):
+            incl_optional = True
+        elif not set(['required', 'mandatory']).union(vocab):
+            incl_required = False
+
+    return {'incl_required': incl_required, 'incl_optional': incl_optional}
+
+
+def get_definition(std, product, vocab):
+    """Determine arguments to apply to preprocessor
+
+    """
+
+    _d = lambda t: {k:v for k, v in zip(('version', 'path'), t)}
+
+    return {'standard': _d(get_std(std)),
+            'product': _d(get_product(product)),
+            'vocab': get_incvocab(vocab),
+            }
 
 
 
@@ -205,24 +250,38 @@ if __name__ == '__main__':
 
     import argparse
 
+    # Define commandline options
+    usage = "make <build> PROCOPTS='std_version product_version vocab_type'"
+    version = f"version: {__version__}"
+    description = ("Preprocessor for sphinx generator of spif "
+                   "documentation.\n {version}")
+
     parser = argparse.ArgumentParser(usage=usage,
             formatter_class=argparse.RawDescriptionHelpFormatter,
-            description=description,
-            epilog=epilog)
+            description=description)
 
     # Optional arguments
     parser.add_argument('-v', '--version',
                         action='store',
-                        dest='version',
+                        dest='std_version',
+                        default='latest',
+                        type=str,
+                        help=("Version of the standard that will be used "
+                              "to create the documentation. If the version "
+                              "given does not exist then will default "
+                              "to the most recent version."))
+    parser.add_argument('-p, --product',
+                        action='store',
+                        dest='product_version',
                         default='latest',
                         type=str,
                         help=("Version of the product that will be used "
                               "to create the documentation. If the version "
                               "given does not exist then will default "
                               "to 'latest'."))
-    parser.add_argument('--process',
+    parser.add_argument('--vocab',
                         action='store',
-                        dest='process_type',
+                        dest='vocab_type',
                         choices=['all', 'both',
                                  'required', 'mandatory',
                                  'optional'],
@@ -233,6 +292,9 @@ if __name__ == '__main__':
                               "Default is 'all' so both required and optional "
                               "vocabulary are included in documentation."))
 
+    pdb.set_trace()
+
+    args_dict = vars(parser.parse_args())
 
     definition = os.environ['FAAM_PRODUCT'] #/home/dave/vcs/faam-data/products/latest/core_faam_YYYYmmdd_v005_rN_xNNN.json'
     copy_introduction()
