@@ -1,5 +1,9 @@
 
-from docsource_options import *
+from .docsource_options import *
+
+
+
+__all__ = ['__version__']
 
 
 
