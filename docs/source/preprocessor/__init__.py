@@ -1,5 +1,5 @@
 
-from preproc_conf import *
+from docsource_options import *
 
 
 
