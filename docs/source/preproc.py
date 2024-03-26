@@ -13,28 +13,28 @@ from preprocessor import *
 pdb.set_trace()
 
 
-
-
-
 # Path to spif standard dir
 spif_dir = os.path.abspath(os.path.join(os.path.dirname(__file__),
-                                        '..',
+                                        '..', '..',
                                         'standard')
                                         )
 
+# Path to templates
+template_dir = os.path.abspath(os.path.join(os.path.dirname(__file__),
+                                            'preprocessor',
+                                            'templates')
+                                            )
+
+
 # Add standard
-sys.path.append('../../')
-from attributes import GlobalAttributes
+#sys.path.append('../../')
+#from attributes import GlobalAttributes
 
 
-template_dir = os.path.join(
-    os.path.dirname(__file__),
-    'templates'
-)
-dynamic_dir = os.path.join(
-    os.path.dirname(__file__),
-    'dynamic_content'
-)
+# Path to dynamically generated content
+dynamic_dir = os.path.abspath(os.path.join(os.path.dirname(__file__),
+                                           'dynamic_content')
+                                           )
 
 if not os.path.exists(dynamic_dir):
     os.makedirs(dynamic_dir)
@@ -157,8 +157,8 @@ if __name__ == '__main__':
     # Define commandline options
     usage = "make <build> STDOPT=std_version PRODOPT=product_version VOCABOPT=vocab_type"
     version = f"version: {__version__}"
-    description = ("Preprocessor for sphinx generator of spif "
-                   "documentation.\n {version}")
+    description = ("Preprocessor for sphinx generation of SPIF "
+                   f"documentation.\n {version}")
 
     parser = argparse.ArgumentParser(usage=usage,
             formatter_class=argparse.RawDescriptionHelpFormatter,
@@ -207,6 +207,3 @@ if __name__ == '__main__':
     populate_global_attrs(definition)
     copy_variables()
     populate_variables(definition)
-
-
-"""
