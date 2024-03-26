@@ -9,7 +9,7 @@ SOURCEDIR     = source
 BUILDDIR      = build
 
 PYTHON        = python
-PREPROCESSOR  = preproc.py
+PREPROCESSOR  = source/preproc.py
 # Preprocessor call options
 STDOPT        =
 PRODOPT		  =

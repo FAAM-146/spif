@@ -5,18 +5,128 @@ from typing import Mapping
 import os
 import sys
 
+<<<<<<< HEAD:docs/preproc.py
 import pdb
 
 # Preprocessor information
 __version__ = 20240326
 
 
+=======
+
+def setup(app):
+    return
+
+__version__ = '20240315'
+__all__ = ['docs_conf']
+
+# Default variables that can be passed from Sphinx to conf.py to this script
+# Version of the spif standard. Default is highest version number
+STD_VERSION = 'latest'
+# Version of the product. Default is "latest"
+PRODUCT_VERSION = 'latest'
+# Type of vocabulary to include in docs. Default is mandatory and optional
+VOCAB_TYPES = 'all'
+
+
+def docs_conf(std_path: str='.',
+              std_version: str=None,
+              product_version: str=None,
+              vocab_types: [str, list]=None) -> list[tuple, tuple, dict]:
+
+    """Determine code source for documentation.
+
+    Args:
+        std_path: Path, absolute or relative to docs/, to the standard code
+            directory.
+        std_version: Version of the spif standard. Default is highest version
+            number found relative to ``home_path``.
+        product_version: Version of the product. Default is "latest".
+        vocab_types: Type of vocabulary entries to include in documentation.
+            May be one or more of "all" [default] or "both", "required" or
+            "mandatory", or "optional". May be a list of more than one or a
+            single string.
+
+    Returns:
+        A list of three elements which give the standard version and path, the
+        product version and path, and a dictionary of vocabulary types to
+        include in the documentation. For example:
+
+        [(std_version, std_path),
+         (product_version, product_path),
+         {'incl_required': incl_required, 'incl_optional': incl_optional},
+        ]
+    """
+
+
+    if not os.path.isdir(std_path):
+        std_path = '.'
+
+    import pdb
+    pdb.set_trace()
+
+    if not std_version:
+        std_version = STD_VERSION
+    if not product_version:
+        product_version = PRODUCT_VERSION
+    if not vocab_types:
+        vocab_types = VOCAB_TYPES
+
+    # Find required version of the standard. Assume directories are v1, v2, etc
+    std_version = str(std_version).lower()
+    std_version = std_version if std_version.startswith('v') else 'v'+std_version
+    if not glob.glob(std_version, std_path):
+        # If requested std does not exist then default to the latest one
+        std_path = sorted(glob.glob('v*', std_path))[-1]
+        std_version = os.path.basename(std_path)
+    else:
+        std_path = glob.glob(std_version, std_path)
+
+    # Find required version of the product.
+    # Assume directory names are 'v' num or 'latest'
+    product_version = str(product_version).lower()
+    if product_version != PRODUCT_VERSION and not product_version.startswith('v'):
+        product_version = 'v' + product_version
+
+    # Find required product directory
+    product_path = os.path.join(std_path, '..', 'products', product_version)
+    if not os.path.isdir(product_path):
+        product_path = os.path.join(std_path, '..', 'products', PRODUCT_VERSION)
+        product_version = PRODUCT_VERSION
+
+    # Determine what type of vocabulary to include in docs
+    vocab_types = [s.lower() for s in list(vocab_types)]
+    incl_required = True
+    incl_optional = False
+
+    if set('all', 'both').union(vocab_types):
+        incl_required = True
+        incl_optional = True
+    else:
+        if set(['required', 'mandatory']).union(vocab_types):
+            incl_required = True
+        elif set(['optional']).union(vocab_types):
+            incl_optional = True
+        elif not set(['required', 'mandatory']).union(vocab_types):
+            incl_required = False
+
+
+    return [(std_version, std_path),
+            (product_version, product_path),
+            {'incl_required': incl_required, 'incl_optional': incl_optional},
+            ]
+
+
+
+"""
+>>>>>>> d838fe998a0ceb77139a5083f71becc8255e90be:docs/source/preproc.py
 # Path to spif standard dir
 spif_dir = os.path.abspath(os.path.join(os.path.dirname(__file__),
                                         '..',
                                         'standard')
                                         )
 
+<<<<<<< HEAD:docs/preproc.py
 # Default variables that can be passed from Sphinx to this script
 STD = 'latest'      # Version of the spif standard. Default is highest v number
 PRODUCT = 'latest'  # Version of the product. Default is latest
@@ -28,11 +138,14 @@ VOCAB_TYPES = 'all' # Type of vocabulary to include in documentation
 # This will build html output (the default) for v1 of the standard with v1.2
 # products (will fall back to latest if v1.2 does not exist) and include
 # information on required and optional vocabulary.
+=======
+>>>>>>> d838fe998a0ceb77139a5083f71becc8255e90be:docs/source/preproc.py
 
 
 
 
 
+<<<<<<< HEAD:docs/preproc.py
 
 
 
@@ -117,6 +230,8 @@ def get_definition(std, product, vocab):
             }
 
 
+=======
+>>>>>>> d838fe998a0ceb77139a5083f71becc8255e90be:docs/source/preproc.py
 
 # Add standard
 sys.path.append('../../')
@@ -305,3 +420,4 @@ if __name__ == '__main__':
     populate_variables(definition)
 
 
+"""
