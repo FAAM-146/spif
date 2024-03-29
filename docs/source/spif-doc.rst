@@ -97,6 +97,8 @@ File root
 
 There is only one required global attribute which is ``Conventions``. This must include the text ``SPIF-m.n``, where ``m.n`` are the major and minor versions. Other conventions strings can also be included with as a space- (recommended) or comma-separated list.
 
+<!-- These should be extracted from auto-generated file -->
+
   :Conventions: A space or comma delineated list of conventions given in a single string. Must include "SPIF-m.n" where m.n is the version number.
 
 There are many recommended global attributes, users may refer to the `ACDD <https://wiki.esipfed.org/Attribute_Convention_for_Data_Discovery_1-3>`_ which lists some commonly used attributes.
@@ -111,11 +113,13 @@ The imager group contains variables with information about the probe size, resol
 
 Mandatory imager group attributes are;
 
+<!-- These should be extracted from auto-generated file -->
+
   :imager_name: Short name of the imaging instrument. If may be the same as the group name.
   :imager_long_name: Full descriptive name of the imaging instrument.
 
 
-:doc:`Mandatory Parameters <spif_mandatory_vocab>`
+:doc:`Mandatory Parameters <spif_mandatory_vocab>` <!-- Link to specific part of doc -->
 
 
 Imager core group
@@ -131,6 +135,8 @@ a ``standard_name`` attribute "time". It's worth mentioning that due to the rand
 Note that different probes may not provide image times in exactly the same way and indeed, image arrival time may in some circumstances be difficult to precisely define. However, the ``timestamp`` variable will always give the image arrival time as accurately as possible, a description of how it was determined from the raw buffer data should be included in the ``comment`` or another variable attribute. One may decide to add a ``timestamp_flag`` as an ancillary variable using the `CF flag <https://cfconventions.org/Data/cf-conventions/cf-conventions-1.11/cf-conventions.html#flags>`_ format to quantify the reliability of each time stamp.
 
 
+
+:doc:`Mandatory Parameters <spif_mandatory_vocab>` <!-- Link to specific part of doc -->
 
 
 
