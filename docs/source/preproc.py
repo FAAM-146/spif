@@ -31,14 +31,6 @@ template_dir = os.path.abspath(os.path.join(os.path.dirname(__file__),
 #from attributes import GlobalAttributes
 
 
-# Path to dynamically generated content
-dynamic_dir = os.path.abspath(os.path.join(os.path.dirname(__file__),
-                                           'dynamic_content')
-                                           )
-
-if not os.path.exists(dynamic_dir):
-    os.makedirs(dynamic_dir)
-
 def init() -> None:
     for f in os.listdir(dynamic_dir):
         os.remove(f)
