@@ -8,7 +8,7 @@ import sys
 
 import pdb
 
-from preprocessor import *
+import preprocessor as prep
 
 pdb.set_trace()
 
@@ -156,7 +156,7 @@ if __name__ == '__main__':
 
     # Define commandline options
     usage = "make <build> STDOPT=std_version PRODOPT=product_version VOCABOPT=vocab_type"
-    version = f"version: {__version__}"
+    version = f"version: {prep.__version__}"
     description = ("Preprocessor for sphinx generation of SPIF "
                    f"documentation.\n {version}")
 
