@@ -165,7 +165,7 @@ if __name__ == '__main__':
                               "to create the documentation. If the version "
                               "given does not exist then will default "
                               "to the most recent version."))
-    parser.add_argument('-p, --product',
+    parser.add_argument('-p', '--product',
                         action='store',
                         dest='product_version',
                         default='latest',
@@ -190,6 +190,7 @@ if __name__ == '__main__':
     pdb.set_trace()
 
     args_dict = vars(parser.parse_args())
+    #args, unknown = parser.parse_known_args()
 
     def_dict = prep.get_definition(spif_dir, **args_dict)
 
