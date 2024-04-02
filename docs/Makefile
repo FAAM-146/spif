@@ -38,5 +38,5 @@ VOCAB = $(addprefix --vocab=,$(word 1,$(VOCABOPT)))
 	#$(info $$(STDVER) is $(STDVER))
 	#$(info $$(PRODVER) is $(PRODVER))
 	#$(info $$(VOCAB) is $(VOCAB))
-	@$(PYTHON) "$(PREPROCESSOR)" "$(STDVER)" "$(PRODVER)" "$(VOCAB)"
+	@$(PYTHON) "$(PREPROCESSOR)" $(STDVER) $(PRODVER) $(VOCAB)
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
