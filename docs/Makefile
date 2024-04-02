@@ -31,12 +31,12 @@ help:
 STDVER = $(addprefix --standard=,$(word 1,$(STDOPT)))
 PRODVER = $(addprefix --product=,$(word 1,$(PRODOPT)))
 VOCAB = $(addprefix --vocab=,$(word 1,$(VOCABOPT)))
+# $(info $$(STDVER) is $(STDVER))
+# $(info $$(PRODVER) is $(PRODVER))
+# $(info $$(VOCAB) is $(VOCAB))
 
 # Catch-all target: route all unknown targets to Sphinx using the new
 # "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
 %: Makefile
-	#$(info $$(STDVER) is $(STDVER))
-	#$(info $$(PRODVER) is $(PRODVER))
-	#$(info $$(VOCAB) is $(VOCAB))
 	@$(PYTHON) "$(PREPROCESSOR)" $(STDVER) $(PRODVER) $(VOCAB)
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
