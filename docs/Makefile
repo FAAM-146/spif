@@ -12,6 +12,7 @@ PYTHON        = python
 PREPROCESSOR  = source/preproc.py
 # Preprocessor call options
 STDOPT        =
+FILEOPT       = spif_example
 PRODOPT       =
 VOCABOPT      =
 
@@ -29,14 +30,16 @@ help:
 # 	2) version number of product
 # 	3) type of vocabulary to include in documentation
 STDVER = $(addprefix --standard=,$(word 1,$(STDOPT)))
+FILENAME = $(addprefix --file=,$(word 1,$(FILEOPT)))
 PRODVER = $(addprefix --product=,$(word 1,$(PRODOPT)))
 VOCAB = $(addprefix --vocab=,$(word 1,$(VOCABOPT)))
 # $(info $$(STDVER) is $(STDVER))
+# $(info $$(FILENAME) is $(FILENAME))
 # $(info $$(PRODVER) is $(PRODVER))
 # $(info $$(VOCAB) is $(VOCAB))
 
 # Catch-all target: route all unknown targets to Sphinx using the new
 # "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
 %: Makefile
-	@$(PYTHON) "$(PREPROCESSOR)" $(STDVER) $(PRODVER) $(VOCAB)
+	@$(PYTHON) "$(PREPROCESSOR)" $(FILENAME) $(STDVER) $(PRODVER) $(VOCAB)
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
