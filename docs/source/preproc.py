@@ -21,7 +21,6 @@ spif_dir = os.path.abspath(os.path.join(os.path.dirname(__file__),
 
 # Path to templates
 template_dir = os.path.abspath(os.path.join(os.path.dirname(__file__),
-                                            'preprocessor',
                                             'templates')
                                             )
 
@@ -157,7 +156,7 @@ if __name__ == '__main__':
             description=description)
 
     # Optional arguments
-    parser.add_argument('-v', '--version',
+    parser.add_argument('-s', '--standard',
                         action='store',
                         dest='std_version',
                         default='latest',
@@ -191,6 +190,9 @@ if __name__ == '__main__':
     pdb.set_trace()
 
     args_dict = vars(parser.parse_args())
+
+    def_dict = prep.get_definition(spif_dir, **args_dict)
+
 
     definition = os.environ['FAAM_PRODUCT'] #/home/dave/vcs/faam-data/products/latest/core_faam_YYYYmmdd_v005_rN_xNNN.json'
     copy_introduction()
