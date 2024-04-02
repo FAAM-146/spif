@@ -31,14 +31,8 @@ template_dir = os.path.abspath(os.path.join(os.path.dirname(__file__),
 
 
 def init() -> None:
-    for f in os.listdir(dynamic_dir):
-        os.remove(f)
+    pass
 
-def copy_introduction() -> None:
-    shutil.copy2(
-        os.path.join(template_dir, 'introduction.rst'),
-        os.path.join(dynamic_dir, 'introduction.rst'),
-    )
 
 def populate_introduction(definition) -> None:
     with open(definition, 'r') as f:
@@ -62,11 +56,6 @@ def populate_introduction(definition) -> None:
     with open(os.path.join(dynamic_dir, 'introduction.rst'), 'w') as f:
         f.write(rst)
 
-def copy_global_attrs() -> None:
-    shutil.copy(
-        os.path.join(template_dir, 'global_attributes.rst'),
-        os.path.join(dynamic_dir, 'global_attributes.rst'),
-    )
 
 def populate_global_attrs(definition) -> None:
     
@@ -92,19 +81,31 @@ def populate_global_attrs(definition) -> None:
     with open(os.path.join(dynamic_dir, 'global_attributes.rst'), 'w') as f:
         f.write(rst)
 
-def copy_variables() -> None:
-    shutil.copy(
-        os.path.join(template_dir, 'variables.rst'),
-        os.path.join(dynamic_dir,  'variables.rst'),
-    )
 
-def populate_variables(definition,
-                       incl_required: bool=True,
-                       incl_optional: bool=False) -> None:
-    with open(definition, 'r') as f:
-        data = json.load(f)
-    variables = sorted(data['variables'], key=lambda x: x['meta']['name'])
+def rst_attributes(attributes: dict=None) -> str:
+    """Create restructured text string of attributes"""
+
     text = ''
+
+    if not attributes:
+        return text
+
+    for attr_key, attr_value in attributes.items():
+            text += f'* ``{attr_key}`` : {str(attr_value)}\n'
+
+    return text
+
+
+def rst_variables(variables: dict=None,
+                  incl_required: bool=True,
+                  incl_optional: bool=False) -> str:
+    """Create restructured text string of variables"""
+
+    text = ''
+
+    if not variables:
+        return text
+
     for var in variables:
 
         if incl_required and incl_optional:
@@ -116,20 +117,36 @@ def populate_variables(definition,
         else:
             continue
 
-        _name =  f'{var["meta"]["name"]}'#' `{var["meta"]["datatype"]}`'
+        _name =  f'{var["meta"]["name"]}'
         text += _name + '\n'
+        text = text + ':rubric:`REQUIRED`\n' if var["meta"]["required"] else text
         text += '-' * (len(_name)) + '\n'
-        # text += f'* **{var["meta"]["name"]}** `{var["meta"]["datatype"]}`\n\n'
         text += f':Datatype: `{var["meta"]["datatype"]}`\n'
         text += f':Dimensions: {", ".join(var["dimensions"])}\n'
         text += (f':Description: {var["meta"]["description"]}\n\n'
                  if var["meta"].get("description")
                  else '\n')
-        #text += '\nAttributes\n'
-        #text += '='* len('Attributes') + '\n\n'
-        for attr_key, attr_value in var['attributes'].items():
-            text += f'* ``{attr_key}`` : {str(attr_value)}\n'
+
+        text += rst_attributes(var.get('attributes', None))
         text += '\n'
+
+    return text
+
+
+def populate_vocab_rst(definition,
+                       incl_required: bool=True,
+                       incl_optional: bool=False) -> None:
+    """Create vocabulary description rst file"""
+
+    pdb.set_trace()
+
+    with open(definition, 'r') as f:
+        data = json.load(f)
+
+
+    variables = sorted(data['variables'], key=lambda x: x['meta']['name'])
+    text = ''
+
 
     with open(os.path.join(dynamic_dir, 'variables.rst'), 'r') as f:
         rst = f.read()
@@ -146,7 +163,9 @@ if __name__ == '__main__':
     import argparse
 
     # Define commandline options
-    usage = "make <build> STDOPT=std_version PRODOPT=product_version VOCABOPT=vocab_type"
+    usage = ("make <build> FILEOPT=definition_filename "
+             "STDOPT=std_version PRODOPT=product_version "
+             "VOCABOPT=vocab_types")
     version = f"version: {prep.__version__}"
     description = ("Preprocessor for sphinx generation of SPIF "
                    f"documentation.\n {version}")
@@ -156,6 +175,16 @@ if __name__ == '__main__':
             description=description)
 
     # Optional arguments
+    parser.add_argument('-f', '--filename',
+                        action='store',
+                        dest='definition_filename',
+                        default=None,
+                        type=str,
+                        help=("Filename or part thereof, of the definition "
+                              "file of the standard (ie the .yaml). If the "
+                              "filename does not exist within the required "
+                              "standard version and product the documentation "
+                              "build will fail."))
     parser.add_argument('-s', '--standard',
                         action='store',
                         dest='std_version',
@@ -176,7 +205,7 @@ if __name__ == '__main__':
                               "to 'latest'."))
     parser.add_argument('--vocab',
                         action='store',
-                        dest='vocab_type',
+                        dest='vocab_types',
                         choices=['all', 'both',
                                  'required', 'mandatory',
                                  'optional'],
@@ -193,7 +222,10 @@ if __name__ == '__main__':
     #args, unknown = parser.parse_known_args()
 
     def_dict = prep.get_definition(spif_dir, **args_dict)
+    definition = def_dict['product']['path']
+    populate_vocab_rst(definition, **def_dict['vocab'])
 
+    pdb.set_trace()
 
     definition = os.environ['FAAM_PRODUCT'] #/home/dave/vcs/faam-data/products/latest/core_faam_YYYYmmdd_v005_rN_xNNN.json'
     copy_introduction()
