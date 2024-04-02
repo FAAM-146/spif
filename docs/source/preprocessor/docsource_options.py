@@ -22,6 +22,7 @@ __all__ = ['get_std',
 STD_VERSION = 'latest'
 # Version of the product. Default is "latest"
 PRODUCT_VERSION = 'latest'
+PRODUCT_IGNORE = ['dataset_schema.json']
 # Type of vocabulary to include in docs. Default is mandatory and optional
 VOCAB_TYPES = 'all'
 
@@ -40,6 +41,9 @@ def get_std(std_path: str='.',std_version: str=None) -> tuple:
 
     """
 
+    _pathnotfound = lambda p: IndexError(
+            f'No standard versions could not be found at {p}')
+
     if not os.path.isdir(std_path):
         std_path = '.'
 
@@ -49,12 +53,18 @@ def get_std(std_path: str='.',std_version: str=None) -> tuple:
     # Find required version of the standard. Assume directories are v1, v2, etc
     std_version = str(std_version).lower()
     std_version = std_version if std_version.startswith('v') else 'v'+std_version
-    if not glob.glob(std_version, std_path):
+    if not glob.glob(os.path.join(std_path, std_version)):
         # If requested std does not exist then default to the latest one
-        std_path = sorted(glob.glob('v*', std_path))[-1]
+        try:
+            std_path = sorted(glob.glob(os.path.join(std_path, 'v*')))[-1]
+        except IndexError as err:
+            _pathnotfound(std_path)
         std_version = os.path.basename(std_path)
     else:
-        std_path = glob.glob(std_version, std_path)
+        try:
+            std_path = glob.glob(os.path.join(std_path, std_version))[0]
+        except IndexError as err:
+            _pathnotfound(std_path)
 
     return (std_version, std_path)
 
@@ -70,7 +80,7 @@ def get_product(std_path: str='.', product_version: str=None) -> tuple:
     Returns:
         Tuple of the product version string and the appropriate path.
     """
-    
+
     if not os.path.isdir(std_path):
         std_path = '.'
     
@@ -84,9 +94,13 @@ def get_product(std_path: str='.', product_version: str=None) -> tuple:
         product_version = 'v' + product_version
 
     # Find required product directory
-    product_path = os.path.join(std_path, '..', 'products', product_version)
+    product_path = os.path.abspath(
+            os.path.join(std_path, 'products', product_version)
+            )
     if not os.path.isdir(product_path):
-        product_path = os.path.join(std_path, '..', 'products', PRODUCT_VERSION)
+        product_path = os.path.abspath(
+            os.path.join(std_path, 'products', PRODUCT_VERSION)
+            )
         product_version = PRODUCT_VERSION
 
     return (product_version, product_path)
@@ -110,36 +124,57 @@ def get_vocab(vocab_types: [str, list]=None) -> Mapping:
     if not vocab_types:
         vocab_types = VOCAB_TYPES
 
+    if type(vocab_types) not in [list, tuple]:
+        vocab_types = [vocab_types]
+
     # Determine what type of vocabulary to include in docs
-    vocab_types = [s.lower() for s in list(vocab_types)]
+    vocab_types = [s.lower() for s in vocab_types]
     incl_required = True
     incl_optional = False
 
-    if set('all', 'both').union(vocab_types):
+    if set(['all', 'both']).intersection(vocab_types):
         incl_required = True
         incl_optional = True
     else:
-        if set(['required', 'mandatory']).union(vocab_types):
+        if set(['required', 'mandatory']).intersection(vocab_types):
             incl_required = True
-        elif set(['optional']).union(vocab_types):
+        elif set(['optional']).intersection(vocab_types):
             incl_optional = True
-        elif not set(['required', 'mandatory']).union(vocab_types):
+        elif not set(['required', 'mandatory']).intersection(vocab_types):
             incl_required = False
 
     return {'incl_required': incl_required, 'incl_optional': incl_optional}
 
 
-def get_definition(std_path: str='.',
+def get_definition(
+              std_path: str='.',
+              definition_filename: str=None,
               std_version: str=None,
               product_version: str=None,
-              vocab_types: [str, list]=None) -> list[tuple, tuple, Mapping]:
+              vocab_types: [str, list]=None) -> Mapping:
     """Determine code source for documentation
 
     """
 
     _d = lambda t: {k:v for k, v in zip(('version', 'path'), t)}
 
-    return {'standard': _d(get_std(std_path, std_version)),
-            'product': _d(get_product(std_path, product_version)),
-            'vocab': get_vocab(vocab_types),
-            }
+    def_dict = {'standard': _d(get_std(std_path, std_version)),
+                'product': _d(get_product(std_path, product_version)),
+                'vocab': get_vocab(vocab_types),
+                }
+
+    def_basename, _ = os.path.splitext(definition_filename)
+    files = []
+    for _path in [def_dict['standard']['path'], def_dict['product']['path']]:
+        files.extend(glob.glob(os.path.join(_path, '**', def_basename+'.*'),
+                               recursive=True)
+                    )
+
+    if len(files) != 2:
+        raise FileNotFoundError('Definition and/or Product files not found '
+                                'for this standard version.')
+
+    def_dict['standard']['path'] = files[0]
+    def_dict['product']['path'] = files[1]
+
+    return def_dict
