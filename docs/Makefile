@@ -28,7 +28,7 @@ help:
 #	1) version number of standard
 # 	2) version number of product
 # 	3) type of vocabulary to include in documentation
-STDVER = $(addprefix --version=,$(word 1,$(STDOPT)))
+STDVER = $(addprefix --standard=,$(word 1,$(STDOPT)))
 PRODVER = $(addprefix --product=,$(word 1,$(PRODOPT)))
 VOCAB = $(addprefix --vocab=,$(word 1,$(VOCABOPT)))
 
