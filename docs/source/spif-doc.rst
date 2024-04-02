@@ -1,5 +1,6 @@
 
 .. title:: SPIF Main
+.. role:: rubric
 
 ************************************
 SPIF  - Single Particle Image Format
