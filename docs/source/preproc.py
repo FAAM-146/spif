@@ -8,7 +8,7 @@ import sys
 
 import pdb
 
-from .rstproc import *
+from rstproc import *
 import preprocessor as prep
 
 
@@ -94,15 +94,17 @@ def populate_group_rst(data: dict, filename: str, level: int=0) -> None:
                 f'{os.path.splitext(filename)[0]}.root.rst')
     else:
         grp_filename = (
-                f'{os.path.splitext(filename)[0]}.{data['meta']['name']}.rst')
+                f'{os.path.splitext(filename)[0]}.{data["meta"]["name"]}.rst')
 
     # Include reference to the new file in the main rst file
     with open(filename, 'a') as f:
         f.write(f'\n\n.. include:: {os.path.basename(grp_filename)}')
 
+    pdb.set_trace()
+
     # Write the new file
     with open(grp_filename, 'w') as f:
-        f.write(prep.rst_grp(data, level=level))
+        f.write(rst_grp(data, level=level))
 
     for group in data['groups']:
         populate_group_rst(group, grp_filename, level+1)
@@ -134,7 +136,7 @@ def populate_vocab_rst(definition,
 
     rst = rst.replace('TAG_PRODUCT_NAME', basename)
     rst = rst.replace('TAG_VOCAB_TYPES', vocab_types)
-    rst += '/n/n'
+    rst += '\n\n'
 
     rst_file = os.path.join(source_dir, basename + '.rst')
 
