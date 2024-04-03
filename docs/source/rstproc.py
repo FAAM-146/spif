@@ -1,5 +1,5 @@
 
-
+import re
 from typing import Mapping
 
 import pdb
@@ -26,11 +26,16 @@ def rst_grp(group: dict=None, level: int=0) -> str:
     if not group:
         return ''
 
-    # Initialise a rst file for this group
-    text = prep.rst_substitutions(level)
-    name = group['meta'].get('name', 'unknown')
+    pdb.set_trace()
 
-    text += f'\n{_esc(name)}\n{'|sec|' * len(name)}\n'
+    # Initialise a rst file for this group
+    text = prep.rst_substitutions(level=level)
+    if group["meta"].get("file_pattern"):
+        name = "Global"
+    else:
+        name = group['meta'].get('name', 'unknown')
+
+    text += f'\n{_esc(name)}\n{"|sec|" * len(name)}\n'
 
     text += (f':Description: {_esc(group["meta"]["description"])}\n'
              if group["meta"].get("description") else ''
@@ -92,7 +97,7 @@ def rst_vars(variables: dict=None,
             continue
 
         name = group['meta'].get('name', 'unknown')
-        text += f'{_esc(name)}\n{'"' * len(name)}\n'
+        text += f'{_esc(name)}\n{"~" * len(name)}\n'
         text += ':rubric:`REQUIRED`\n' if var["meta"].get("required") else ''
         text += f':Datatype: `{var["meta"]["datatype"]}`\n'
         text += f':Dimensions: {", ".join(var["dimensions"])}\n'
