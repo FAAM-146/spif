@@ -14,6 +14,7 @@ PREPROCESSOR  = source/preproc.py
 STDOPT        =
 FILEOPT       = spif_example
 PRODOPT       =
+PRODDIR       =
 VOCABOPT      =
 
 # Put it first so that "make" without argument is like "make help".
@@ -32,6 +33,7 @@ help:
 STDVER = $(addprefix --standard=,$(word 1,$(STDOPT)))
 FILENAME = $(addprefix --file=,$(word 1,$(FILEOPT)))
 PRODVER = $(addprefix --product=,$(word 1,$(PRODOPT)))
+PRODDIR = $(addprefix --product_path=,$(word 1,$(PRODDIR)))
 VOCAB = $(addprefix --vocab=,$(word 1,$(VOCABOPT)))
 # $(info $$(STDVER) is $(STDVER))
 # $(info $$(FILENAME) is $(FILENAME))
@@ -41,5 +43,5 @@ VOCAB = $(addprefix --vocab=,$(word 1,$(VOCABOPT)))
 # Catch-all target: route all unknown targets to Sphinx using the new
 # "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
 %: Makefile
-	@$(PYTHON) "$(PREPROCESSOR)" $(FILENAME) $(STDVER) $(PRODVER) $(VOCAB)
+	@$(PYTHON) "$(PREPROCESSOR)" $(FILENAME) $(STDVER) $(PRODVER) $(PRODDIR) $(VOCAB)
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
