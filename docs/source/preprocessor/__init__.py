@@ -1,6 +1,6 @@
 
 from .docsource_options import *
-
+from .substitutions import *
 
 
 __all__ = ['__version__']
