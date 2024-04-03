@@ -1,6 +1,6 @@
 
 
-.. title:: SPIF TAG_VOCAB_TYPES Vocaulary
+.. title:: SPIF TAG_VOCAB_TYPES Vocabulary
 .. role:: rubric
 
 
