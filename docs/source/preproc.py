@@ -8,9 +8,8 @@ import sys
 
 import pdb
 
+from .rstproc import *
 import preprocessor as prep
-
-pdb.set_trace()
 
 
 # Path to spif standard dir
@@ -19,14 +18,15 @@ spif_dir = os.path.abspath(os.path.join(os.path.dirname(__file__),
                                         'standard')
                                         )
 
+# Path to dynamically generated rst files
+source_dir = os.path.dirname(__file__)
+
 # Path to templates
 template_dir = os.path.abspath(os.path.join(os.path.dirname(__file__),
                                             'templates')
                                             )
 
 
-# Add standard
-#sys.path.append('../../')
 #from attributes import GlobalAttributes
 
 
@@ -82,55 +82,32 @@ def populate_global_attrs(definition) -> None:
         f.write(rst)
 
 
-def rst_attributes(attributes: dict=None) -> str:
-    """Create restructured text string of attributes"""
-
-    text = ''
-
-    if not attributes:
-        return text
-
-    for attr_key, attr_value in attributes.items():
-            text += f'* ``{attr_key}`` : {str(attr_value)}\n'
-
-    return text
 
 
-def rst_variables(variables: dict=None,
-                  incl_required: bool=True,
-                  incl_optional: bool=False) -> str:
-    """Create restructured text string of variables"""
+def populate_group_rst(data: dict, filename: str, level: int=0) -> None:
+    """Creates rst file describing vocabulary of group"""
 
-    text = ''
+    # Create a filename for each group
+    if data['meta'].get('file_pattern'):
+        # Is root group
+        grp_filename = (
+                f'{os.path.splitext(filename)[0]}.root.rst')
+    else:
+        grp_filename = (
+                f'{os.path.splitext(filename)[0]}.{data['meta']['name']}.rst')
 
-    if not variables:
-        return text
+    # Include reference to the new file in the main rst file
+    with open(filename, 'a') as f:
+        f.write(f'\n\n.. include:: {os.path.basename(grp_filename)}')
 
-    for var in variables:
+    # Write the new file
+    with open(grp_filename, 'w') as f:
+        f.write(prep.rst_grp(data, level=level))
 
-        if incl_required and incl_optional:
-            pass
-        elif incl_required and var["meta"]["required"]:
-            pass
-        elif incl_optional and not var["meta"]["required"]:
-            pass
-        else:
-            continue
+    for group in data['groups']:
+        populate_group_rst(group, grp_filename, level+1)
 
-        _name =  f'{var["meta"]["name"]}'
-        text += _name + '\n'
-        text = text + ':rubric:`REQUIRED`\n' if var["meta"]["required"] else text
-        text += '-' * (len(_name)) + '\n'
-        text += f':Datatype: `{var["meta"]["datatype"]}`\n'
-        text += f':Dimensions: {", ".join(var["dimensions"])}\n'
-        text += (f':Description: {var["meta"]["description"]}\n\n'
-                 if var["meta"].get("description")
-                 else '\n')
-
-        text += rst_attributes(var.get('attributes', None))
-        text += '\n'
-
-    return text
+    return
 
 
 def populate_vocab_rst(definition,
@@ -143,6 +120,32 @@ def populate_vocab_rst(definition,
     with open(definition, 'r') as f:
         data = json.load(f)
 
+    basename = os.path.splitext(os.path.basename(definition))[0]
+
+    with open(os.path.join(template_dir, 'vocabulary_template.rst'), 'r') as f:
+        rst = f.read()
+
+    vocab_types = []
+    if incl_required:
+        vocab_types.append('Mandatory')
+    if incl_optional:
+        vocab_types.append('Optional')
+    vocab_types = ' and '.join(vocab_types)
+
+    rst = rst.replace('TAG_PRODUCT_NAME', basename)
+    rst = rst.replace('TAG_VOCAB_TYPES', vocab_types)
+    rst += '/n/n'
+
+    rst_file = os.path.join(source_dir, basename + '.rst')
+
+    with open(rst_file, 'w') as f:
+        f.write(rst)
+
+    populate_group_rst(data, rst_file)
+
+
+
+    pdb.set_trace()
 
     variables = sorted(data['variables'], key=lambda x: x['meta']['name'])
     text = ''
@@ -165,7 +168,7 @@ if __name__ == '__main__':
     # Define commandline options
     usage = ("make <build> FILEOPT=definition_filename "
              "STDOPT=std_version PRODOPT=product_version "
-             "VOCABOPT=vocab_types")
+             "PRODDIR=product_path VOCABOPT=vocab_types")
     version = f"version: {prep.__version__}"
     description = ("Preprocessor for sphinx generation of SPIF "
                    f"documentation.\n {version}")
