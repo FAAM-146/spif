@@ -203,6 +203,14 @@ if __name__ == '__main__':
                               "to create the documentation. If the version "
                               "given does not exist then will default "
                               "to 'latest'."))
+    parser.add_argument('--product_path',
+                        action='store',
+                        dest='product_path',
+                        default=os.path.abspath('.'),
+                        type=str,
+                        help=("Path to product files. Default is "
+                              f"{os.path.abspath('.')} so used when products "
+                              "have been created outside of this repository."))
     parser.add_argument('--vocab',
                         action='store',
                         dest='vocab_types',
