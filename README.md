@@ -19,7 +19,7 @@ Below are described the project and how it may be used.
 ## Terms and Usage
 
   - ***vocal*:** The netCDF vocabulary management and standards compliance checking package.
-  - **vocabulary:** Attribute, group, and variable naming rules of a standard.  
+  - **vocabulary:** Attribute, group, and variable naming rules of a standard.
   - ***vocal* project:** Code repository containing vocabulary definitions, file structure, and compliance rules. See [Project Contents](#project-contents).  
   - **product definition:** Definition of the contents of a netCDF file that are compliant with the rules as specified by the *vocal* project. A minimal example is included in the project or users may create more complex definitions for specific uses.  
   - **product:** A netCDF file that is described by the product definition.
@@ -75,7 +75,7 @@ The easiest way to illustrate the compliance checking is to use *vocal* to creat
   $ vocal release <project_path> -v <defintion_version> -o <definition_path>
 ```
 
-  So to create a version 0.1 product definition stored in `./products` based on the version 1 standard;
+So to create a version 0.1 product definition stored in `./products` based on the version 1 standard;
 
 ```shell
   (vocal) ~/spif$ vocal release standard/v1 -v 0.1 -o .
@@ -134,11 +134,15 @@ The standard SPIF [definition file](https://github.com/FAAM-146/spif/standard/v1
 
 ```ncl
 
-netcdf std_spif_example {
+netcdf spif_example {
   // global attributes:
       :Conventions = "SPIF-1.0" ;
+      :imager_groups = "imager_1" ;
 
-  group: instrument_1 {
+  group: imager_1 {
+    :instrument_name = "imager_1" ;
+    :instrument_long_name = "imager_1 with a more descriptive name" ;
+    :group_type = "imager"
     dimensions:
       array_dimensions = 2 ;
       pixel_colors = 3 ;
@@ -150,6 +154,7 @@ netcdf std_spif_example {
       float wavelength ;
       float pathlength ;
     group: core {
+      :group_type = "core" ;
       dimensions:
         image_num = UNLIMITED ;
         pixel = UNLIMITED ;
@@ -163,7 +168,7 @@ netcdf std_spif_example {
         ubyte height(image_num) ;
         byte overload(image_num) ;
       } // group core
-    } // group instrument_1_group
+    } // group imager_1
   }
 ```
 
