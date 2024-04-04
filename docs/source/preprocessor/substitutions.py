@@ -18,8 +18,8 @@ def _level_subs(level=0, **kwargs) -> str:
 
     text = ""
 
-    text += f'.. |tab|: replace:: {"  " * level}\n'
-    text += f'.. |sec|: replace:: {_level_rst(level)}\n'
+    text += f'.. |tab| replace:: {"  " * level}<!-- 2 spaces -->\n'
+    text += f'.. |sec| replace:: {_level_rst(level)}\n'
 
     return text
 
