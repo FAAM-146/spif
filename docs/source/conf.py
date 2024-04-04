@@ -15,6 +15,8 @@
 # sys.path.insert(0, os.path.abspath('.'))
 import os.path
 import sys
+import datetime
+import sphinx_rtd_theme
 
 # Directory of spif standard
 std_dir = os.path.abspath(
@@ -24,18 +26,10 @@ std_dir = os.path.abspath(
 if std_dir not in sys.path:
     sys.path.insert(0,std_dir)
 
-
-
 import pdb
 pdb.set_trace()
 
 
-
-
-
-import re
-#import spif
-import sphinx_rtd_theme
 
 
 
@@ -56,9 +50,9 @@ release = '0.1'
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = ['sphinx_rtd_theme',
-              'sphinx.ext.autodoc',
-              'sphinx.ext.napoleon',
+extensions = ['sphinx_rtd_theme',   # Read the docs theme
+              'sphinx.ext.autodoc', # Auto doc code documentation
+              'sphinx.ext.napoleon', # Google style docstrings
             ]
 
 napoleon_include_init_with_doc = True
@@ -102,13 +96,6 @@ add_module_names = True
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = []
 
-# A string of reStructuredText that will be included at the beginning
-# of every source file that is read.
-rst_prolog = """
- .. include:: <s5defs.txt>
-
- """
-
 
 # -- Options for HTML output -------------------------------------------------
 
@@ -117,9 +104,66 @@ rst_prolog = """
 #
 html_theme = 'sphinx_rtd_theme'
 
+# A string of reStructuredText that will be included at the beginning
+# of every source file that is read.
+# s5defs.txt builtin with html colors etc
+rst_prolog = """
+ .. include:: <s5defs.txt>
+
+ """
+
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
+html_css_files = ['css/custom_text.css', 'css/faam.css']
+html_logo = "static/faam-small.png"
+html_theme_options = {'logo_only': False,
+                      'display_version': True,
+                     }
 
-html_css_files = ['css/custom.css', 'css/mods.css']
+
+# -- Options for LaTeX output -------------------------------------------------
+latex_elements = {
+    'papersize': 'a4paper',
+    'extraclassoptions': 'openany,oneside',
+    'preamble': r'''
+        \definecolor{FAAMDarkBlue}{HTML}{252243}
+        \definecolor{FAAMLightBlue}{HTML}{0ABBEF}
+        \usepackage{eso-pic}
+        \usepackage{pict2e}
+        \newcommand\BackgroundPic{
+        \put(300,-260){
+            \color{FAAMLightBlue}\circle*{900}
+        }
+        \put(300,-260){
+            \color{FAAMDarkBlue}\circle*{760}
+        }
+    }''',
+    # Pretty hacky this - escaping from the sphinx macros,
+    # but it sorta kinda works well enough.
+    'maketitle': '''
+        \\AddToShipoutPicture*{{\\BackgroundPic}}
+        \\begin{{titlepage}}
+            \\color{{FAAMDarkBlue}}
+            \\begin{{flushright}}
+                \\sphinxlogo
+                {{\\sffamily
+                    {{\\Huge \\textbf{{ {project} }}}}
+                    \\par\\vspace{{1cm}}
+                    {{\\itshape\\LARGE\\textbf{{ Release {release} }}}}
+                    \\par\\vspace{{3cm}}
+                    {{\\LARGE \\textbf{{{author}}}}}
+                    \\par\\vspace{{3cm}}
+                    {{\\Large \\textbf{{{date}}}}}
+                 }}
+             \\end{{flushright}}
+        \\end{{titlepage}}
+        '''.format(
+            project=project,
+            release=release,
+            author=author,
+            date=datetime.date.today().strftime('%B %-d, %Y')
+        )
+}
+latex_logo = '_static/faam.png'
