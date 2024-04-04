@@ -140,9 +140,9 @@ netcdf spif_example {
       :imager_groups = "imager_1" ;
 
   group: imager_1 {
-    :instrument_name = "imager_1" ;
-    :instrument_long_name = "imager_1 with a more descriptive name" ;
-    :group_type = "imager"
+      :instrument_name = "imager_1" ;
+      :instrument_long_name = "imager_1 with a more descriptive name" ;
+      :group_type = "imager"
     dimensions:
       array_dimensions = 2 ;
       pixel_colors = 3 ;
@@ -154,7 +154,7 @@ netcdf spif_example {
       float wavelength ;
       float pathlength ;
     group: core {
-      :group_type = "core" ;
+        :group_type = "core" ;
       dimensions:
         image_num = UNLIMITED ;
         pixel = UNLIMITED ;
