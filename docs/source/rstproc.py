@@ -20,22 +20,25 @@ def _esc(s):
     return re.sub(r'([\*\_\:])', r'\\\1', s)
 
 
-def rst_grp(group: dict=None, level: int=0) -> str:
+def rst_grp(group: dict=None, level: int=0, **kwargs) -> str:
     """Create restructured text string of group"""
 
     if not group:
         return ''
 
-    pdb.set_trace()
-
-    # Initialise a rst file for this group
-    text = prep.rst_substitutions(level=level)
     if group["meta"].get("file_pattern"):
         name = "Global"
+        path = name
     else:
-        name = group['meta'].get('name', 'unknown')
+        name = group["meta"].get("name", 'unknown')
+        path = group["meta"]["path"] if group["meta"].get("path") else name
 
-    text += f'\n{_esc(name)}\n{"|sec|" * len(name)}\n'
+    # Initialise a rst file for this group
+    text = f'..\n  File describing contents of {name} group\n\n'
+#    text += prep.rst_substitutions(level=level)
+
+
+    text += f'\n{_esc(path)}\n{"-" * len(_esc(path))}\n\n'
 
     text += (f':Description: {_esc(group["meta"]["description"])}\n'
              if group["meta"].get("description") else ''
@@ -51,17 +54,17 @@ def rst_grp(group: dict=None, level: int=0) -> str:
     text += '\n\n'
 
     # Add group attributes if required
-    text += '**Group Attributes:**\n' if  group['attributes'] else ''
-    text += rst_attrs(group['attributes'], level=level)
+    text += f'Group Attributes:\n{"^"*17}\n' if  group['attributes'] else ''
+    text += rst_attrs(group['attributes'], level=level, **kwargs)
 
     # Add group variables if required
-    text += '**Group Variables:**\n' if  group['variables'] else ''
-    text += rst_vars(group['varables'], level=level)
+    text += f'Group Variables:\n{"^"*16}\n\n' if  group['variables'] else ''
+    text += rst_vars(group['variables'], level=level, **kwargs)
 
     return text
 
 
-def rst_attrs(attributes: dict=None, level: int=0) -> str:
+def rst_attrs(attributes: dict=None, level: int=0, **kwargs) -> str:
     """Create restructured text string of attributes"""
 
     text = ''
@@ -70,14 +73,17 @@ def rst_attrs(attributes: dict=None, level: int=0) -> str:
         return text
 
     for attr_key, attr_value in attributes.items():
-            text += f'* ``{attr_key}`` : {str(attr_value)}\n'
+            text += f'  * ``{attr_key}`` : {str(attr_value)}\n'
+    text += '\n'
 
     return text
 
 
 def rst_vars(variables: dict=None,
-                  incl_required: bool=True,
-                  incl_optional: bool=False) -> str:
+             level: int=0,
+             incl_required: bool=True,
+             incl_optional: bool=False,
+             **kwargs) -> str:
     """Create restructured text string of variables"""
 
     text = ''
@@ -96,16 +102,17 @@ def rst_vars(variables: dict=None,
         else:
             continue
 
-        name = group['meta'].get('name', 'unknown')
-        text += f'{_esc(name)}\n{"~" * len(name)}\n'
-        text += ':rubric:`REQUIRED`\n' if var["meta"].get("required") else ''
-        text += f':Datatype: `{var["meta"]["datatype"]}`\n'
-        text += f':Dimensions: {", ".join(var["dimensions"])}\n'
-        text += (f':Description: {var["meta"]["description"]}\n\n'
+        name = var["meta"].get("name", 'unknown')
+        sec_quote = '"'
+        text += f'{_esc(name)}\n{sec_quote * len(_esc(name))}\n'
+        text += ':red:`REQUIRED`\n\n' if var["meta"].get("required") else '\n'
+        text += f'  :Datatype: `{var["meta"]["datatype"]}`\n'
+        text += f'  :Dimensions: {", ".join(var["dimensions"])}\n'
+        text += (f'  :Description: {var["meta"]["description"]}\n\n'
                  if var["meta"].get("description")
                  else '\n')
 
-        text += rst_attributes(var.get('attributes', None))
+        text += rst_attrs(var.get('attributes', None), level=level, **kwargs)
         text += '\n'
 
     return text
