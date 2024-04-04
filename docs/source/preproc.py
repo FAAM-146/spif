@@ -84,30 +84,38 @@ def populate_global_attrs(definition) -> None:
 
 
 
-def populate_group_rst(data: dict, filename: str, level: int=0) -> None:
+def populate_group_rst(data: dict,
+                       filename: str,
+                       level: int=0,
+                       **kwargs) -> None:
     """Creates rst file describing vocabulary of group"""
 
     # Create a filename for each group
-    if data['meta'].get('file_pattern'):
+    if data['meta']['path'] in ['/', 'root']:
         # Is root group
         grp_filename = (
                 f'{os.path.splitext(filename)[0]}.root.rst')
     else:
-        grp_filename = (
-                f'{os.path.splitext(filename)[0]}.{data["meta"]["name"]}.rst')
+        grp_filename = filename.replace(".rst", f'.{data["meta"]["name"]}.rst')
 
     # Include reference to the new file in the main rst file
     with open(filename, 'a') as f:
         f.write(f'\n\n.. include:: {os.path.basename(grp_filename)}')
 
-    pdb.set_trace()
-
     # Write the new file
     with open(grp_filename, 'w') as f:
         f.write(rst_grp(data, level=level))
 
-    for group in data['groups']:
-        populate_group_rst(group, grp_filename, level+1)
+    try:
+        groups = data['groups']
+    except KeyError as err:
+        # No sub-groups
+        return
+
+    for group in groups:
+        group['meta']['path'] = os.path.join(data['meta']['path'],
+                                             group['meta']['name'])
+        populate_group_rst(group, grp_filename, level+1, **kwargs)
 
     return
 
@@ -122,6 +130,11 @@ def populate_vocab_rst(definition,
     with open(definition, 'r') as f:
         data = json.load(f)
 
+    # Add a path meta key to data
+    data['meta']['path'] = '/'
+
+    # Create a filename to save the rst text into
+    # Filenames will be created for each group based on the group name/s
     basename = os.path.splitext(os.path.basename(definition))[0]
 
     with open(os.path.join(template_dir, 'vocabulary_template.rst'), 'r') as f:
@@ -143,24 +156,14 @@ def populate_vocab_rst(definition,
     with open(rst_file, 'w') as f:
         f.write(rst)
 
-    populate_group_rst(data, rst_file)
+    populate_group_rst(data, rst_file,
+                       incl_required=incl_required,
+                       incl_optional=incl_optional)
 
 
 
     pdb.set_trace()
 
-    variables = sorted(data['variables'], key=lambda x: x['meta']['name'])
-    text = ''
-
-
-    with open(os.path.join(dynamic_dir, 'variables.rst'), 'r') as f:
-        rst = f.read()
-
-    rst = rst.replace('TAG_PRODUCT_VARIABLES', text)
-
-
-    with open(os.path.join(dynamic_dir, 'variables.rst'), 'w') as f:
-        f.write(rst)
 
 
 if __name__ == '__main__':
@@ -229,8 +232,6 @@ if __name__ == '__main__':
                               "Default is 'all' so both required and optional "
                               "vocabulary are included in documentation."))
 
-    pdb.set_trace()
-
     args_dict = vars(parser.parse_args())
     #args, unknown = parser.parse_known_args()
 
@@ -238,12 +239,4 @@ if __name__ == '__main__':
     definition = def_dict['product']['path']
     populate_vocab_rst(definition, **def_dict['vocab'])
 
-    pdb.set_trace()
 
-    definition = os.environ['FAAM_PRODUCT'] #/home/dave/vcs/faam-data/products/latest/core_faam_YYYYmmdd_v005_rN_xNNN.json'
-    copy_introduction()
-    populate_introduction(definition)
-    copy_global_attrs()
-    populate_global_attrs(definition)
-    copy_variables()
-    populate_variables(definition)
