@@ -27,7 +27,7 @@ if std_dir not in sys.path:
     sys.path.insert(0,std_dir)
 
 import pdb
-pdb.set_trace()
+
 
 
 
@@ -117,7 +117,7 @@ rst_prolog = """
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
 html_css_files = ['css/custom_text.css', 'css/faam.css']
-html_logo = "static/faam-small.png"
+html_logo = "_static/faam-small.png"
 html_theme_options = {'logo_only': False,
                       'display_version': True,
                      }
