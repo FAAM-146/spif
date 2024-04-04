@@ -16,7 +16,7 @@ from vocal.validation import (
     _randomize_object_name,
 )
 
-from ..attributes import GroupAttributes, InstrumentGroupAttributes
+from ..attributes import GroupAttributes, ImagerGroupAttributes
 
 from .dimension import Dimension
 from .variable import Variable
@@ -158,13 +158,13 @@ class Group(BaseModel, GroupNetCDFMixin):
         return values
 
 
-class InstrumentGroup(BaseModel, GroupNetCDFMixin):
+class ImagerGroup(BaseModel, GroupNetCDFMixin):
     model_config = ConfigDict(
-        title='Instrument Group Schema'
+        title='Imager Group Schema'
     )
 
     meta: GroupMeta
-    attributes: InstrumentGroupAttributes
+    attributes: ImagerGroupAttributes
     dimensions: Optional[list[Dimension]] = None
     groups: list[Group]
     variables: list[Variable]
@@ -172,7 +172,7 @@ class InstrumentGroup(BaseModel, GroupNetCDFMixin):
     # Ensure that the 'core' group exists
     check_core_group_exists = validator(group_exists('core'))
 
-    # Ensure that the 'instrument' group has the correct variables
+    # Ensure that the 'imager' group has the correct variables
     check_color_level_variable_exists = validator(variable_exists('color_level'))
     check_array_size_variable_exists = validator(variable_exists('array_size'))
     check_image_size_variable_exists = validator(variable_exists('image_size'))
@@ -180,7 +180,7 @@ class InstrumentGroup(BaseModel, GroupNetCDFMixin):
     check_wavelength_variable_exists = validator(variable_exists('wavelength'))
     check_pathlength_variable_exists = validator(variable_exists('pathlength'))
 
-    # Ensure that the 'instrument' group has the correct dimensions
+    # Ensure that the 'imager' group has the correct dimensions
     check_array_dimensions_dimension_exists = validator(dimension_exists('array_dimensions'))
     check_pixel_colors_dimension_exists = validator(dimension_exists('pixel_colors'))
 

@@ -26,6 +26,7 @@ meta:
 # ------------------------------------------------------------------------------
 attributes:
   Conventions: SPIF-1.0
+  imager_groups: '<str: derived_from_file>'
 
 # No variables or dimensions are required in the root group
 variables: []
@@ -44,7 +45,8 @@ groups:
     attributes:
       instrument_name: imager_1
       instrument_long_name: imager_1 with a more descriptive name
-    
+      group_type: imager
+
     # Required imager group dimensions
     dimensions:
       - name: array_dimensions
@@ -142,7 +144,8 @@ groups:
             variables needed for reading that data.
 
         # No imager/core mandatory attributes
-        attributes: {}
+        attributes:
+          group_type: core
         
         # imager/core group dimensions. Both are UNLIMITED
         dimensions:

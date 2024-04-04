@@ -17,10 +17,10 @@ class GroupAttributes(BaseModel):
     #   example='my_attribute_value'
     # )
 
-class InstrumentGroupAttributes(BaseModel):
+class ImagerGroupAttributes(BaseModel):
     model_config = ConfigDict(
         # Configuration options here
-        title='Instrument Group Attributes',
+        title='Imager Group Attributes',
         extra='allow'
     )
 

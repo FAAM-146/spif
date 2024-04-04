@@ -49,6 +49,7 @@ attributes:
   date_created: '<str: derived_from_file>'
 
   # data source information
+  imager_groups: OAP100
   source: In situ probe; optical array probe.
   instrument: OAP100
   project: ACC - Arbitrary Cloud Campaign
@@ -95,6 +96,7 @@ groups:
       description: Data from platform that is used to process image data
   
     attributes:
+      group_type: platform
       comment: '<str: derived_from_file optional>' 
 
     dimensions:
@@ -198,6 +200,7 @@ groups:
         Instrument group of raw and processed data for this instrument.
 
     attributes:
+      group_type: imager
       # instrument information
       instrument: '<str: derived_from_file optional>'
       instrument_name: OAP100
@@ -327,7 +330,8 @@ groups:
           name: core
           description: Decompressed raw image data
 
-        attributes: {}
+        attributes:
+          group_type: core
 
         # instrument/core group dimensions. Both are UNLIMITED
         dimensions:
@@ -414,6 +418,7 @@ groups:
             These are simple timeseries.
 
         attributes:
+          group_type: other
           comment: Data and housekeeping obtained from the auxillary datafile/s
           raw_filenames: '<str: derived_from_file optional>'
 
