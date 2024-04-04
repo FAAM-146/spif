@@ -7,9 +7,9 @@ SPIF  - Single Particle Image Format
 ************************************
 
 
-<!--
-For full information on the SPIF data standard and usage examples see [paper_placeholder](https://github.com/graemenott/spif-paper).
--->
+..
+  For full information on the SPIF data standard and usage examples see [paper_placeholder](https://github.com/graemenott/spif-paper).
+
 
 =========================
 Background and Motivation
@@ -98,9 +98,10 @@ File root
 
 There is only one required global attribute which is ``Conventions``. This must include the text ``SPIF-m.n``, where ``m.n`` are the major and minor versions. Other conventions strings can also be included with as a space- (recommended) or comma-separated list.
 
-<!-- These should be extracted from auto-generated file -->
+..
+  These should be extracted from auto-generated file
 
-  :Conventions: A space or comma delineated list of conventions given in a single string. Must include "SPIF-m.n" where m.n is the version number.
+:Conventions: A space or comma delineated list of conventions given in a single string. Must include "SPIF-m.n" where m.n is the version number.
 
 There are many recommended global attributes, users may refer to the `ACDD <https://wiki.esipfed.org/Attribute_Convention_for_Data_Discovery_1-3>`_ which lists some commonly used attributes.
 
@@ -114,10 +115,12 @@ The imager group contains variables with information about the probe size, resol
 
 Mandatory imager group attributes are;
 
-<!-- These should be extracted from auto-generated file -->
+..
+  These should be extracted from auto-generated file
 
-  :imager_name: Short name of the imaging instrument. If may be the same as the group name.
-  :imager_long_name: Full descriptive name of the imaging instrument.
+
+:imager_name: Short name of the imaging instrument. If may be the same as the group name.
+:imager_long_name: Full descriptive name of the imaging instrument.
 
 
 :doc:`Mandatory Parameters <spif_mandatory_vocab>` <!-- Link to specific part of doc -->
