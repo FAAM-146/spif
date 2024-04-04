@@ -125,8 +125,6 @@ def populate_vocab_rst(definition,
                        incl_optional: bool=False) -> None:
     """Create vocabulary description rst file"""
 
-    pdb.set_trace()
-
     with open(definition, 'r') as f:
         data = json.load(f)
 
@@ -161,11 +159,8 @@ def populate_vocab_rst(definition,
                        incl_optional=incl_optional)
 
 
-
-    pdb.set_trace()
-
-
-
+# ----------------------------------------------------------------------
+# ----------------------------------------------------------------------
 if __name__ == '__main__':
 
     import argparse
