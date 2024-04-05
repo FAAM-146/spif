@@ -11,28 +11,32 @@ import pdb
 from rstproc import *
 import preprocessor as prep
 
+# Filename of mandatory definition/product file/s
+DEFAULT_MANDATORY_DEFINITION = 'spif_example'
 
 # Path to spif standard dir
-spif_dir = os.path.abspath(os.path.join(os.path.dirname(__file__),
-                                        '..', '..',
-                                        'standard')
-                                        )
+spif_dir = os.path.abspath(
+        os.path.join(os.path.dirname(__file__), '..', '..', 'standard')
+        )
 
 # Path to dynamically generated rst files
 source_dir = os.path.dirname(__file__)
 
 # Path to templates
-template_dir = os.path.abspath(os.path.join(os.path.dirname(__file__),
-                                            'templates')
-                                            )
+template_dir = os.path.abspath(
+        os.path.join(os.path.dirname(__file__), 'templates')
+        )
 
+dynamic_dir = os.path.abspath(
+        os.path.join(os.path.dirname(__file__), 'dynamic_content')
+        )
 
-#from attributes import GlobalAttributes
-
+if not os.path.exists(dynamic_dir):
+    os.makedirs(dynamic_dir)
 
 def init() -> None:
-    pass
-
+    for f in os.listdir(dynamic_dir):
+        os.remove(f)
 
 def populate_introduction(definition) -> None:
     with open(definition, 'r') as f:
@@ -121,6 +125,7 @@ def populate_group_rst(data: dict,
 
 
 def populate_vocab_rst(definition,
+                       vocab_example_filename: str=None,
                        incl_required: bool=True,
                        incl_optional: bool=False) -> None:
     """Create vocabulary description rst file"""
@@ -133,7 +138,10 @@ def populate_vocab_rst(definition,
 
     # Create a filename to save the rst text into
     # Filenames will be created for each group based on the group name/s
-    basename = os.path.splitext(os.path.basename(definition))[0]
+    if vocab_example_filename:
+        basename = vocab_example_filename
+    else:
+        basename = os.path.splitext(os.path.basename(definition))[0]
 
     with open(os.path.join(template_dir, 'vocabulary_template.rst'), 'r') as f:
         rst = f.read()
@@ -149,7 +157,7 @@ def populate_vocab_rst(definition,
     rst = rst.replace('TAG_VOCAB_TYPES', vocab_types)
     rst += '\n\n'
 
-    rst_file = os.path.join(source_dir, basename + '.rst')
+    rst_file = os.path.join(dynamic_dir, basename + '.rst')
 
     with open(rst_file, 'w') as f:
         f.write(rst)
@@ -158,6 +166,7 @@ def populate_vocab_rst(definition,
                        incl_required=incl_required,
                        incl_optional=incl_optional)
 
+    return rst_file
 
 # ----------------------------------------------------------------------
 # ----------------------------------------------------------------------
@@ -181,7 +190,7 @@ if __name__ == '__main__':
     parser.add_argument('-f', '--filename',
                         action='store',
                         dest='definition_filename',
-                        default=None,
+                        default=DEFAULT_MANDATORY_DEFINITION,
                         type=str,
                         help=("Filename or part thereof, of the definition "
                               "file of the standard (ie the .yaml). If the "
@@ -232,6 +241,28 @@ if __name__ == '__main__':
 
     def_dict = prep.get_definition(spif_dir, **args_dict)
     definition = def_dict['product']['path']
-    populate_vocab_rst(definition, **def_dict['vocab'])
 
+    subs_rst = '..\n  Substitution links to dynamic content\n\n'
+    example_files = {'MandatorySpifFile': '', 'OptionalSpifFile': ''}
+    example = populate_vocab_rst(definition,
+                                 vocab_example_filename = 'minimal_example',
+                                 incl_required = True,
+                                 incl_optional = False
+                                 )
+    example_files['MandatorySpifFile'] = os.path.relpath(
+                                example, os.path.dirname(__file__))
 
+    if def_dict['vocab']['incl_optional'] is True:
+        example = populate_vocab_rst(definition, **def_dict['vocab'])
+        example_files['OptionalSpifFile'] = os.path.relpath(
+                                example, os.path.dirname(__file__))
+
+    subs_rst += '\n'.join(
+        [f'.. |{f}| replace:: {k}' for f,k in example_files.items() if k]
+        )
+
+    subs_file = os.path.join(os.path.dirname(__file__),
+                             "filename_substitutions.rst")
+
+    with open(subs_file, 'w') as f:
+        f.write(subs_rst)
