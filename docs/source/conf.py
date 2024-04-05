@@ -79,7 +79,7 @@ language = None
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path .
-exclude_patterns = ['Thumbs.db', '.DS_Store', 'build']
+exclude_patterns = ['Thumbs.db', '.DS_Store', 'build', 'templates']
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = 'sphinx'
@@ -96,6 +96,14 @@ add_module_names = True
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = []
 
+# A string of reStructuredText that will be included at the beginning
+# of every source file that is read.
+# s5defs.txt builtin with html colors etc
+rst_prolog = """
+ .. include:: <s5defs.txt>
+ .. include:: filename_substitutions.rst
+
+ """
 
 # -- Options for HTML output -------------------------------------------------
 
@@ -104,13 +112,6 @@ exclude_patterns = []
 #
 html_theme = 'sphinx_rtd_theme'
 
-# A string of reStructuredText that will be included at the beginning
-# of every source file that is read.
-# s5defs.txt builtin with html colors etc
-rst_prolog = """
- .. include:: <s5defs.txt>
-
- """
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
