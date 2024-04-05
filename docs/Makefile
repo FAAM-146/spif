@@ -12,7 +12,7 @@ PYTHON        = python
 PREPROCESSOR  = source/preproc.py
 # Preprocessor call options
 STDOPT        =
-FILEOPT       = spif_example
+FILEOPT       =
 PRODOPT       =
 PRODDIR       =
 VOCABOPT      =
