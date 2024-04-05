@@ -35,7 +35,7 @@ class ImagerGroupAttributes(BaseModel):
         example='instrument_name_value'
     )
 
-    instrument_long_name: str = Field(
+    instrument_long_name: Optional[str] = Field(
         description='Full descriptive name of the instrument.',
         example='instrument_long_name_value'
     )
