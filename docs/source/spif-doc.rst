@@ -11,7 +11,7 @@ SPIF  - Single Particle Image Format
   For full information on the SPIF data standard and usage examples see [paper_placeholder](https://github.com/graemenott/spif-paper).
 
 
-=========================
+
 Background and Motivation
 =========================
 
@@ -22,11 +22,11 @@ Image data from such probes is recorded in proprietary and instrument- or system
 The SPIF standard has been designed so that decoded raw binary data are stored in a `netCDF4 <https://doi.org/10.5065/D6H70CW6>`_ file structure with a standardised vocabulary in accordance with `FAIR Guiding Principles <https://www.go-fair.org/fair-principles/>`_ [#Wilkinson2016]_. It is hoped that this will improve access to this data for users from a wide range of fields and facilitate the sharing, refinement, and standardisation of data processing routines (for a discussion on inconsistencies between current particle processing routines see McFarquhar et al., 2017 [#McFarquhar2017]_
 ).
 
-==========
+
 SPIF Files
 ==========
 
------------------
+
 The SPIF standard
 -----------------
 
@@ -36,7 +36,7 @@ In a similar fashion to the CF Conventions; SPIF defines a minimum vocabulary, t
 
 Additional data can be stored in a SPIF file along with the required vocabulary to provide ancillary data from other sources, processed data products, or instrument housekeeping data to aid in diagnostic investigations. Any such data contained within the file is optional but should not conflict with requirements of the SPIF standard.
 
--------------------
+
 Standard Compliance
 -------------------
 
@@ -51,7 +51,7 @@ The SPIF convention string can be added to the ``Conventions`` global attribute 
 where ``m`` is the major version, and ``n`` the minor version of the SPIF standard.
 
 
--------------------
+
 SPIF File Structure
 -------------------
 
@@ -141,9 +141,6 @@ Note that different probes may not provide image times in exactly the same way a
 
 
 :doc:`Mandatory Parameters <spif_mandatory_vocab>` <!-- Link to specific part of doc -->
-
-
-
 
 
 
