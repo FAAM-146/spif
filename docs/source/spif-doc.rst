@@ -86,22 +86,28 @@ Groups in bold are mandatory while those in italics are optional. The imaging in
 
 The SPIF definition is constrained to ensure that standard-compliant files contain all the information/data required for future processing. SPIF files must contain, as a minimum, a mandatory vocabulary. That is; groups, attributes, and (coordinate) variables.
 
-  Details of the mandatory vocabulary are described in detail :doc:`here <spif_mandatory_vocab>`.
+Details of the mandatory vocabulary are described in detail :doc:`here <|MandatorySpifFile|>`.
 
-In addition to these mandatory netCDF parameters, a SPIF file can be extended with additional groups, attributes, and (coordinate) variables. It may assist users if these added parameters are familiar and so some suggested optional parameters are given;
+In addition to these mandatory netCDF parameters, a SPIF file can be extended with additional groups, attributes, and (coordinate) variables.
 
-  Further information on optional groups and their contents are described in :doc:`spif_extensions`. :doc:`List of Optional Parameters <spif_optional_vocab>`
+.. seealso::
+  Recommended optional vocabulary is described in :doc:`|OptionalSpifFile|`
 
 
 File root
 ^^^^^^^^^
 
-There is only one required global attribute which is ``Conventions``. This must include the text ``SPIF-m.n``, where ``m.n`` are the major and minor versions. Other conventions strings can also be included with as a space- (recommended) or comma-separated list.
+There are only two required global attributes. This first of these is ``Conventions``. This must include the text ``SPIF-m.n``, where ``m.n`` are the major and minor versions. Other recognised conventions strings can also be included in a space- (recommended) or comma-separated list.
+
+
+The second required global attribute is ``imager_groups``. This is used to identify groups of imaging data that conforms to the SPIF structure. It is possible to have multiple groups within the file root and these may or may not contain image data. This attribute makes it easy for users to find those groups. If there are more than one imager group then these should be given as a space- (recommended) or comma-separated list.
+
+.. include:: |MandatorySpifFile|
+    :start-after: __root__AttrsStart__
+    :end-before: __root_AttrsStop__
 
 ..
-  These should be extracted from auto-generated file
-
-:Conventions: A space or comma delineated list of conventions given in a single string. Must include "SPIF-m.n" where m.n is the version number.
+  :Conventions: A space or comma delineated list of conventions given in a single string. Must include "SPIF-m.n" where m.n is the version number.
 
 There are many recommended global attributes, users may refer to the `ACDD <https://wiki.esipfed.org/Attribute_Convention_for_Data_Discovery_1-3>`_ which lists some commonly used attributes.
 
@@ -109,7 +115,7 @@ There are many recommended global attributes, users may refer to the `ACDD <http
 Imager group
 ^^^^^^^^^^^^
 
-The image data from an appropriate instrument is contained within a special group within the SPIF file ``root``. It may make sense to include more than one instrument or an instrument with more than one channel, for example the `SPEC <http://www.specinc.com>`_ `2D-S (Stereo) Probe <http://www.specinc.com/2d-s-stereo-probe-operation>`_ which has two orthogonal OAPs, in the same file. The names of the imager groups are not prescribed but should be descriptive, for example for the 2D-S the imager group names may be ``2DS_horizonal`` and 2DS_vertical``. In this text the imager groups are written as ``<imager-1>``, ``<imager-2>``, etc where the braces indicate that it is not a literal string. Group attributes ``imager_name`` and ``imager_long_name`` should contain more complete instrument information.
+The image data from an appropriate instrument is contained within a special group within the SPIF file ``root``. It may make sense to include more than one instrument or an instrument with more than one channel, for example the `SPEC <http://www.specinc.com>`_ `2D-S (Stereo) Probe <http://www.specinc.com/2d-s-stereo-probe-operation>`_ which has two orthogonal OAPs, in the same file. The names of the imager groups are not prescribed but should be descriptive, for example for the 2D-S the imager group names may be ``2DS_horizonal`` and 2DS_vertical``. In this text the imager groups are written as ``<imager-1>``, ``<imager-2>``, etc where the braces indicate that it is not a literal string. The mandatory group attribute ``instrument_name`` and the recommended group attribute ``instrument_long_name`` should contain more complete instrument information.
 
 The imager group contains variables with information about the probe size, resolution, and other data required for interpreting the raw images.
 
@@ -118,12 +124,15 @@ Mandatory imager group attributes are;
 ..
   These should be extracted from auto-generated file
 
+.. include:: |MandatorySpifFile|
+    :start-after: __imager__AttrsStart__
+    :end-before: __imager_AttrsStop__
 
-:imager_name: Short name of the imaging instrument. If may be the same as the group name.
-:imager_long_name: Full descriptive name of the imaging instrument.
+..
+  :imager_name: Short name of the imaging instrument. If may be the same as the group name.
+  :imager_long_name: Full descriptive name of the imaging instrument.
 
-
-:doc:`Mandatory Parameters <spif_mandatory_vocab>` <!-- Link to specific part of doc -->
+A complete description of mandatory vocabulary of the imager group is given :ref:`here <imager_group_sec>`.
 
 
 Imager core group
@@ -138,11 +147,17 @@ a ``standard_name`` attribute "time". It's worth mentioning that due to the rand
 
 Note that different probes may not provide image times in exactly the same way and indeed, image arrival time may in some circumstances be difficult to precisely define. However, the ``timestamp`` variable will always give the image arrival time as accurately as possible, a description of how it was determined from the raw buffer data should be included in the ``comment`` or another variable attribute. One may decide to add a ``timestamp_flag`` as an ancillary variable using the `CF flag <https://cfconventions.org/Data/cf-conventions/cf-conventions-1.11/cf-conventions.html#flags>`_ format to quantify the reliability of each time stamp.
 
+Mandatory imager/core group attributes are;
 
+.. include:: |MandatorySpifFile|
+    :start-after: __core__AttrsStart__
+    :end-before: __core_AttrsStop__
 
-:doc:`Mandatory Parameters <spif_mandatory_vocab>` <!-- Link to specific part of doc -->
+A complete description of mandatory vocabulary of the imager core group is given :ref:`here <core_group_sec>`.
 
 
+Image Data
+----------
 
 
 
@@ -169,131 +184,6 @@ Note that different probes may not provide image times in exactly the same way a
 
 
 
-#### Mandatory Variables:
-
-> `float32` **color_level**(pixel_colors): Lower bound of fractional obscuration/grayscale/color level of photodiode array for each color_value. Gives the number of shadow/gray/color levels in the image.
-
-> `int32` **array_size**(array_dimensions): Number of pixels on the detector.
-
-
-> `int32` **image_size**(array_dimensions): Number of pixels across an image. If fixed size then will be number of pixels, if variable size then use `_FillValue`.
-
-> `float32` **resolution**(array_dimensions): Image resolution of instrument for each dimension.
-
-> `float32` **wavelength**(): Operating wavelength of laser used for shadowing/imaging the particles.
-
-> `float32` **pathlength**(): Optical path length of imaging region.
-
-#### Recommended Variables:
-
-> `float32` **color_value**(pixel_colors): Value of each color used in image. Usually these will be contiguous but the does not have to be. Can be included to facilitate arbitrary values to be used in the "image" variable.
-
-> `float32` **resolution_error**(array_dimensions): Uncertainty of the image resolution of instrument for each dimension.
-
-
-
-
-
-
-
-
-
-
-
-Some of these groups and their contents are required and are shown below;
-
-```
-root
-  ├ :Conventions = "SPIF-1.0"
-  ├── <instrument-1>
-  │   ├ :instrument_name
-  │   ├ :instrument_long_name
-  │   ├ `float32` color_level(pixel_colors)
-  │   ├ `int32` array_size(array_dimensions)
-  │   ├ `int32` image_size(array_dimensions)
-  │   ├ `float32` resolution(array_dimensions)
-  │   ├ `float32` wavelength()
-  │   ├ `float32` pathlength()
-  │   └── core
-  │       ├ `uint8` image(pixel)
-  │       ├ `uint64` timestamp(image_num)
-  │       │   └ :standard_name = "time"
-  │       ├ `uint32` startpixel(image_num)
-  │       ├ `uint8` width(image_num)
-  │       ├ `uint8` height(image_num)
-  │       └ `byte` overload(image_num)
-  │
-  ├── <instrument-2>
-  │   └── ...
-  │
-  └── ...
-```
-
-
-
-
-### Instrument group
-
-It is envisaged that SPIF files will normally contain data from a single instrument. However it may make sense to include more than one instrument or an instrument with more than one channel, for example the [SPEC](http://www.specinc.com) [2D-S (Stereo) Probe](http://www.specinc.com/2d-s-stereo-probe-operation) which has two orthogonal OAPs, in the same file. The names of the instrument groups are not prescribed but should be descriptive. Group attributes ``instrument_name`` and ``instrument_long_name`` contain more complete instrument information. In this text the instrument groups are written as ``<instrument-1>``, ``<instrument-2>``, etc where the braces indicate that it is not a literal string.
-
-The instrument group contains variables with information about the probe size, resolution, and other data required for interpreting the raw images.
-
-#### Mandatory Attributes:
-
-> _instrument_name:_ Short name of the instrument. If may be the same as the group name.
-
-> _instrument_long_name:_ Full descriptive name of instrument.
-
-#### Recommended Attributes:
-
-> _instrument_description:_ Further description of the instrument
-
-> _instrument_manufacturer:_ Instrument manufacturer
-
-> _instrument_model:_ Manufacturer's model designation
-
-> _instrument_serial_number:_ Instrument serial number
-
-> _instrument_software:_ Name of data acquisition software interfacing with instrument
-
-> _instrument_software_version:_ Version of data acquisition software interfacing with instrument
-
-> _instrument_firmware:_ Firmware version of instrument
-
-> _raw_filenames:_ List of filename of raw binary image data from which this data was obtained
-
-#### Mandatory Variables:
-
-> `float32` **color_level**(pixel_colors): Lower bound of fractional obscuration/grayscale/color level of photodiode array for each color_value. Gives the number of shadow/gray/color levels in the image.
-
-> `int32` **array_size**(array_dimensions): Number of pixels on the detector.
-
-
-> `int32` **image_size**(array_dimensions): Number of pixels across an image. If fixed size then will be number of pixels, if variable size then use `_FillValue`.
-
-> `float32` **resolution**(array_dimensions): Image resolution of instrument for each dimension.
-
-> `float32` **wavelength**(): Operating wavelength of laser used for shadowing/imaging the particles.
-
-> `float32` **pathlength**(): Optical path length of imaging region.
-
-#### Recommended Variables:
-
-> `float32` **color_value**(pixel_colors): Value of each color used in image. Usually these will be contiguous but the does not have to be. Can be included to facilitate arbitrary values to be used in the "image" variable.
-
-> `float32` **resolution_error**(array_dimensions): Uncertainty of the image resolution of instrument for each dimension.
-
-
-
-### Instrument Core group
-
-The instrument Core group is where the flattened image data is stored. There are two unlimited dimensions in the core group, "image_num" and "pixel". The maximum value of the coordinate variable "image_num" is the number of images in the dataset while the maximum of "pixel" is the total number of pixels in the image array.
-
-The arrival time of each image is given by "timestamp" in a recognised time, usually nanoseconds, from a reference time. Time variables have a units string attribute that conforms to the [UDUNITS recommendation](https://cfconventions.org/Data/cf-conventions/cf-conventions-1.11/cf-conventions.html#time-coordinate), for example “nanoseconds since 2024-01-01 00:00:00 +0”. The "timestamp" variable has
-a ``standard_name`` attribute "time". It's worth mentioning that due to the random nature of cloud sampling, the data in "timestamp" will be highly irregular and different from what one may expect from timeseries data.
-
-
-## Image Data
 
 
 .. rubric:: References
