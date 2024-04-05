@@ -16,7 +16,7 @@ SPIF - Single Particle Image Format
 		:caption: Contents:
 
 		spif-doc
-		spif_example
+		dynamic_content
 
 
 
