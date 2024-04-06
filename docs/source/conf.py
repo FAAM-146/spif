@@ -74,7 +74,7 @@ master_doc = 'index'
 #
 # This is also used if you do content translation via gettext catalogs.
 # Usually you set "language" from the command line for these cases.
-language = None
+#language = en
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
@@ -101,7 +101,7 @@ exclude_patterns = []
 # s5defs.txt builtin with html colors etc
 rst_prolog = """
  .. include:: <s5defs.txt>
- .. include:: filename_substitutions.rst
+ .. include:: dynamic_content/filename_substitutions.rst
 
  """
 
@@ -118,7 +118,7 @@ html_theme = 'sphinx_rtd_theme'
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
 html_css_files = ['css/custom_text.css', 'css/faam.css']
-html_logo = "_static/faam-small.png"
+#html_logo = "_static/faam-small.png"
 html_theme_options = {'logo_only': False,
                       'display_version': True,
                      }
