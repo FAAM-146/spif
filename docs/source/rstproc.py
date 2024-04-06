@@ -38,7 +38,8 @@ def rst_grp(group: dict=None, level: int=0, **kwargs) -> str:
     text = f'..\n  File describing contents of {name} group\n\n'
 #    text += prep.rst_substitutions(level=level)
 
-    text += f'.. {grp_type}_group_sec::\n'
+    # Include a section target
+    text += f'.. _{grp_type} group section\n'
     text += f'\n{_esc(path)}\n{"-" * len(_esc(path))}\n\n'
     text += (f':Description: {_esc(group["meta"]["description"])}\n'
              if group["meta"].get("description") else ''
@@ -54,16 +55,24 @@ def rst_grp(group: dict=None, level: int=0, **kwargs) -> str:
     text += '\n\n'
 
     # Add group attributes if required
-    text += f'Group Attributes:\n{"^"*17}\n' if  group['attributes'] else ''
-    text += f'..\n  __{grp_type}_AttrsStart__\n\n'
-    text += rst_attrs(group['attributes'], level=level, **kwargs)
-    text += f'..\n  __{grp_type}_AttrsStop__\n\n'
+    # Add stop/start markers (eg ".. root_AttrsStart") for include statements
+    # in spif-doc.rst and elsewhere
+    if group['attributes']:
+        text += f'Group Attributes:\n{"^"*17}\n'
+        text += f'.. {grp_type}_AttrsStart\n\ \n'
+        text += rst_attrs(group['attributes'], level=level, **kwargs)
+        text += f'.. {grp_type}_AttrsStop\n\n'
+    else:
+        text += '\n'
 
     # Add group variables if required
-    text += f'Group Variables:\n{"^"*16}\n\n' if  group['variables'] else ''
-    text += f'..\n  __{grp_type}_VarsStart__\n\n'
-    text += rst_vars(group['variables'], level=level, **kwargs)
-    text += f'..\n  __{grp_type}_VarsStop__\n\n'
+    if group['variables']:
+        text += f'Group Variables:\n{"^"*16}\n\n'
+        text += f'.. {grp_type}_VarsStart\n\ \n'
+        text += rst_vars(group['variables'], level=level, **kwargs)
+        text += f'.. {grp_type}_VarsStop\n\n'
+    else:
+        text += '\n'
 
     return text
 
@@ -78,7 +87,7 @@ def rst_attrs(attributes: dict=None, level: int=0, **kwargs) -> str:
 
     indent = "  " * level
     for attr_key, attr_value in attributes.items():
-            text += f'{indent}  * ``{attr_key}`` : {str(attr_value)}\n'
+            text += f'{indent}  * ``{attr_key}``\ : {str(attr_value)}\n'
     text += '\n'
 
     return text
@@ -111,9 +120,9 @@ def rst_vars(variables: dict=None,
         sec_quote = '"'
         text += f'{_esc(name)}\n{sec_quote * len(_esc(name))}\n'
         text += ':red:`REQUIRED`\n\n' if var["meta"].get("required") else '\n'
-        text += f'  :Datatype: `{var["meta"]["datatype"]}`\n'
-        text += f'  :Dimensions: {", ".join(var["dimensions"])}\n'
-        text += (f'  :Description: {var["meta"]["description"]}\n\n'
+        text += f':Datatype: `{var["meta"]["datatype"]}`\n'
+        text += f':Dimensions: {", ".join(var["dimensions"])}\n'
+        text += (f':Description: {var["meta"]["description"]}\n\n'
                  if var["meta"].get("description")
                  else '\n')
 
