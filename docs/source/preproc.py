@@ -14,6 +14,10 @@ import preprocessor as prep
 # Filename of mandatory definition/product file/s
 DEFAULT_MANDATORY_DEFINITION = 'spif_example'
 
+# Filename for minimal example definition, ie only mandatory vocabulary
+# Used to create dynamic documentation for mandatory only
+DEFAULT_MINIMAL_FILENAME = DEFAULT_MANDATORY_DEFINITION
+
 # Path to spif standard dir
 spif_dir = os.path.abspath(
         os.path.join(os.path.dirname(__file__), '..', '..', 'standard')
@@ -33,59 +37,9 @@ dynamic_dir = os.path.abspath(
 
 if not os.path.exists(dynamic_dir):
     os.makedirs(dynamic_dir)
-
-def init() -> None:
+else:
     for f in os.listdir(dynamic_dir):
-        os.remove(f)
-
-def populate_introduction(definition) -> None:
-    with open(definition, 'r') as f:
-        data = json.load(f)
-
-    name = os.path.basename(definition.replace('.json', ''))
-    description = data['meta']['description']
-    pattern = data['meta']['file_pattern']
-    references = data['meta']['references']
-
-    references = ' | '.join([f'`{i[0]} <{i[1]}>`_' for i in references])
-
-    with open(os.path.join(dynamic_dir, 'introduction.rst'), 'r') as f:
-        rst = f.read()
-
-    rst = rst.replace('TAG_PRODUCT_NAME', name)
-    rst = rst.replace('TAG_PRODUCT_DESCRIPTION', description)
-    rst = rst.replace('TAG_PRODUCT_FILE_PATTERN', pattern)
-    rst = rst.replace('TAG_PRODUCT_REFERENCES', references)
-
-    with open(os.path.join(dynamic_dir, 'introduction.rst'), 'w') as f:
-        f.write(rst)
-
-
-def populate_global_attrs(definition) -> None:
-    
-    with open(definition, 'r') as f:
-        data = json.load(f)
-    attributes = data['attributes']
-
-    text = ''
-    for key, value in attributes.items():
-        text += f'* ``{key}``: '
-        text += f'**{value}** - '
-        desc =  GlobalAttributes.model_json_schema()['properties'][key]['description']
-        print(desc)
-        text += desc + '\n'
-    text += '\n'
-
-    with open(os.path.join(dynamic_dir, 'global_attributes.rst'), 'r') as f:
-        rst = f.read()
-
-    rst = rst.replace('TAG_PRODUCT_GLOBAL_ATTRIBUTES', text)
-
-
-    with open(os.path.join(dynamic_dir, 'global_attributes.rst'), 'w') as f:
-        f.write(rst)
-
-
+        os.remove(os.path.join(dynamic_dir, f))
 
 
 def populate_group_rst(data: dict,
@@ -245,10 +199,10 @@ if __name__ == '__main__':
     subs_rst = '..\n  Substitution links to dynamic content\n\n'
     example_files = {'MandatorySpifFile': '', 'OptionalSpifFile': ''}
     example = populate_vocab_rst(definition,
-                                 vocab_example_filename = 'minimal_example',
-                                 incl_required = True,
-                                 incl_optional = False
-                                 )
+                        vocab_example_filename = DEFAULT_MINIMAL_FILENAME,
+                        incl_required = True,
+                        incl_optional = False
+                        )
     example_files['MandatorySpifFile'] = os.path.relpath(
                                 example, os.path.dirname(__file__))
 
@@ -261,7 +215,7 @@ if __name__ == '__main__':
         [f'.. |{f}| replace:: {k}' for f,k in example_files.items() if k]
         )
 
-    subs_file = os.path.join(os.path.dirname(__file__),
+    subs_file = os.path.join(dynamic_dir,
                              "filename_substitutions.rst")
 
     with open(subs_file, 'w') as f:
