@@ -10,7 +10,7 @@ SPIF  - Single Particle Image Format
 ..
   For full information on the SPIF data standard and usage examples see [paper_placeholder](https://github.com/graemenott/spif-paper).
 
-
+Test of substitution: |MandatorySpifFile|
 
 Background and Motivation
 =========================
@@ -102,12 +102,12 @@ There are only two required global attributes. This first of these is ``Conventi
 
 The second required global attribute is ``imager_groups``. This is used to identify groups of imaging data that conforms to the SPIF structure. It is possible to have multiple groups within the file root and these may or may not contain image data. This attribute makes it easy for users to find those groups. If there are more than one imager group then these should be given as a space- (recommended) or comma-separated list.
 
-.. include:: |MandatorySpifFile|
-    :start-after: __root__AttrsStart__
-    :end-before: __root_AttrsStop__
-
 ..
-  :Conventions: A space or comma delineated list of conventions given in a single string. Must include "SPIF-m.n" where m.n is the version number.
+  Move this include block into a dynamically generated file. Can use string replacements to do filenames
+
+.. include:: dynamic_content/spif_example.root.rst
+  :start-after: root_AttrsStart
+  :end-before: root_AttrsStop
 
 There are many recommended global attributes, users may refer to the `ACDD <https://wiki.esipfed.org/Attribute_Convention_for_Data_Discovery_1-3>`_ which lists some commonly used attributes.
 
@@ -119,20 +119,17 @@ The image data from an appropriate instrument is contained within a special grou
 
 The imager group contains variables with information about the probe size, resolution, and other data required for interpreting the raw images.
 
-Mandatory imager group attributes are;
-
 ..
-  These should be extracted from auto-generated file
+  Move this include block into a dynamically generated file. Can use string replacements to do filenames
 
-.. include:: |MandatorySpifFile|
-    :start-after: __imager__AttrsStart__
-    :end-before: __imager_AttrsStop__
-
+.. include:: dynamic_content/spif_example.rst
+    :start-after: imager_AttrsStart
+    :end-before: imager_AttrsStop
 ..
   :imager_name: Short name of the imaging instrument. If may be the same as the group name.
   :imager_long_name: Full descriptive name of the imaging instrument.
 
-A complete description of mandatory vocabulary of the imager group is given :ref:`here <imager_group_sec>`.
+A complete description of mandatory vocabulary of the imager group is given :ref:`here <imager group section>`.
 
 
 Imager core group
@@ -149,11 +146,14 @@ Note that different probes may not provide image times in exactly the same way a
 
 Mandatory imager/core group attributes are;
 
-.. include:: |MandatorySpifFile|
-    :start-after: __core__AttrsStart__
-    :end-before: __core_AttrsStop__
+..
+  Move this include block into a dynamically generated file. Can use string replacements to do filenames
 
-A complete description of mandatory vocabulary of the imager core group is given :ref:`here <core_group_sec>`.
+.. include:: dynamic_content/spif_example.root.imager.core.rst
+    :start-after: core_AttrsStart
+    :end-before: core_AttrsStop
+
+A complete description of mandatory vocabulary of the imager core group is given :ref:`here <core group section>`.
 
 
 Image Data
@@ -172,7 +172,8 @@ Image Data
 
 
 
-
+SPIF Extentions
+---------------
 
 
 
