@@ -27,7 +27,7 @@ Mandatory Attributes:
 ^^^^^^^^^^^^^^^^^^^^^
 
     :group_type: Must be "imager"
-    :imager_name: Short name of the imaging instrument. It may be the same as
+    :instrument_name: Short name of the imaging instrument. It may be the same as
         the group name.
 
 
