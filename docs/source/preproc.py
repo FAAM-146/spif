@@ -81,7 +81,7 @@ def populate_group_rst(data: dict,
 def populate_vocab_rst(definition,
                        vocab_example_filename: str=None,
                        incl_required: bool=True,
-                       incl_optional: bool=False) -> None:
+                       incl_optional: bool=False) -> str:
     """Create vocabulary description rst file"""
 
     with open(definition, 'r') as f:
@@ -122,6 +122,83 @@ def populate_vocab_rst(definition,
 
     return rst_file
 
+
+def call(args_dict: dict) -> None:
+    """Main script call
+
+    Function loops through each definition file given. The first is used as
+    the primary to create documentation that covers only the mandatory
+    vocabulary. Each subsequent file is used to illustrate extended/optional
+    vocabulary.
+
+    A substitutions file is created to be used in index.rst and spif-doc.rst
+    so that links to the dynamically generated docs work correctly.
+    """
+
+    example_files = []
+
+    _args_dict = args_dict.copy()
+    _ = _args_dict.pop('definition_filenames', None)
+
+    # Create minimal example doc first, ie Mandatory vocab only
+    minimal = True
+
+    for file in args_dict['definition_filenames']:
+        _args_dict['definition_filename'] = file
+        def_dict = prep.get_definition(spif_dir, **_args_dict)
+        definition = def_dict['product']['path']
+        example_files.append(populate_vocab_rst(definition, file))
+        minimal = False
+
+    req_example_file = os.path.relpath(example_files[0], dynamic_dir)
+    opt_example_files = [os.path.relpath(f, dynamic_dir)
+                         for f in example_files[1:]
+                         ]
+
+    # Create a substitutions file based on template
+    with open(os.path.join(template_dir,
+                           'substitutions_template.rst'), 'r') as f:
+        rst = f.read()
+
+    rst = rst.replace('REQUIRED_SPIF_EXAMPLE', req_example_file)
+    rst = rst.replace('OPTIONAL_SPIF_EXAMPLES', '\n'.join(opt_example_files))
+    rst += '\n\n'
+
+    subst_file = os.path.join(dynamic_dir, 'substitutions.rst')
+
+    with open(subst_file, 'w') as f:
+        f.write(rst)
+
+    return
+
+
+
+    subs_rst = '..\n  Substitution links to dynamic content\n\n'
+    example_files = {'MandatorySpifFile': '', 'OptionalSpifFile': ''}
+    example = populate_vocab_rst(definition,
+                        vocab_example_filename = DEFAULT_MINIMAL_FILENAME,
+                        incl_required = True,
+                        incl_optional = False
+                        )
+    example_files['MandatorySpifFile'] = os.path.relpath(
+                                example, os.path.dirname(__file__))
+
+    if def_dict['vocab']['incl_optional'] is True:
+        example = populate_vocab_rst(definition, **def_dict['vocab'])
+        example_files['OptionalSpifFile'] = os.path.relpath(
+                                example, os.path.dirname(__file__))
+
+    subs_rst += '\n'.join(
+        [f'.. |{f}| replace:: {k}' for f,k in example_files.items() if k]
+        )
+
+    subs_file = os.path.join(dynamic_dir,
+                             "filename_substitutions.rst")
+
+    with open(subs_file, 'w') as f:
+        f.write(subs_rst)
+
+
 # ----------------------------------------------------------------------
 # ----------------------------------------------------------------------
 if __name__ == '__main__':
@@ -129,9 +206,9 @@ if __name__ == '__main__':
     import argparse
 
     # Define commandline options
-    usage = ("make <build> FILEOPT=definition_filename "
-             "STDOPT=std_version PRODOPT=product_version "
-             "PRODDIR=product_path VOCABOPT=vocab_types")
+    usage = ("make <build> STDFILE=definition_filename "
+             "STDVER=std_version PRODVER=product_version "
+             "PRODDIR=product_path")
     version = f"version: {prep.__version__}"
     description = ("Preprocessor for sphinx generation of SPIF "
                    f"documentation.\n {version}")
@@ -141,16 +218,21 @@ if __name__ == '__main__':
             description=description)
 
     # Optional arguments
-    parser.add_argument('-f', '--filename',
+    parser.add_argument('-f', '--file',
                         action='store',
-                        dest='definition_filename',
-                        default=DEFAULT_MANDATORY_DEFINITION,
+                        nargs='*',
+                        dest='definition_filenames',
+                        default=[DEFAULT_MANDATORY_DEFINITION],
                         type=str,
-                        help=("Filename or part thereof, of the definition "
-                              "file of the standard (ie the .yaml). If the "
-                              "filename does not exist within the required "
-                              "standard version and product the documentation "
-                              "build will fail."))
+                        help=("Space-delineated list of filenames, or part "
+                              "thereof, of the definition file/s of a single "
+                              "version of the standard, ie the .yaml file/s. "
+                              "The first file must *only* contain mandatory "
+                              "vocabulary. Any subsequent files given can be "
+                              "used to illustrate extended vocabulary. If the "
+                              "filenames do not exist within the required "
+                              "standard version and product, the "
+                              "documentation build will fail."))
     parser.add_argument('-s', '--standard',
                         action='store',
                         dest='std_version',
@@ -193,30 +275,4 @@ if __name__ == '__main__':
     args_dict = vars(parser.parse_args())
     #args, unknown = parser.parse_known_args()
 
-    def_dict = prep.get_definition(spif_dir, **args_dict)
-    definition = def_dict['product']['path']
-
-    subs_rst = '..\n  Substitution links to dynamic content\n\n'
-    example_files = {'MandatorySpifFile': '', 'OptionalSpifFile': ''}
-    example = populate_vocab_rst(definition,
-                        vocab_example_filename = DEFAULT_MINIMAL_FILENAME,
-                        incl_required = True,
-                        incl_optional = False
-                        )
-    example_files['MandatorySpifFile'] = os.path.relpath(
-                                example, os.path.dirname(__file__))
-
-    if def_dict['vocab']['incl_optional'] is True:
-        example = populate_vocab_rst(definition, **def_dict['vocab'])
-        example_files['OptionalSpifFile'] = os.path.relpath(
-                                example, os.path.dirname(__file__))
-
-    subs_rst += '\n'.join(
-        [f'.. |{f}| replace:: {k}' for f,k in example_files.items() if k]
-        )
-
-    subs_file = os.path.join(dynamic_dir,
-                             "filename_substitutions.rst")
-
-    with open(subs_file, 'w') as f:
-        f.write(subs_rst)
+    call(args_dict)
