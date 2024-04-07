@@ -44,7 +44,6 @@ groups:
     # Required imager group attributes
     attributes:
       instrument_name: imager_1
-      instrument_long_name: imager_1 with a more descriptive name
       group_type: imager
 
     # Required imager group dimensions
