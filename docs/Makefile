@@ -10,12 +10,13 @@ BUILDDIR      = build
 
 PYTHON        = python
 PREPROCESSOR  = source/preproc.py
+
 # Preprocessor call options
-STDOPT        =
-FILEOPT       =
-PRODOPT       =
+STDVER        =
+STDFILE       =
+PRODVER       =
 PRODDIR       =
-VOCABOPT      =
+
 
 # Web publishing options
 PUBHOST       = faam-webserver
@@ -23,16 +24,25 @@ PUBDIR        = /var/www/html/additional/sphinx/data/main
 
 
 # Create arg strings from preproccessor options;
-#	STDOPT: version number of standard
-# 	FILEOPT: product/definition file to produce documentation for
+#	STDVER: version number of standard
+# 	STDFILE: One or more product/definition file/s, comma-delineated.
+#      First file is assumed to be minimal example file with mandatory only vocab
 # 	PRODOPT: version number of product
 #	PRODDIR: path to product files (if not local)
-# 	VOCABOPT: type of vocabulary to include in documentation
-STDVER = $(addprefix --standard=,$(word 1,$(STDOPT)))
-FILENAME = $(addprefix --file=,$(word 1,$(FILEOPT)))
-PRODVER = $(addprefix --product=,$(word 1,$(PRODOPT)))
+comma = ,
+empty =
+space = $(empty) $(empty)
+
+STD = $(addprefix --standard=,$(word 1,$(STDVER)))
+# Convert comma-delineated list to whitespace-delineated
+FILELIST = $(addprefix --file$(space),$(word 1,$(STDFILE)))
+FILENAME = $(subst $(comma),$(space),$(FILELIST))
+PRODUCT = $(addprefix --product=,$(word 1,$(PRODVER)))
 PRODPATH = $(addprefix --product_path=,$(word 1,$(PRODDIR)))
-VOCAB = $(addprefix --vocab=,$(word 1,$(VOCABOPT)))
+
+$(info $$(FILELIST) is $(FILELIST))
+$(info $$(FILENAME) is $(FILENAME))
+
 # $(info $$(STDVER) is $(STDVER))
 # $(info $$(FILENAME) is $(FILENAME))
 # $(info $$(PRODVER) is $(PRODVER))
@@ -57,5 +67,5 @@ publish:
 # Catch-all target: route all unknown targets to Sphinx using the new
 # "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
 %: Makefile
-	@$(PYTHON) "$(PREPROCESSOR)" $(FILENAME) $(STDVER) $(PRODVER) $(PRODDIR) $(VOCAB)
+	@$(PYTHON) "$(PREPROCESSOR)" $(FILENAME) $(STD) $(PRODUCT) $(PRODPATH)
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
