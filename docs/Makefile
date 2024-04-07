@@ -40,14 +40,11 @@ FILENAME = $(subst $(comma),$(space),$(FILELIST))
 PRODUCT = $(addprefix --product=,$(word 1,$(PRODVER)))
 PRODPATH = $(addprefix --product_path=,$(word 1,$(PRODDIR)))
 
-$(info $$(FILELIST) is $(FILELIST))
-$(info $$(FILENAME) is $(FILENAME))
-
-# $(info $$(STDVER) is $(STDVER))
+# $(info $$(FILELIST) is $(FILELIST))
 # $(info $$(FILENAME) is $(FILENAME))
-# $(info $$(PRODVER) is $(PRODVER))
+# $(info $$(STD) is $(STD))
+# $(info $$(PRODUCT) is $(PRODUCT))
 # $(info $$(PRODPATH) is $(PRODPATH))
-# $(info $$(VOCAB) is $(VOCAB))
 
 
 # Put it first so that "make" without argument is like "make help".
