@@ -16,7 +16,8 @@
 import os.path
 import sys
 import datetime
-import sphinx_rtd_theme
+#import sphinx_rtd_theme
+import sphinx_design
 
 # Directory of spif standard
 std_dir = os.path.abspath(
@@ -50,7 +51,8 @@ release = '0.1'
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = ['sphinx_rtd_theme',   # Read the docs theme
+extensions = ['sphinx_design',      # Furo theme
+              'sphinx_rtd_theme',   # Read the docs theme
               'sphinx.ext.autodoc', # Auto doc code documentation
               'sphinx.ext.napoleon', # Google style docstrings
             ]
@@ -101,7 +103,6 @@ exclude_patterns = []
 # s5defs.txt builtin with html colors etc
 rst_prolog = """
  .. include:: <s5defs.txt>
- .. include:: dynamic_content/filename_substitutions.rst
 
  """
 
@@ -110,7 +111,7 @@ rst_prolog = """
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'sphinx_rtd_theme'
+html_theme = 'alabaster'#sphinx_design'
 
 
 # Add any paths that contain custom static files (such as style sheets) here,
