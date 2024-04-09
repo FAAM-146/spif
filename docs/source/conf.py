@@ -16,34 +16,35 @@
 import os.path
 import sys
 import datetime
-#import sphinx_rtd_theme
+import sphinx_rtd_theme
 import sphinx_design
+
+import pdb
 
 # Directory of spif standard
 std_dir = os.path.abspath(
                 os.path.join(os.path.dirname(__file__), '..', '..', 'standard')
                 )
-
+dyn_dir = os.path.abspath(
+                os.path.join(os.path.dirname(__file__), 'dynamic_content')
+                )
 if std_dir not in sys.path:
-    sys.path.insert(0,std_dir)
+    sys.path.insert(0, std_dir)
+if dyn_dir not in sys.path:
+    sys.path.insert(0, dyn_dir)
 
-import pdb
-
-
-
-
-
-
-
+from versions import __standard_version__, __product_version__
 
 # -- Project information -----------------------------------------------------
-
-project = 'SPIF - Single Particle Image Format'
-copyright = '2024, G J Nott, D Sproson'
-author = 'G J Nott, D Sproson'
+project_short_name = "SPIF"
+project_long_name = "Single Particle Image Format"
+project = f"{project_short_name} – {project_long_name}"
+date = datetime.datetime.now().date().isoformat()
+copyright = f'{date}, G J Nott, D Sproson'
+author = 'SPIF team'
 
 # The full version, including alpha/beta/rc tags
-release = '0.1'
+release = f"{__product_version__:0.3}"
 
 
 # -- General configuration ---------------------------------------------------
@@ -53,7 +54,7 @@ release = '0.1'
 # ones.
 extensions = ['sphinx_design',      # Furo theme
               'sphinx_rtd_theme',   # Read the docs theme
-              'sphinx.ext.autodoc', # Auto doc code documentation
+#              'sphinx.ext.autodoc', # Auto doc code documentation
               'sphinx.ext.napoleon', # Google style docstrings
             ]
 
@@ -113,10 +114,10 @@ html_theme = 'furo'#sphinx_design'
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
-html_css_files = ['css/custom_text.css', 'css/faam.css']
+html_css_files = ['css/custom_text.css']#, 'css/faam.css']
 #html_logo = "_static/faam-small.png"
-html_theme_options = {'logo_only': False,
-                      'display_version': True,
+html_title = f"{project_short_name}: v{release}"
+html_theme_options = {'top_of_page_button': None,
                      }
 
 
