@@ -125,6 +125,16 @@ def get_product(product_path: str='.',
         product_path = os.path.join(product_path, PRODUCT_VERSION)
         product_version = PRODUCT_VERSION
 
+    if product_version == PRODUCT_VERSION:
+        # Get the actual number of the version
+        try:
+            product_version = os.path.basename(
+                    sorted(glob.glob(os.path.join(product_path, '../v*')))[-1]
+                    )
+        except IndexError as err:
+            # No v numbers so just return the string
+            pass
+
     return (product_version, product_path)
 
 
