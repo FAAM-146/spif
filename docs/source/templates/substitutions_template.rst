@@ -6,21 +6,21 @@
 
 .. ReqVocabFileStart
 
-REQUIRED_SPIF_EXAMPLE
+:doc:`here <dynamic_content/REQUIRED_SPIF_EXAMPLE>`
 
 .. ReqVocabFileStop
 
 
 .. OptVocabFileStart
 
-OPTIONAL_SPIF_EXAMPLES
+:doc:`here <dynamic_content/OPTIONAL_SPIF_EXAMPLES.rst>`
 
 .. OptVocabFileStop
 
 
 .. root_ReqAttrsStart
 
-.. include:: REQUIRED_SPIF_EXAMPLE
+.. include:: dynamic_content/REQUIRED_SPIF_EXAMPLE.root.rst
 	:start-after: root_AttrsStart
 	:end-before: root_AttrsStop
 
@@ -28,7 +28,7 @@ OPTIONAL_SPIF_EXAMPLES
 
 .. root_ReqVarsStart
 
-.. include:: REQUIRED_SPIF_EXAMPLE
+.. include:: dynamic_content/REQUIRED_SPIF_EXAMPLE.root.rst
 	:start-after: root_VarsStart
 	:end-before: root_VarsStop
 
@@ -37,7 +37,7 @@ OPTIONAL_SPIF_EXAMPLES
 
 .. imager_ReqAttrsStart
 
-.. include:: REQUIRED_SPIF_EXAMPLE
+.. include:: dynamic_content/REQUIRED_SPIF_EXAMPLE.root.imager_1.rst
 	:start-after: imager_AttrsStart
 	:end-before: imager_AttrsStop
 
@@ -45,7 +45,7 @@ OPTIONAL_SPIF_EXAMPLES
 
 .. imager_ReqVarsStart
 
-.. include:: REQUIRED_SPIF_EXAMPLE
+.. include:: dynamic_content/REQUIRED_SPIF_EXAMPLE.root.imager_1.rst
 	:start-after: imager_VarsStart
 	:end-before: imager_VarsStop
 
@@ -54,7 +54,7 @@ OPTIONAL_SPIF_EXAMPLES
 
 .. core_ReqAttrsStart
 
-.. include:: REQUIRED_SPIF_EXAMPLE
+.. include:: dynamic_content/REQUIRED_SPIF_EXAMPLE.root.imager_1.core.rst
 	:start-after: core_AttrsStart
 	:end-before: core_AttrsStop
 
@@ -62,7 +62,7 @@ OPTIONAL_SPIF_EXAMPLES
 
 .. core_ReqVarsStart
 
-.. include:: REQUIRED_SPIF_EXAMPLE
+.. include:: dynamic_content/REQUIRED_SPIF_EXAMPLE.root.imager_1.core.rst
 	:start-after: core_VarsStart
 	:end-before: core_VarsStop
 
