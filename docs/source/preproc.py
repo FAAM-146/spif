@@ -35,12 +35,6 @@ dynamic_dir = os.path.abspath(
         os.path.join(os.path.dirname(__file__), 'dynamic_content')
         )
 
-if not os.path.exists(dynamic_dir):
-    os.makedirs(dynamic_dir)
-else:
-    for f in os.listdir(dynamic_dir):
-        os.remove(os.path.join(dynamic_dir, f))
-
 
 def populate_group_rst(data: dict,
                        filename: str,
@@ -135,6 +129,17 @@ def call(args_dict: dict) -> None:
     so that links to the dynamically generated docs work correctly.
     """
 
+    if not os.path.exists(dynamic_dir):
+        os.makedirs(dynamic_dir)
+    else:
+        pdb.set_trace()
+
+        for f in os.listdir(dynamic_dir):
+            try:
+                os.remove(os.path.join(dynamic_dir, f))
+            except OSError as err:
+                shutil.rmtree(os.path.join(dynamic_dir, f))
+
     example_files = []
 
     _args_dict = args_dict.copy()
@@ -169,6 +174,19 @@ def call(args_dict: dict) -> None:
 
     with open(subst_file, 'w') as f:
         f.write(rst)
+
+    # Write versions used to create docs into documentation_versions.py
+    with open(os.path.join(template_dir,
+                           'documentation_versions.txt'), 'r') as f:
+        text = f.read()
+
+    std_ver = def_dict['standard']['version'].lstrip('v')
+    prod_ver = def_dict['product']['version'].lstrip('v')
+    text = text.replace('STD_VERSION_NUM', std_ver)
+    text = text.replace('PROD_VERSION_NUM', prod_ver)
+
+    with open(os.path.join(dynamic_dir, 'versions.py'), 'w') as f:
+        f.write(text)
 
     return
 
