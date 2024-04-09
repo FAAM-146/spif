@@ -39,7 +39,7 @@ def rst_grp(group: dict=None, level: int=0, **kwargs) -> str:
 #    text += prep.rst_substitutions(level=level)
 
     # Include a section target
-    text += f'.. _{grp_type} group section:\n'
+#    text += f'.. _{grp_type} group section:\n'
     text += f'\n{_esc(path)}\n{"-" * len(_esc(path))}\n\n'
     text += (f':Description: {_esc(group["meta"]["description"])}\n'
              if group["meta"].get("description") else ''
@@ -127,8 +127,10 @@ def rst_vars(variables: dict=None,
                  else '\n')
 
         # Add variable attributes with increased indent
-        text += rst_attrs(var.get('attributes', None), level=level+1, **kwargs)
-        text += '\n'
+        var_attrs = rst_attrs(var.get('attributes', None),
+                              level=level+1,
+                              **kwargs)
+        text += f':Attributes:\n{var_attrs}\n' if var_attrs else '\n'
 
     return text
 
