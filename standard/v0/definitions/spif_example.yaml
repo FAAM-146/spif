@@ -25,7 +25,7 @@ meta:
 # Global attributes
 # ------------------------------------------------------------------------------
 attributes:
-  Conventions: SPIF-1.0
+  Conventions: SPIF-0.1
   imager_groups: '<str: derived_from_file>'
 
 # No variables or dimensions are required in the root group
