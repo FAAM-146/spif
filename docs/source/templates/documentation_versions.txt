@@ -1,0 +1,17 @@
+""" Documentation Versions
+
+This file is used to create a versions file in dynamic_content
+which contains information about the source versions.
+
+A string replace is used to insert the correct versions as
+determined by docsrc_options.get_definition(). the result is
+saved as dynamic_content/documentation_versions.py
+
+This is imported by conf.py
+
+"""
+
+
+__standard_version__ = STD_VERSION_NUM
+__product_version__ = PROD_VERSION_NUM
+
