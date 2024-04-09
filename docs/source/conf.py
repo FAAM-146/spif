@@ -81,7 +81,7 @@ master_doc = 'index'
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path .
-exclude_patterns = ['Thumbs.db', '.DS_Store', 'build', 'templates']
+exclude_patterns = ['Thumbs.db', '.DS_Store', 'build*', 'templates*']
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = 'sphinx'
@@ -92,11 +92,6 @@ add_function_parentheses = True
 # If true, the current module name will be prepended to all description
 # unit titles (such as .. function::).
 add_module_names = True
-
-# List of patterns, relative to source directory, that match files and
-# directories to ignore when looking for source files.
-# This pattern also affects html_static_path and html_extra_path.
-exclude_patterns = []
 
 # A string of reStructuredText that will be included at the beginning
 # of every source file that is read.
@@ -111,7 +106,7 @@ rst_prolog = """
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'alabaster'#sphinx_design'
+html_theme = 'furo'#sphinx_design'
 
 
 # Add any paths that contain custom static files (such as style sheets) here,
