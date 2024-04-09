@@ -2,7 +2,7 @@
 .. title:: SPIF Main
 
 ************************************
-SPIF  - Single Particle Image Format
+SPIF – Single Particle Image Format
 ************************************
 
 
@@ -155,17 +155,9 @@ A complete description of mandatory vocabulary of the imager core group is given
 Image Data
 ----------
 
+Particle images may be produced with a one dimensional photodiode array or a two dimensional sensor and may be monoscale, grayscale of few or many tonal levels, or possibly colour. To cope with the differing image dimensionalities, images are all flattened to a one dimensional numerical array. Flattened data from each image is appended to the array in order of arrival. A nanosecond resolution timestamp corresponding to the first pixel of an image is given to provide arrival times.
 
-
-
-
-
-
-
-
-
-
-
+Image data has been extracted from the raw binary file, to maintain a comprehensive copy of the original data, no processing or filtering is applied during the extraction process, so potentially corrupt images, repeated images, and noise are all included. Each image may also contain multiple particles. As the array is entirely raw data, there has been no processing to split out the multiple particles from a single image or filtering to remove corruptions or noise.
 
 
 SPIF Extentions
