@@ -73,7 +73,7 @@ def populate_group_rst(data: dict,
     for group in groups:
         group['meta']['path'] = os.path.join(data['meta']['path'],
                                              group['meta']['name'])
-        populate_group_rst(group, grp_filename, level+1, **kwargs)
+        populate_group_rst(group, grp_filename, level, **kwargs)
 
     return
 
@@ -160,7 +160,8 @@ def call(args_dict: dict) -> None:
                            'substitutions_template.rst'), 'r') as f:
         rst = f.read()
 
-    rst = rst.replace('REQUIRED_SPIF_EXAMPLE', req_example_file)
+    rst = rst.replace('REQUIRED_SPIF_EXAMPLE',
+                      os.path.splitext(req_example_file)[0])
     rst = rst.replace('OPTIONAL_SPIF_EXAMPLES', '\n'.join(opt_example_files))
     rst += '\n\n'
 
@@ -170,33 +171,6 @@ def call(args_dict: dict) -> None:
         f.write(rst)
 
     return
-
-
-
-    subs_rst = '..\n  Substitution links to dynamic content\n\n'
-    example_files = {'MandatorySpifFile': '', 'OptionalSpifFile': ''}
-    example = populate_vocab_rst(definition,
-                        vocab_example_filename = DEFAULT_MINIMAL_FILENAME,
-                        incl_required = True,
-                        incl_optional = False
-                        )
-    example_files['MandatorySpifFile'] = os.path.relpath(
-                                example, os.path.dirname(__file__))
-
-    if def_dict['vocab']['incl_optional'] is True:
-        example = populate_vocab_rst(definition, **def_dict['vocab'])
-        example_files['OptionalSpifFile'] = os.path.relpath(
-                                example, os.path.dirname(__file__))
-
-    subs_rst += '\n'.join(
-        [f'.. |{f}| replace:: {k}' for f,k in example_files.items() if k]
-        )
-
-    subs_file = os.path.join(dynamic_dir,
-                             "filename_substitutions.rst")
-
-    with open(subs_file, 'w') as f:
-        f.write(subs_rst)
 
 
 # ----------------------------------------------------------------------
