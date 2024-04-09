@@ -36,7 +36,7 @@ dimensions: []
 groups:
   # Top-level imager group
   - meta:
-      name: <imager_1>
+      name: imager_1
       description: >-
         Group containing image data from a single instrument or instrument
         channel.
