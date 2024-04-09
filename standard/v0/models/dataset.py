@@ -15,7 +15,7 @@ from .variable import Variable
 
 class DatasetMeta(BaseModel):
     file_pattern: str = Field(description='Canonical filename pattern for this dataset')
-    short_name: str = Field(description='Unique short name for this dataset')
+    short_name: Optional[str] = Field(description='Unique short name for this dataset', default=None)
     long_name: Optional[str] = Field(description='Long descriptive name for this dataset', default=None)
     description: Optional[str] = Field(description='Description of this dataset', default=None)
     references: Optional[list[tuple[str, str]]] = Field(description='References for this dataset', default=None)
