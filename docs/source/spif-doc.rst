@@ -38,7 +38,7 @@ Additional data can be stored in a SPIF file along with the required vocabulary 
 Standard Compliance
 -------------------
 
-This `repository <https://github.com/FAAM-146/spif>`_ contains the *vocal* project for the SPIF data standard. *Vocal* is a tool for managing netCDF data product standards and associated data product specifications. It can be used to check netCDF file compliance to a standard, including SPIF. See the :doc:`SPIF project page <spif-project>` for more details.
+This `repository <https://github.com/FAAM-146/spif>`_ contains the *vocal* project for the SPIF data standard. *Vocal* is a tool for managing netCDF data product standards and associated data product specifications. It can be used to check netCDF file compliance to a standard, including SPIF. See the `SPIF project README <https://github.com/FAAM-146/spif>`_ for more details.
 
 The SPIF convention string can be added to the ``Conventions`` global attribute of a netCDF file that is compliant, that is;
 
@@ -80,16 +80,16 @@ SPIF files use netCDF4 groups to divide multiple imaging instruments and to sepa
 		│
 		└── ...
 
-Groups in bold are mandatory while those in italics are optional. The imaging instrument groups are labelled as ``<imager-1>``, ``<imager-2>``,...``<imager-n>`` where the angled braces ``< >`` indicate that the name actually used in the SPIF file will be some other string. Documentation uses ``imager`` to distinguish these groups from those containing non-imaging instrument data. The file structure and required vocabulary are described below.
+Groups in bold are mandatory while those in italics are optional. The imaging instrument groups are labelled as ``<imager-1>``, ``<imager-2>``\ ...\ ``<imager-n>`` where the angled braces ``< >`` indicate that the name actually used in the SPIF file will be some other string. Documentation uses ``imager`` to distinguish these groups from those containing non-imaging instrument data. The file structure and required vocabulary are described below.
 
 The SPIF definition is constrained to ensure that standard-compliant files contain all the information/data required for future processing. SPIF files must contain, as a minimum, a mandatory vocabulary. That is; groups, attributes, and (coordinate) variables.
 
-Details of the mandatory vocabulary are described in detail :doc:`here <|MandatorySpifFile|>`.
+Details of the mandatory vocabulary are described in detail `here <|MandatorySpifFile|>`.
 
 In addition to these mandatory netCDF parameters, a SPIF file can be extended with additional groups, attributes, and (coordinate) variables.
 
 .. seealso::
-	Recommended optional vocabulary is described in :doc:`|OptionalSpifFile|`
+	Recommended optional vocabulary is described in `|OptionalSpifFile|`
 
 
 File root
@@ -97,22 +97,17 @@ File root
 
 There are only two required global attributes. This first of these is ``Conventions``. This must include the text ``SPIF-m.n``, where ``m.n`` are the major and minor versions. Other recognised conventions strings can also be included in a space- (recommended) or comma-separated list.
 
-
 The second required global attribute is ``imager_groups``. This is used to identify groups of imaging data that conforms to the SPIF structure. It is possible to have multiple groups within the file root and these may or may not contain image data. This attribute makes it easy for users to find those groups. If there are more than one imager group then these should be given as a space- (recommended) or comma-separated list.
-
-..
-	Move this include block into a dynamically generated file. Can use string replacements to do filenames
-.. include:: dynamic_content/spif_example.root.rst
-	:start-after: root_AttrsStart
-	:end-before: root_AttrsStop
-
-Fred
 
 .. include:: dynamic_content/substitutions.rst
 	:start-after: root_ReqAttrsStart
 	:end-before: root_ReqAttrsStop
 
 There are many recommended global attributes, users may refer to the `ACDD <https://wiki.esipfed.org/Attribute_Convention_for_Data_Discovery_1-3>`_ which lists some commonly used attributes.
+
+.. include:: dynamic_content/substitutions.rst
+	:start-after: ReqVocabFileStart
+	:end-before: ReqVocabFileStop
 
 
 Imager group
@@ -125,12 +120,9 @@ The imager group contains variables with information about the probe size, resol
 ..
 	Move this include block into a dynamically generated file. Can use string replacements to do filenames
 
-.. include:: dynamic_content/spif_example.root.imager.rst
-		:start-after: imager_AttrsStart
-		:end-before: imager_AttrsStop
-..
-	:imager_name: Short name of the imaging instrument. If may be the same as the group name.
-	:imager_long_name: Full descriptive name of the imaging instrument.
+.. include:: dynamic_content/substitutions.rst
+	:start-after: imager_ReqAttrsStart
+	:end-before: imager_ReqAttrsStop
 
 A complete description of mandatory vocabulary of the imager group is given :ref:`here <imager group section>`.
 
@@ -153,12 +145,9 @@ Note that different probes may not provide image times in exactly the same way a
 
 Mandatory imager/core group attributes are;
 
-..
-	Move this include block into a dynamically generated file. Can use string replacements to do filenames
-
-.. include:: dynamic_content/spif_example.root.imager.core.rst
-		:start-after: core_AttrsStart
-		:end-before: core_AttrsStop
+.. include:: dynamic_content/substitutions.rst
+		:start-after: core_ReqAttrsStart
+		:end-before: core_ReqAttrsStop
 
 A complete description of mandatory vocabulary of the imager core group is given :ref:`here <core group section>`.
 
@@ -181,15 +170,6 @@ Image Data
 
 SPIF Extentions
 ---------------
-
-
-
-
-
-
-
-
-
 
 
 
