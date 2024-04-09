@@ -2,7 +2,9 @@
 .. title:: Substitutions
 
 ..
-	This is used to create a substitutions file in dynamic_content
+	This file is used to create a substitutions file in dynamic_content
+	which contains pointers to parts of appropriate source files.
+
 
 .. ReqVocabFileStart
 
