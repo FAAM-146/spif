@@ -1,12 +1,13 @@
 
-from typing import Optional
+from typing import Literal, Optional
 from pydantic import BaseModel, ConfigDict
 from vocal.field import Field
 
-class GroupAttributes(BaseModel):
+
+class CoreGroupAttributes(BaseModel):
     model_config = ConfigDict(
         # Configuration options here
-        title='Group Attributes',
+        title='Core Group Attributes',
         extra='allow'
     )
 
@@ -16,6 +17,40 @@ class GroupAttributes(BaseModel):
     #   description='A description of my attribute',
     #   example='my_attribute_value'
     # )
+    group_type: Literal['core']
+
+
+class PlatformGroupAttributes(BaseModel):
+    model_config = ConfigDict(
+        # Configuration options here
+        title='Platform Group Attributes',
+        extra='allow'
+    )
+
+    # Add your attributes here, e.g.
+    #
+    # my_attribute: str = Field(
+    #   description='A description of my attribute',
+    #   example='my_attribute_value'
+    # )
+    group_type: Literal['platform']
+
+
+class GenericGroupAttributes(BaseModel):
+    model_config = ConfigDict(
+        # Configuration options here
+        title='Generic Group Attributes',
+        extra='allow'
+    )
+
+    # Add your attributes here, e.g.
+    #
+    # my_attribute: str = Field(
+    #   description='A description of my attribute',
+    #   example='my_attribute_value'
+    # )
+    group_type: Literal['other']
+
 
 class ImagerGroupAttributes(BaseModel):
     model_config = ConfigDict(
@@ -30,6 +65,8 @@ class ImagerGroupAttributes(BaseModel):
     #   description='A description of my attribute',
     #   example='my_attribute_value'
     # )
+    group_type: Literal['imager']
+
     instrument_name: str = Field(
         description='Short name of the instrument. May be the same as the group name.',
         example='instrument_name_value'
@@ -37,7 +74,8 @@ class ImagerGroupAttributes(BaseModel):
 
     instrument_long_name: Optional[str] = Field(
         description='Full descriptive name of the instrument.',
-        example='instrument_long_name_value'
+        example='instrument_long_name_value',
+        default=None
     )
 
     instrument_serial_number: Optional[str] = Field(

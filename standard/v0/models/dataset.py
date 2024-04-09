@@ -9,7 +9,7 @@ from vocal.netcdf.mixins import DatasetNetCDFMixin
 from ..attributes import GlobalAttributes
 
 from .dimension import Dimension
-from .group import ImagerGroup
+from .group import ImagerGroup, PlatformGroup, GenericGroup
 from .variable import Variable
 
 
@@ -28,5 +28,5 @@ class Dataset(BaseModel, DatasetNetCDFMixin):
     meta: DatasetMeta
     attributes: GlobalAttributes
     dimensions: Optional[list[Dimension]] = None
-    groups: list[ImagerGroup]
+    groups: list[ImagerGroup | PlatformGroup | GenericGroup]
     variables: list[Variable]

@@ -1,5 +1,6 @@
 
-from pydantic import Field, BaseModel
+from pydantic import BaseModel
+from vocal.field import Field
 
 class GlobalAttributes(BaseModel):
     class Config:
@@ -17,4 +18,9 @@ class GlobalAttributes(BaseModel):
     Conventions: str = Field(
         description='NetCDF conventions followed by this file',
         example='SPIF-1.0'
+    )
+
+    imager_groups: str = Field(
+        description='Space separated list of imager groups in this file',
+        example='imager1 imager2'
     )

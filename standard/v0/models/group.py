@@ -16,7 +16,11 @@ from vocal.validation import (
     _randomize_object_name,
 )
 
-from ..attributes import GroupAttributes, ImagerGroupAttributes
+from ..attributes.group_attributes import (
+    GenericGroupAttributes, PlatformGroupAttributes
+)
+
+from ..attributes import  ImagerGroupAttributes, CoreGroupAttributes
 
 from .dimension import Dimension
 from .variable import Variable
@@ -50,44 +54,67 @@ class GroupMeta(BaseModel):
 
     name: str
 
-
-class Group(BaseModel, GroupNetCDFMixin):
+class GenericGroup(BaseModel, GroupNetCDFMixin):
     model_config = ConfigDict(
         title='Group Schema'
     )
 
     meta: GroupMeta
-    attributes: GroupAttributes
+    attributes: GenericGroupAttributes
     dimensions: Optional[list[Dimension]] = None
     variables: list[Variable]
-    groups: Optional[list[None]] = None
+    groups: Optional[list[GenericGroup]] = None
+
+
+class PlatformGroup(BaseModel, GroupNetCDFMixin):
+    model_config = ConfigDict(
+        title='Group Schema'
+    )
+
+    meta: GroupMeta
+    attributes: PlatformGroupAttributes
+    dimensions: Optional[list[Dimension]] = None
+    variables: list[Variable]
+    groups: Optional[list[GenericGroup]] = None
+
+
+class CoreGroup(BaseModel, GroupNetCDFMixin):
+    model_config = ConfigDict(
+        title='Group Schema'
+    )
+
+    meta: GroupMeta
+    attributes: CoreGroupAttributes
+    dimensions: list[Dimension]
+    variables: list[Variable]
+    groups: Optional[list[GenericGroup]] = None
 
     # Ensure that the 'core' group has the required variables
-    check_for_image_variable = validator(core_group(variable_exists('image')))
-    check_for_timestamp_variable = validator(core_group(variable_exists('timestamp')))
-    check_for_startpixel_variable = validator(core_group(variable_exists('startpixel')))
-    check_for_width_variable = validator(core_group(variable_exists('width')))
-    check_for_height_variable = validator(core_group(variable_exists('height')))
-    check_for_overload_variable = validator(core_group(variable_exists('overload')))
+    check_for_image_variable = validator(variable_exists('image'))
+    check_for_timestamp_variable = validator(variable_exists('timestamp'))
+    check_for_startpixel_variable = validator(variable_exists('startpixel'))
+    check_for_width_variable = validator(variable_exists('width'))
+    check_for_height_variable = validator(variable_exists('height'))
+    check_for_overload_variable = validator(variable_exists('overload'))
 
     # Ensure that the 'core' group has the required dimensions
-    check_for_image_num_dimension = validator(core_group(dimension_exists('image_num')))
-    check_for_pixel_dimension = validator(core_group(dimension_exists('pixel')))
+    check_for_image_num_dimension = validator(dimension_exists('image_num'))
+    check_for_pixel_dimension = validator(dimension_exists('pixel'))
 
     # Ensure that variables have the correct dimensions
-    check_image_dims = validator(core_group(variable_has_dimensions('image', ['pixel'])))
-    check_timestamp_dims = validator(core_group(variable_has_dimensions('timestamp', ['image_num'])))
-    check_startpixel_dims = validator(core_group(variable_has_dimensions('startpixel', ['image_num'])))
-    check_width_dims = validator(core_group(variable_has_dimensions('width', ['image_num'])))
-    check_height_dims = validator(core_group(variable_has_dimensions('height', ['image_num'])))
+    check_image_dims = validator(variable_has_dimensions('image', ['pixel']))
+    check_timestamp_dims = validator(variable_has_dimensions('timestamp', ['image_num']))
+    check_startpixel_dims = validator(variable_has_dimensions('startpixel', ['image_num']))
+    check_width_dims = validator(variable_has_dimensions('width', ['image_num']))
+    check_height_dims = validator(variable_has_dimensions('height', ['image_num']))
     
     # Check that variables have the correct type
-    image_has_correct_type = validator(core_group(variable_has_types('image', UINT8)))
-    timestamp_has_correct_type = validator(core_group(variable_has_types('timestamp', UINT64)))
-    startpixel_has_correct_type = validator(core_group(variable_has_types('startpixel', UINTS)))
-    width_has_correct_type = validator(core_group(variable_has_types('width', UINTS)))
-    height_has_correct_type = validator(core_group(variable_has_types('height', UINTS)))
-    overload_has_correct_type = validator(core_group(variable_has_types('overload', INT8)))
+    image_has_correct_type = validator(variable_has_types('image', UINT8))
+    timestamp_has_correct_type = validator(variable_has_types('timestamp', UINT64))
+    startpixel_has_correct_type = validator(variable_has_types('startpixel', UINTS))
+    width_has_correct_type = validator(variable_has_types('width', UINTS))
+    height_has_correct_type = validator(variable_has_types('height', UINTS))
+    overload_has_correct_type = validator(variable_has_types('overload', INT8))
 
     # Ensure that required dimensions are unlimited size
     @validator
@@ -165,8 +192,8 @@ class ImagerGroup(BaseModel, GroupNetCDFMixin):
 
     meta: GroupMeta
     attributes: ImagerGroupAttributes
-    dimensions: Optional[list[Dimension]] = None
-    groups: list[Group]
+    dimensions: list[Dimension]
+    groups: list[CoreGroup | GenericGroup]
     variables: list[Variable]
 
     # Ensure that the 'core' group exists
