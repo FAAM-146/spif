@@ -132,8 +132,6 @@ def call(args_dict: dict) -> None:
     if not os.path.exists(dynamic_dir):
         os.makedirs(dynamic_dir)
     else:
-        pdb.set_trace()
-
         for f in os.listdir(dynamic_dir):
             try:
                 os.remove(os.path.join(dynamic_dir, f))
