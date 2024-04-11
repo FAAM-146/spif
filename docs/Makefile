@@ -20,7 +20,7 @@ PRODDIR       =
 
 # Web publishing options
 PUBHOST       = faam-webserver
-PUBDIR        = /var/www/html/additional/sphinx/data/main
+PUBDIR        = /var/www/html/additional/sphinx/spif
 
 
 # Create arg strings from preproccessor options;
@@ -59,7 +59,7 @@ help:
 publish:
 	make html
 	ssh $(PUBHOST) mkdir -p $(PUBDIR)
-	rsync -a  _build/html/ $(PUBHOST):$(PUBDIR)
+	rsync -a  build/html/ $(PUBHOST):$(PUBDIR)
 
 # Catch-all target: route all unknown targets to Sphinx using the new
 # "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
