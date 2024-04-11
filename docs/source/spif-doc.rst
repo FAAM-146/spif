@@ -66,7 +66,7 @@ SPIF files use netCDF4 groups to divide multiple imaging instruments and to sepa
 		│   │
 		│   ├── **core**
 		│   │
-		│   ├── *auxillary*
+		│   ├── *auxiliary*
 		│   │
 		│   ├── *level-0*
 		│   │
@@ -160,17 +160,25 @@ Particle images may be produced with a one dimensional photodiode array or a two
 Image data has been extracted from the raw binary file, to maintain a comprehensive copy of the original data, no processing or filtering is applied during the extraction process, so potentially corrupt images, repeated images, and noise are all included. Each image may also contain multiple particles. As the array is entirely raw data, there has been no processing to split out the multiple particles from a single image or filtering to remove corruptions or noise.
 
 
-SPIF Extentions
+SPIF Extensions
 ---------------
 
 
+.. note::
+    Need to complete
 
 
 .. rubric:: References
 
-.. [#Knollenberg1970] https://doi.org/10.1175/1520-0450(1970)009<0086:TOAAAT>,2.0.CO;2), 1970.
-.. [#Quaas2015] https://doi.org/10.1007/s40641-015-0028-0, 2015.
-.. [#Lawson2001] Lawson et al., 2001 https://agupubs.onlinelibrary.wiley.com/doi/10.1029/2000JD900789, 2001.
-.. [#Fugal2009] https://amt.copernicus.org/articles/2/259/2009/, 2009.
-.. [#Wilkinson2016] Wilkinson et al., 2016. https://www.nature.com/articles/sdata201618)
-.. [#McFarquhar2017] McFarquhar et al., 2017. https://doi.org/10.1175/AMSMONOGRAPHS-D-16-0007.1
+.. [#Knollenberg1970] Knollenberg, R. G. The optical array: An alternative to scattering or extinction for airborne particle size determination. J. Appl. Meteorol. 9, 86–103 (1970). https://doi.org/10.1175/1520-0450(1970)009<0086:TOAAAT>2.0.CO;2>
+
+.. [#Quaas2015] Quaas, J. Approaches to Observe Anthropogenic Aerosol-Cloud Interactions. Curr. Clim. Change Rep. 1, 297–304 (2015). https://doi.org/10.1007/s40641-015-0028-0
+
+.. [#Lawson2001] Lawson, R. P. et al. An overview of microphysical properties of Arctic clouds observed in May and July 1998 during FIRE ACE. J. Geophys. Res., 106, 14989–5014 (2001). https://agupubs.onlinelibrary.wiley.com/doi/10.1029/2000JD900789
+
+.. [#Fugal2009] Fugal, J. P. and Shaw, R. A. Cloud particle size distributions measured with an airborne digital in-line holographic instrument, Atmos. Meas. Tech., 2, 259–271 (2009). https://doi.org/10.5194/amt-2-259-2009
+
+.. [#Wilkinson2016] Wilkinson, M. et al. The FAIR Guiding Principles for scientific data management and stewardship. Sci Data 3, 160018 (2016). https://doi.org/10.1038/sdata.2016.18
+
+.. [#McFarquhar2017] McFarquhar, G. M. et al. Processing of Ice Cloud In Situ Data Collected by Bulk Water, Scattering, and Imaging Probes: Fundamentals, Uncertainties, and Efforts toward Consistency. Meteor. Monogr., 58, 11.1–11.33 (2017). https://doi.org/10.1175/AMSMONOGRAPHS-D-16-0007.1
+
