@@ -34,18 +34,11 @@ The Single Particle Image Format (SPIF) concept was originally conceived after a
 .. note::
     List to be completed
 
-Concept:
---------
-
 * A Bansemer at NCAR
 * J Crosier at Uni of Manchester
 * M Freer at CloudSci
 * G Nott at FAAM
 * P Rosenberg at Uni of Leeds
-
-Additional contributions:
-------------------------
-
 * K Bala, N Bliankinshtein, L Nichman, S Shilin M and Wolde at NRC who maintain a `repository of OAP binary decoder and utilities <https://github.com/nrc-cnrc/NRC-SPIFpy>`_
 * D Sproson at FAAM
 * F Van Den Heuvel at BAS
