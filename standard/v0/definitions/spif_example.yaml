@@ -20,7 +20,6 @@ meta:
     requirements.
   references:
     - ['SPIF standard', 'https://github.com/FAAM-146/spif']
-    - ['Example dataset documentation', 'https://some.url/']
 
 # Global attributes
 # ------------------------------------------------------------------------------
@@ -63,8 +62,7 @@ groups:
             Lower bound of fractional obscuration/grayscale/color level of
             photo-detectors for each ``color_value``.
         dimensions: ['pixel_colors']
-        attributes:
-          attribute1: Testing a variable attribute not in the SPIF spec
+        attributes: {}
 
       - meta:
           name: color_value
