@@ -7,11 +7,11 @@ There are two parts to this repository;
 
 1. The documentation source files that describe the standard.
 
-  The documentation is hosted [here](https://www.faam.ac.uk/sphinx/spif).
+   The documentation is hosted [here](https://www.faam.ac.uk/sphinx/spif).
 
 1. The *vocal* project files that are used to manage and validate SPIF-compliant netCDF files.
 
-  This is described [below](#spif_project).
+   This is described [below](#the-vocal-spif-project).
 
 
 ## The Single Particle Image Format
@@ -26,7 +26,7 @@ In a similar fashion to the [CF (Climate and Forecast) Conventions](http://cfcon
 **Details of the SPIF data standard and vocabulary descriptions are given [here](https://www.faam.ac.uk/sphinx/spif).**
 
 
-## The *vocal* SPIF project {#spif_project}
+## The *vocal* SPIF project
 
 *[Vocal](https://github.com/FAAM-146/vocal)* is a tool for managing netCDF data product standards and associated data product specifications. This [repository](https://github.com/FAAM-146/spif) is the *vocal* project for the SPIF data standard. This is not the only way to construct files that follow the standard but it gives an easy way to check files for compliance with the standard.
 
