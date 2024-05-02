@@ -1,3 +1,12 @@
+"""
+Preprocessor for sphinx build.
+
+__main__ is called by Makefile with appropriate arguments
+
+Creates rst source files based on the spif products
+
+"""
+
 import glob
 import json
 import shutil
@@ -150,7 +159,12 @@ def call(args_dict: dict) -> None:
         _args_dict['definition_filename'] = file
         def_dict = prep.get_definition(spif_dir, **_args_dict)
         definition = def_dict['product']['path']
-        example_files.append(populate_vocab_rst(definition, file))
+        incl_optional = not(minimal)
+        example_files.append(populate_vocab_rst(definition,
+                                                file,
+                                                incl_optional=not(minimal)
+                                                )
+                            )
         minimal = False
 
     req_example_file = os.path.relpath(example_files[0], dynamic_dir)
@@ -196,7 +210,8 @@ if __name__ == '__main__':
     import argparse
 
     # Define commandline options
-    usage = ("make <build> STDFILE=definition_filename "
+    usage = ("make <build> "
+             "STDFILE=definition_filename[,definition_filename-2,...] "
              "STDVER=std_version PRODVER=product_version "
              "PRODDIR=product_path")
     version = f"version: {prep.__version__}"
