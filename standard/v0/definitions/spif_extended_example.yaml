@@ -1,30 +1,33 @@
 # Example definition file for an imaginary OAP owned by an arbitrary
-# organisation. Use with SPIF vocal project to create/check netCDF files
+# organisation.
+# Use with SPIF vocal project to create/check netCDF files
 #
-# This is an example SPIF netCDF definition for an imaginary optical array
-# probe, called an OAP100. The definition is designed to satisfy requirements
-# of the SPIF standard as well as the in-house requirements of an arbitrary
-# organisation that produces the data. The in-house requirements include
-# additional global attributes, a 'platform' group which includes some
-# aircraft state data that will aid interpretation of the processed particle
-# image data, and an 'OAP100/auxillary' group which includes some instrument
-# housekeeping data that may be useful for flagging issues with instrument
-# performance. The variables in these two groups are recommended but not
-# required by the in-house standards.
+# This is an example SPIF netCDF definition that contains two imaginary 
+# particle imagers. One is an optical array probe, called an OAP100, and the
+# second is a CCD based imager called a CCD001.
 #
-# Definition version: 20231219
+# The definition is designed to satisfy requirements of the SPIF standard as
+# well as the in-house requirements of an arbitrary organisation that produces
+# the data. The in-house requirements include additional global attributes,
+# the 'platform' group with aircraft position and state data that allows 
+# processing of the raw particle image (from pixels to physical size) and 
+# interpretation of the processed images. An 'OAP100/auxillary' group is 
+# included with some instrument housekeeping data that may be useful for
+# flagging issues with instrument performance.
+#
+# Definition version: 20240502
 # Creates version: 1.0
-# Example filename: imaginary_oap_20231219_v001.nc
+# Example filename: spif_extended_example.nc
 #
 meta:
   file_pattern: >-
-    arbitrary_oap_[0-9]{8}_v001.nc
-  short_name: 'oap100_spif'
-  long_name: 'Decoded raw image data from an imaginary OAP'
+    arbitrary_images_[0-9]{8}_v001.nc
+  short_name: 'aro_spif'
+  long_name: 'Decoded raw image data from an imaginary OAP and CCD imager'
   description: >-
     This dataset contains fabricated raw image data for an imaginary optical
-    array probe, the OAP100. Also included may be aircraft position data and
-    probe housekeeping data.
+    array probe, the OAP100, and a CCD based imager called a CCD001. Also
+    included may be aircraft position data and probe housekeeping data.
   references:
     - ['data documentation', 'https://www.arbitrary.org/data_standards/']
     - ['SPIF standard', 'https://github.com/FAAM-146/spif']
@@ -49,9 +52,8 @@ attributes:
   date_created: '<str: derived_from_file>'
 
   # data source information
-  imager_groups: OAP100
-  source: In situ probe; optical array probe.
-  instrument: OAP100
+  imager_groups: OAP100, CCD001
+  source: In situ measurements
   project: ACC - Arbitrary Cloud Campaign
   platform: Good Airplane v3
   platform_type: aircraft
@@ -81,9 +83,9 @@ attributes:
     CLOUD DROPLET DISTRIBUTION,
   keywords_vocabulary: 'Global Change Master Directory (GCMD)'
   acknowledgement: >-
-    This data has been fabricated to replicate that from an imaginary
-    but non-existant optical array probe (OAP). It is included as part of
-    the SPIF vocal project repository as an example only.
+    This data has been fabricated to replicate that from imaginary but
+    non-existant optical array probe (OAP) and CCD-based imager. It is
+    included as part of the SPIF vocal project repository as an example only.
 
 # No variables or dimensions are required in the root group
 variables: []
@@ -93,7 +95,10 @@ dimensions: []
 groups:
   - meta:
       name: platform
-      description: Data from platform that is used to process image data
+      description: >-
+        Time series data from platform that can be used to process image data.
+        Times use the RAF format where the Time dimension is integer seconds and
+        the sps32 dimension gives the 32 Hz data in each second.
   
     attributes:
       group_type: platform
@@ -210,7 +215,7 @@ groups:
         four levels of grayscale.
       instrument_location: '<str: derived_from_file>'
       instrument_orientation: '<str: derived_from_file>'
-      instrument_manufacturer: OAP Instruments ltd
+      instrument_manufacturer: OAP Instruments Ltd
       instrument_model: OAP100-GS
       instrument_serial_number: '001'
       instrument_software: '<str: derived_from_file optional>'
@@ -222,9 +227,9 @@ groups:
     # instrument group dimensions
     dimensions:
       - name: array_dimensions
-        size: 2
+        size: 1
       - name: pixel_colors
-        size: 3
+        size: 4
 
     variables:
       # instrument group mandatory variables
@@ -249,7 +254,7 @@ groups:
           required: true
         dimensions: ['array_dimensions']
         attributes:
-          long_name: Number of pixels in detector along each array dimension
+          long_name: Number of pixels in detector along each dimension
           coverage_content_type: auxiliaryInformation
           units: '1'
           _FillValue: -9999
@@ -265,7 +270,8 @@ groups:
           units: '1'
           _FillValue: -9999
           comment: >-
-            If variable size images are produced by probe then is _FillValue.
+            If images are of varying size along a dimension then use
+            ``_FillValue`` for that dimension.
 
       - meta:
           name: resolution
@@ -273,7 +279,7 @@ groups:
           required: true
         dimensions: ['array_dimensions']
         attributes:
-          long_name: Pixel resolution along each array dimension
+          long_name: Pixel resolution along each dimension
           coverage_content_type: auxiliaryInformation
           units: '<str: derived_from_file>'
           _FillValue: -9999.
@@ -319,7 +325,8 @@ groups:
           required: false
         dimensions: ['array_dimensions']
         attributes:
-          long_name: Uncertainty of pixel resolution
+          long_name: >-
+            Uncertainty of pixel resolution of instrument for each dimension.
           coverage_content_type: auxiliaryInformation
           units: '<str: derived_from_file>'
           _FillValue: -9999.
@@ -328,7 +335,7 @@ groups:
       # instrument/core group
       - meta:
           name: core
-          description: Decompressed raw image data
+          description: Decompressed and flattened raw image data
 
         attributes:
           group_type: core
@@ -342,6 +349,7 @@ groups:
 
         # Required instrument/core group variables
         variables:
+
           - meta:
               name: image
               datatype: <uint8>
@@ -368,7 +376,7 @@ groups:
               required: true
             dimensions: ['image_num']
             attributes:
-              long_name: Array index for the first pixel of each image in image
+              long_name: Array index for the first pixel of each image
               _FillValue: 4294967295
 
           - meta:
@@ -419,7 +427,7 @@ groups:
 
         attributes:
           group_type: other
-          comment: Data and housekeeping obtained from the auxillary datafile/s
+          comment: 1 Hz housekeeping obtained from the auxillary datafile/s
           raw_filenames: '<str: derived_from_file optional>'
 
         dimensions:
@@ -479,5 +487,209 @@ groups:
               units: 'mA'
               _FillValue: -9999.
 
+# Top-level instrument group
+  - meta:
+      name: CCD001
+      description: >-
+        Instrument group of raw and processed data for this instrument.
 
+    attributes:
+      group_type: imager
+      # instrument information
+      instrument: '<str: derived_from_file optional>'
+      instrument_name: CCD001
+      instrument_long_name: CCD imager - 1um 
+      instrument_description: >-
+        Imaginary CCD based imager with 1 um pixel resolution and
+        256 levels of grayscale.
+      instrument_location: '<str: derived_from_file>'
+      instrument_orientation: '<str: derived_from_file>'
+      instrument_manufacturer: CCD Instruments Ltd
+      instrument_model: CCD001
+      instrument_serial_number: '001'
+      instrument_software: '<str: derived_from_file optional>'
+      instrument_software_version: '<str: derived_from_file optional>'
+      instrument_fimware: '<str: derived_from_file optional>'
+      references: https://www.CCD_instruments.com/manuals
+      raw_filenames: '<str: derived_from_file optional>'
 
+    # instrument group dimensions
+    dimensions:
+      - name: array_dimensions
+        size: 2
+      - name: pixel_colors
+        size: 256
+
+    variables:
+      # instrument group mandatory variables
+      - meta:
+          name: color_level
+          datatype: <float32>
+          required: true
+        dimensions: ['pixel_colors']
+        attributes:
+          long_name: Lower bound of obscuration/grayscale/color level
+          coverage_content_type: auxiliaryInformation
+          units: '1'
+          _FillValue: -9999.
+          comment: >-
+            Obscuration/grayscale/color level corresponding to each value of
+            pixel_colors. For example, a grayscale OAP may have lower-bound
+            shadow levels of [0, 0.25, 0.5, 0.75].
+
+      - meta:
+          name: array_size
+          datatype: <int32>
+          required: true
+        dimensions: ['array_dimensions']
+        attributes:
+          long_name: Number of pixels in detector along each dimension
+          coverage_content_type: auxiliaryInformation
+          units: '1'
+          _FillValue: -9999
+
+      - meta:
+          name: image_size
+          datatype: <int32>
+          required: true
+        dimensions: ['array_dimensions']
+        attributes:
+          long_name: Number of pixels across an image along each dimension
+          coverage_content_type: auxiliaryInformation
+          units: '1'
+          _FillValue: -9999
+          comment: >-
+            If images are of varying size along a dimension then use
+            ``_FillValue`` for that dimension.
+
+      - meta:
+          name: resolution
+          datatype: <float32>
+          required: true
+        dimensions: ['array_dimensions']
+        attributes:
+          long_name: Pixel resolution along each dimension
+          coverage_content_type: auxiliaryInformation
+          units: '<str: derived_from_file>'
+          _FillValue: -9999.
+
+      - meta:
+          name: wavelength
+          datatype: <float32>
+          required: true
+        dimensions: []
+        attributes:
+          long_name: Wavelength of laser used for imaging particles
+          coverage_content_type: auxiliaryInformation
+          units: '<str: derived_from_file>'
+          _FillValue: -9999.
+
+      - meta:
+          name: pathlength
+          datatype: <float32>
+          required: true
+        dimensions: []
+        attributes:
+          long_name: Optical path length of imaging region
+          coverage_content_type: auxiliaryInformation
+          units: '<str: derived_from_file>'
+          _FillValue: -9999.
+          comment: For OAPs the pathlength will be arm separation distance.
+
+      # instrument group optional variables
+      - meta:
+          name: color_value
+          datatype: <uint8>
+          required: false
+        dimensions: ['pixel_colors']
+        attributes:
+          long_name: Byte values of image associated with each color_level value
+          coverage_content_type: auxiliaryInformation
+          units: '1'
+          _FillValue: 255
+
+      - meta:
+          name: resolution_error
+          datatype: <float32>
+          required: false
+        dimensions: ['array_dimensions']
+        attributes:
+          long_name: Uncertainty of pixel resolution
+          coverage_content_type: auxiliaryInformation
+          units: '<str: derived_from_file>'
+          _FillValue: -9999.
+
+    groups:
+      # instrument/core group
+      - meta:
+          name: core
+          description: Decompressed and flattened raw image data
+
+        attributes:
+          group_type: core
+
+        # instrument/core group dimensions. Both are UNLIMITED
+        dimensions:
+          - name: image_num
+            size: null
+          - name: pixel
+            size: null
+
+        # Required instrument/core group variables
+        variables:
+
+          - meta:
+              name: image
+              datatype: <uint8>
+              required: true
+            dimensions: ['pixel']
+            attributes:
+              long_name: 1-dimensional array of series of images
+              coverage_content_type: image
+              _FillValue: 255
+
+          - meta:
+              name: timestamp
+              datatype: <uint64>
+              required: true
+            dimensions: ['image_num']
+            attributes:
+              long_name: Image arrival time
+              standard_name: time
+              units: '<str: derived_from_file>'
+
+          - meta:
+              name: startpixel
+              datatype: <uint32>
+              required: true
+            dimensions: ['image_num']
+            attributes:
+              long_name: Array index for the first pixel of each image
+              _FillValue: 4294967295
+
+          - meta:
+              name: width
+              datatype: <uint8>
+              required: true
+            dimensions: ['image_num']
+            attributes:
+              long_name: Number of pixels across an image
+              _FillValue: 255
+
+          - meta:
+              name: height
+              datatype: <uint8>
+              required: true
+            dimensions: ['image_num']
+            attributes:
+              long_name: Number of slices/lines along an image
+              _FillValue: 255
+
+          - meta:
+              name: overload
+              datatype: <byte>
+              required: true
+            dimensions: ['image_num']
+            attributes:
+              long_name: Overload flag for each image
+              _FillValue: -127
