@@ -149,9 +149,9 @@ The easiest way to illustrate the compliance checking is to use *vocal* to creat
 
 #### Creating an in-house product definition for SPIF files
 
-A common usage will be testing a netCDF file against both the SPIF standard and organisational requirements at the same time. For example, an organisation may have an in-house vocabulary for their image data files. These files include metadata and data that is optional under the SPIF standard but mandatory in the in-house definition. In-house definitions are created with a yaml file and these are described in the *vocal* [README](https://github.com/FAAM-146/vocal#specifying-data-products). Note that the in-house definition will usually be stored elsewhere and so be (version) controlled by the organisation in question and not as part of the SPIF project repository. The included [extended example definition](https://github.com/FAAM-146/spif/standard/v0/definitions/spif_extended_example.yaml) could be used as a template for an in-house definition.
+A common usage will be testing a netCDF file against both the SPIF standard and organisational requirements at the same time. For example, an organisation may have an in-house vocabulary for their image data files. These files include metadata and data that is optional under the SPIF standard but mandatory in the in-house definition. In-house definitions are created with a yaml file and these are described in the *vocal* [README](https://github.com/FAAM-146/vocal#specifying-data-products). Note that the in-house definition will usually be stored elsewhere and so be (version) controlled by the organisation in question and not as part of the SPIF project repository. The included [extended example definition](standard/v0/definitions/spif_extended_example.yaml) could be used as a template for an in-house definition.
 
-The standard SPIF [definition file](https://github.com/FAAM-146/spif/standard/v0/definitions/spif_example.yaml) may produce a netCDF file which looks like;
+The standard SPIF [definition file](standard/v0/definitions/spif_example.yaml) may produce a netCDF file which looks like;
 
 
 ```ncl
