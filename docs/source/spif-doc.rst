@@ -163,9 +163,16 @@ Image data has been extracted from the raw binary file, to maintain a comprehens
 SPIF Extensions
 ---------------
 
+Extended example is;
+
+.. include:: dynamic_content/substitutions.rst
+		:start-after: OptVocabFileStart
+		:end-before: OptVocabFileStop
+
+
 
 .. note::
-    Need to complete
+	Need to complete
 
 
 .. rubric:: References
@@ -174,7 +181,7 @@ SPIF Extensions
 
 .. [#Quaas2015] Quaas, J. Approaches to Observe Anthropogenic Aerosol-Cloud Interactions. Curr. Clim. Change Rep. 1, 297–304 (2015). https://doi.org/10.1007/s40641-015-0028-0
 
-.. [#Lawson2001] Lawson, R. P. et al. An overview of microphysical properties of Arctic clouds observed in May and July 1998 during FIRE ACE. J. Geophys. Res., 106, 14989–5014 (2001). https://agupubs.onlinelibrary.wiley.com/doi/10.1029/2000JD900789
+.. [#Lawson2001] Lawson, R. P. et al. An overview of microphysical properties of Arctic clouds observed in May and July 1998 during FIRE ACE. J. Geophys. Res., 106, 14989–5014 (2001). https://doi.org/10.1029/2000JD900789
 
 .. [#Fugal2009] Fugal, J. P. and Shaw, R. A. Cloud particle size distributions measured with an airborne digital in-line holographic instrument, Atmos. Meas. Tech., 2, 259–271 (2009). https://doi.org/10.5194/amt-2-259-2009
 
