@@ -1,8 +1,36 @@
-# Configuration file for the Sphinx documentation builder.
-#
-# This file only contains a selection of the most common options. For a full
-# list see the documentation:
-# https://www.sphinx-doc.org/en/master/usage/configuration.html
+"""
+Configuration file for the Sphinx documentation builder.
+
+This file only contains a selection of the most common options. For a full
+list see the documentation:
+https://www.sphinx-doc.org/en/master/usage/configuration.html
+
+Instructions for compiling documentation:
+-----------------------------------------
+
+- Dynamic content is generated from json products so need to create/update
+  product specification files
+
+  * Update vocal if required by deleting and recreating conda environment
+  * In repo root create a release
+
+  ```shell
+    ~/spif$ conda activate vocal
+    (vocal) ~/spif$ vocal release standard/v0 -v 0.1 -o .
+  ```
+
+- Run sphinx to create documentation in spif/docs/build. (I have sphinx in
+  my spif environment.)
+
+  ```shell
+    ~/spif$ conda activate spif
+    (spif) ~/spif$ cd docs
+    (spif) ~/spif$ make html
+```
+
+- To push html to website, Dave must create build on his machine.
+
+"""
 
 # -- Path setup --------------------------------------------------------------
 
