@@ -1,3 +1,8 @@
+"""
+Functions to create restructured text strings from netCDF descriptions
+
+
+"""
 
 import re
 from typing import Mapping
@@ -21,7 +26,15 @@ def _esc(s):
 
 
 def rst_grp(group: dict=None, level: int=0, **kwargs) -> str:
-    """Create restructured text string of group"""
+    """Create restructured text string of group
+
+    Args:
+        group:
+        level:
+
+    Returns:
+        String describing group suitable for sphinx build
+    """
 
     if not group:
         return ''
@@ -78,7 +91,15 @@ def rst_grp(group: dict=None, level: int=0, **kwargs) -> str:
 
 
 def rst_attrs(attributes: dict=None, level: int=0, **kwargs) -> str:
-    """Create restructured text string of attributes"""
+    """Create restructured text string of attributes
+
+    Args:
+        attributes:
+        level:
+
+    Returns:
+        String describing attributes suitable for sphinx build
+    """
 
     text = ''
 
@@ -98,7 +119,17 @@ def rst_vars(variables: dict=None,
              incl_required: bool=True,
              incl_optional: bool=False,
              **kwargs) -> str:
-    """Create restructured text string of variables"""
+    """Create restructured text string of variables
+
+    Args:
+        variables:
+        level:
+        incl_required:
+        incl_optional:
+
+    Returns:
+        String describing a variable suitable for sphinx build
+    """
 
     text = ''
 
