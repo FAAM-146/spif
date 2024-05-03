@@ -103,12 +103,10 @@ def populate_vocab_rst(definition,
     with open(os.path.join(template_dir, 'vocabulary_template.rst'), 'r') as f:
         rst = f.read()
 
-    vocab_types = []
     if incl_required:
-        vocab_types.append('Mandatory')
+        vocab_types = 'Mandatory'
     if incl_optional:
-        vocab_types.append('Optional')
-    vocab_types = ' and '.join(vocab_types)
+        vocab_types = 'Extended'
 
     rst = rst.replace('TAG_PRODUCT_NAME', basename)
     rst = rst.replace('TAG_VOCAB_TYPES', vocab_types)
