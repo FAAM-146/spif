@@ -9,6 +9,7 @@ SPIF – Single Particle Image Format
 ..
 	For full information on the SPIF data standard and usage examples see [paper_placeholder](https://github.com/graemenott/spif-paper).
 
+.. _motivation:
 
 Background and Motivation
 =========================
@@ -25,7 +26,7 @@ SPIF Files
 ==========
 
 
-The SPIF standard
+The SPIF Standard
 -----------------
 
 The SPIF standard is a standardised vocabulary for storing image data and metadata in `netCDF4 <https://doi.org/10.5065/D6H70CW6>`_ files. NetCDF allows for fully self-describing, archival standard data and is supported on a variety of platforms, environments, and programming languages and commonly used in earth science communities. Conventions and best practice guides such as `Attribute Convention for Dataset Discovery <https://wiki.esipfed.org/Attribute_Convention_for_Data_Discovery_1-3>`_ (ACDD) and `CF (Climate and Forecast) Conventions <https://cfconventions.org>`_ are used to standardise the netCDF4 metadata and variable structures to suit a particular field and so facilitate access, standard workflows, and comparison between datasets.
@@ -59,37 +60,46 @@ SPIF files use netCDF4 groups to divide multiple imaging instruments and to sepa
 	:name: spif-structure-basic
 
 	**root**
-		│
-		├── *platform*
-		│
-		├── **<imager-1>**
-		│   │
-		│   ├── **core**
-		│   │
-		│   ├── *auxiliary*
-		│   │
-		│   ├── *level-0*
-		│   │
-		│   ├── *level-1*
-		│   │
-		│   └── *level-2*
-		│
-		├── <*imager-2*>
-		│   │
-		│   └── ...
-		│
-		└── ...
+	│
+	├── *platform*
+	│
+	├── **<imager-1>**
+	│   │
+	│   ├── **core**
+	│   │
+	│   ├── *auxiliary*
+	│   │
+	│   ├── *level-0*
+	│   │
+	│   ├── *level-1*
+	│   │
+	│   └── *level-2*
+	│
+	├── <*imager-2*>
+	│   │
+	│   └── ...
+	│
+	└── ...
 
 Groups in bold are mandatory while those in italics are optional. The imaging instrument groups are labelled as ``<imager-1>``, ``<imager-2>``\ ...\ ``<imager-n>`` where the angled braces ``< >`` indicate that the name actually used in the SPIF file will be some other string. Documentation uses ``imager`` to distinguish these groups from those containing non-imaging instrument data. The file structure and required vocabulary are described below.
 
 The SPIF definition is constrained to ensure that standard-compliant files contain all the information/data required for future processing. SPIF files must contain, as a minimum, a mandatory vocabulary. That is; groups, attributes, and (coordinate) variables.
 
-Details of the mandatory vocabulary are described in detail `here <|MandatorySpifFile|>`.
+.. seealso::
+	Details of the mandatory vocabulary are described in;
+
+	.. include:: dynamic_content/substitutions.rst
+		:start-after: ReqVocabFileStart
+		:end-before: ReqVocabFileStop
 
 In addition to these mandatory netCDF parameters, a SPIF file can be extended with additional groups, attributes, and (coordinate) variables.
 
 .. seealso::
-	Recommended optional vocabulary is described in `|OptionalSpifFile|`
+	Recommended optional vocabulary is described as part of;
+
+	.. include:: dynamic_content/substitutions.rst
+		:start-after: OptVocabFileStart
+		:end-before: OptVocabFileStop
 
 
 File root
@@ -173,6 +183,38 @@ Extended example is;
 
 .. note::
 	Need to complete
+
+
+Using SPIF for other Types of Image Data
+========================================
+
+Although the SPIF standard was designed to address issues in a specific :ref:`application <motivation>`, its use is not limited to atmospheric particle data. Although metadata can be embedded within image files using formats such as `Exif <https://en.wikipedia.org/wiki/Exif>`_ or `XMP <https://en.wikipedia.org/wiki/Extensible_Metadata_Platform>`_, this can become unwieldy as the complexity of the metadata increases. As the netCDF4 structure is very flexible and the SPIF format tolerant of expanded vocabularies, arbitrary metadata and ancillary data can be included within a SPIF-compliant file alongside the image data. While particle image data is stored with a temporal resolution of nanoseconds, any convenient timestep recognised by the `CF Conventions <https://cfconventions.org>`_ is supported.
+
+In terms of the image data; multispectral or time-synchronised stereoscopic images for example could be included in a single ``<imager-1>/core/image`` variable by increasing the number of image dimensions before flattening. Unsynchronised but timestamped images can be stored in two seperate <imager> groups within the same file along with shared ancillary data.
+
+An imaginary example may be storing data from a visible camera and a second that records laser-induced fluorescence images of an object undergoing a chemical reaction. Reagent parameters and laser pulse triggers and energies could be recorded in ancillary groups. One may construct a file structure as below that conforms to the :ref:`SPIF standard <spif-structure-basic>` structure.
+
+
+.. parsed-literal::
+	:name: spif-structure-imaginary
+
+	**root**
+	│
+	├── **visible**
+	│   │
+	│   └── **core**
+	│
+	├── **fluoroescent**
+	│   │
+	│   ├── **core**
+	│   │
+	│   └── laser_power
+	│
+	└── reagents
+
+
+
+
 
 
 .. rubric:: References
