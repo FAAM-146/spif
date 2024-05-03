@@ -7,7 +7,7 @@
 # see;
 #    https://github.com/FAAM-146/spif
 #
-# Definition version: 20231219
+# Definition version: 20240502
 # Creates version: 1.0
 # Example filename: spif_example.nc
 #
@@ -48,9 +48,9 @@ groups:
     # Required imager group dimensions
     dimensions:
       - name: array_dimensions
-        size: 2
+        size: 1
       - name: pixel_colors
-        size: 3
+        size: 4
     
     # imager group mandatory variables
     variables:
@@ -70,8 +70,8 @@ groups:
           required: false
           description: >-
             Value of each color used in image. Usually these will be contiguous
-            but it does not have to be. Can be included to facilitate the use
-            of arbitrary values in the ``core/image`` variable.
+            from 0 but it does not have to be. Can be included to facilitate
+            the use of arbitrary values in the ``core/image`` variable.
         dimensions: ['pixel_colors']
         attributes: {}
 
@@ -80,7 +80,8 @@ groups:
           datatype: <int32>
           required: true
           description: >-
-            Number of pixels on the detector.
+            Number of pixels on the detector in each dimension. If varying 
+            or undefined, use ``_FillValue``.
         dimensions: ['array_dimensions']
         attributes: {}
       
@@ -89,8 +90,9 @@ groups:
           datatype: <int32>
           required: true
           description: >-
-            Number of pixels across an image. If fixed size then will be
-            number of pixels, if variable size then use ``_FillValue``.
+            Number of pixels across an image. If a fixed size then it will be
+            the number of pixels, if of varying size along a dimension then use
+            ``_FillValue``.
         dimensions: ['array_dimensions']
         attributes: {}
       
@@ -109,7 +111,9 @@ groups:
           required: true
           description: >-
             Operating wavelength of laser used for shadowing/imaging the
-            particles. If white light source then use ``_FillValue``.
+            particles. If white light source then use ``_FillValue``. If
+            multiple wavelengths are used then use a coordinate array rather
+            than scalar variable.
         dimensions: []
         attributes: {}
       
@@ -127,7 +131,8 @@ groups:
           datatype: <float32>
           required: false
           description: >-
-            Uncertainty of the image resolution of instrument for each dimension.
+            Uncertainty of the image resolution of instrument for each
+            dimension.
         dimensions: ['array_dimensions']
         attributes: {}
 
@@ -172,7 +177,6 @@ groups:
                 pixel of an image.
             dimensions: ['image_num']
             attributes:
-              attribute1: testing a variable attribute not in the SPIF spec
               standard_name: time
               units: '<str: derived_from_file>'
 

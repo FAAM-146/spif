@@ -15,7 +15,7 @@
 
 .. OptVocabFileStart
 
-:doc:`here <dynamic_content/OPTIONAL_SPIF_EXAMPLES.rst>`
+:doc:`here <dynamic_content/OPTIONAL_SPIF_EXAMPLES>`
 
 .. OptVocabFileStop
 

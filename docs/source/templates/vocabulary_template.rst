@@ -3,9 +3,9 @@
 .. title:: SPIF TAG_VOCAB_TYPES Vocabulary
 
 
-************************
-SPIF Standard Vocabulary
-************************
+*******************************
+SPIF TAG_VOCAB_TYPES Vocabulary
+*******************************
 
 ============
 Introduction
