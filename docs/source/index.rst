@@ -20,11 +20,15 @@ Contents
 ========
 
 .. toctree::
-		:glob:
-		:maxdepth: 2
-		
+		:maxdepth: 3
+
 		spif-doc
-		dynamic_content/spif_*
+
+.. toctree::
+		:glob:
+		:maxdepth: 1
+
+		dynamic_content/spif_*example
 
 
 Contributors
