@@ -127,9 +127,6 @@ The image data from an appropriate instrument is contained within a special grou
 
 The imager group contains variables with information about the probe size, resolution, and other data required for interpreting the raw images.
 
-..
-	Move this include block into a dynamically generated file. Can use string replacements to do filenames
-
 .. include:: dynamic_content/substitutions.rst
 	:start-after: imager_ReqAttrsStart
 	:end-before: imager_ReqAttrsStop
@@ -149,7 +146,7 @@ The imager ``core`` group is a sub-group of the ``imager`` group and contains th
 The length of the 1-dimensional image array is the product of the number of images, given by the unlimited dimension ``image_num``, and the width and height of each image. Depending on the type of instrument, the width and/or height may be fixed or variable for each image. The maximum value of the coordinate variable ``image_num`` is the number of images in the dataset while the maximum value of ``pixel`` is the total number of pixels in the image array.
 
 The arrival time of each image is given by ``timestamp`` in a recognised time, usually nanoseconds, from a reference time. ``timestamp`` has a ``units`` attribute string that conforms to the `UDUNITS recommendation <https://cfconventions.org/Data/cf-conventions/cf-conventions-1.11/cf-conventions.html#time-coordinate>`_, for example "nanoseconds since 2024-01-01 00:00:00 +0". The ``timestamp`` variable has
-a ``standard_name`` attribute "time". It's worth mentioning that due to the random nature of cloud sampling, the data in ``timestamp`` will be highly irregular and different from what one may expect from timeseries data.
+a ``standard_name`` attribute "time". It's worth mentioning that due to the random nature of cloud sampling, the data in ``timestamp`` will be highly irregular and different from what one may expect from time series data.
 
 Note that different probes may not provide image times in exactly the same way and indeed, image arrival time may in some circumstances be difficult to precisely define. However, the ``timestamp`` variable will always give the image arrival time as accurately as possible, a description of how it was determined from the raw buffer data should be included in the ``comment`` or another variable attribute. One may decide to add a ``timestamp_flag`` as an ancillary variable using the `CF flag <https://cfconventions.org/Data/cf-conventions/cf-conventions-1.11/cf-conventions.html#flags>`_ format to quantify the reliability of each time stamp.
 
@@ -190,7 +187,7 @@ Using SPIF for other Types of Image Data
 
 Although the SPIF standard was designed to address issues in a specific :ref:`application <motivation>`, its use is not limited to atmospheric particle data. Although metadata can be embedded within image files using formats such as `Exif <https://en.wikipedia.org/wiki/Exif>`_ or `XMP <https://en.wikipedia.org/wiki/Extensible_Metadata_Platform>`_, this can become unwieldy as the complexity of the metadata increases. As the netCDF4 structure is very flexible and the SPIF format tolerant of expanded vocabularies, arbitrary metadata and ancillary data can be included within a SPIF-compliant file alongside the image data. While particle image data is stored with a temporal resolution of nanoseconds, any convenient timestep recognised by the `CF Conventions <https://cfconventions.org>`_ is supported.
 
-In terms of the image data; multispectral or time-synchronised stereoscopic images for example could be included in a single ``<imager-1>/core/image`` variable by increasing the number of image dimensions before flattening. Unsynchronised but timestamped images can be stored in two seperate <imager> groups within the same file along with shared ancillary data.
+In terms of the image data; multispectral or time-synchronised stereoscopic images for example could be included in a single ``<imager-1>/core/image`` variable by increasing the number of image dimensions before flattening. Unsynchronised but timestamped images can be stored in two separate <imager> groups within the same file along with shared ancillary data.
 
 An imaginary example may be storing data from a visible camera and a second that records laser-induced fluorescence images of an object undergoing a chemical reaction. Reagent parameters and laser pulse triggers and energies could be recorded in ancillary groups. One may construct a file structure as below that conforms to the :ref:`SPIF standard <spif-structure-basic>` structure.
 
@@ -204,7 +201,7 @@ An imaginary example may be storing data from a visible camera and a second that
 	│   │
 	│   └── **core**
 	│
-	├── **fluoroescent**
+	├── **fluorescence**
 	│   │
 	│   ├── **core**
 	│   │
