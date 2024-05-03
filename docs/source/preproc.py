@@ -177,7 +177,13 @@ def call(args_dict: dict) -> None:
 
     rst = rst.replace('REQUIRED_SPIF_EXAMPLE',
                       os.path.splitext(req_example_file)[0])
-    rst = rst.replace('OPTIONAL_SPIF_EXAMPLES', '\n'.join(opt_example_files))
+    # Only links to the first of any optional files
+    try:
+        opt_example_file = opt_example_files[0]
+    except IndexError as err:
+        opt_example_file = ''
+    rst = rst.replace('OPTIONAL_SPIF_EXAMPLE',
+                      os.path.splitext(opt_example_file)[0])
     rst += '\n\n'
 
     subst_file = os.path.join(dynamic_dir, 'substitutions.rst')
