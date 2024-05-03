@@ -8,14 +8,14 @@
 
 .. ReqVocabFileStart
 
-:doc:`here <dynamic_content/REQUIRED_SPIF_EXAMPLE>`
+:doc:`dynamic_content/REQUIRED_SPIF_EXAMPLE`
 
 .. ReqVocabFileStop
 
 
 .. OptVocabFileStart
 
-:doc:`here <dynamic_content/OPTIONAL_SPIF_EXAMPLES>`
+:doc:`dynamic_content/OPTIONAL_SPIF_EXAMPLE`
 
 .. OptVocabFileStop
 
