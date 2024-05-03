@@ -34,7 +34,7 @@ Contents
 Contributors
 ============
 
-The Single Particle Image Format (SPIF) concept was originally conceived after an optical array probe workshop (date?) where the intricacies and subtleties in decoding binary images files and the ramifications thereof were discussed at length. During a post-meeting conversation in a pub, an outline of the SPIF standard was conceived with the objective of opening up raw cloud image data to those outside a rather small and specialist field. Since then there have been many iterations and changes to how it could be implemented in practice with input from many individuals and organisations. Some of these are;
+The Single Particle Image Format (SPIF) concept was originally conceived after an optical array probe workshop (date?) where the intricacies and subtleties in decoding binary image files and the ramifications thereof were discussed at length. During a post-meeting conversation, an outline of the SPIF standard was conceived with the objective of opening up raw cloud image data to those outside a rather small and specialist field. Since then there have been many iterations and changes to how it could be implemented in practice with input from many individuals and organisations. Some of these are;
 
 .. note::
 	List to be completed
