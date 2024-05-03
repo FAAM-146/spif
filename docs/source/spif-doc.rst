@@ -83,14 +83,100 @@ SPIF files use netCDF4 groups to divide multiple imaging instruments and to sepa
 
 Groups in bold are mandatory while those in italics are optional. The imaging instrument groups are labelled as ``<imager-1>``, ``<imager-2>``\ ...\ ``<imager-n>`` where the angled braces ``< >`` indicate that the name actually used in the SPIF file will be some other string. Documentation uses ``imager`` to distinguish these groups from those containing non-imaging instrument data. The file structure and required vocabulary are described below.
 
-The SPIF definition is constrained to ensure that standard-compliant files contain all the information/data required for future processing. SPIF files must contain, as a minimum, a mandatory vocabulary. That is; groups, attributes, and (coordinate) variables.
+The SPIF definition is constrained to ensure that standard-compliant files contain all the information/data required for reconstruction of the raw image data. SPIF files must contain, as a minimum, a mandatory vocabulary. That is; groups, attributes, and (coordinate) variables. These are discussed in the sections below.
 
 .. seealso::
-	Details of the mandatory vocabulary are described in;
+	Details of the mandatory vocabulary of a netCDF file are described in;
 
 	.. include:: dynamic_content/substitutions.rst
 		:start-after: ReqVocabFileStart
 		:end-before: ReqVocabFileStop
+
+
+File root
+^^^^^^^^^
+
+There are only two required global attributes. This first of these is ``Conventions``. This must include the text ``SPIF-m.n``, where ``m.n`` are the major and minor versions. Other recognised conventions strings can also be included in a space- (recommended) or comma-separated list.
+
+The second required global attribute is ``imager_groups``. This is used to identify groups of imaging data that conforms to the SPIF structure. It is possible to have multiple groups within the file root and these may or may not contain image data. This attribute makes it easy for users to find those groups. If there are more than one imager group then these should be given as a space- (recommended) or comma-separated list.
+
+..
+	Should ``imager_groups`` be mandatory or just recommended (when there are more than one imager group)?
+
+.. include:: dynamic_content/substitutions.rst
+	:start-after: root_ReqAttrsStart
+	:end-before: root_ReqAttrsStop
+
+It is assumed that most users will add additional root attributes to make the file more useful and easy to use. There are many recommended global attributes, refer to the `ACDD <https://wiki.esipfed.org/Attribute_Convention_for_Data_Discovery_1-3>`_ which lists some commonly used attributes.
+
+
+Imager group
+^^^^^^^^^^^^
+
+The image data from an appropriate instrument is contained within a special group in the SPIF file ``root``. It may make sense to include more than one imager group for multiple instruments or an instrument with more than one channel, for example the `SPEC <http://www.specinc.com>`_ `2D-S (Stereo) Probe <http://www.specinc.com/2d-s-stereo-probe-operation>`_ which has two orthogonal OAPs, in the same file. The names of the imager groups are not prescribed but should be descriptive, for example for the 2D-S the imager group names may be ``2DS_horizonal`` and 2DS_vertical``. In this text the imager groups are written as ``<imager-1>``, ``<imager-2>``, etc where the braces indicate that it is not a literal string.
+
+There are two mandatory imager group attributes;
+
+.. include:: dynamic_content/substitutions.rst
+	:start-after: imager_ReqAttrsStart
+	:end-before: imager_ReqAttrsStop
+
+The mandatory group attribute ``instrument_name`` and the recommended group attribute ``instrument_long_name`` should contain more complete instrument information. As with the root attributes, users may wish to greatly increase the number of imager group attributes to fully describe the instrument and how it was used. The ``group_type`` attribute must contain contain the string "imager" as an identifier for compliance checking.
+
+..
+	It is recommended (?) that ``group_type`` be removed from the SPIF mandatory list. It only required by *vocal* and if this is not used then it seems superfluous.
+
+The imager group contains variables with information about the probe size, resolution, and other data required for interpreting the raw images.
+
+
+Imager core group
+^^^^^^^^^^^^^^^^^
+
+The imager ``core`` group is a sub-group of the ``imager`` group and contains the flattened image data. All image data has been extracted from the raw binary file and stored in a more :ref:`usable form <Image Data>` in the ``<imager>/core/image`` variable.
+
+The length of the 1-dimensional image array is the product of the number of images, given by the unlimited dimension ``image_num``, the width and height of each image, and the number of ``array_dimensions``. Depending on the type of instrument, the width and/or height may be fixed or variable for each image. The maximum value of the coordinate variable ``image_num`` is the number of images in the dataset while the maximum value of ``pixel`` is the total number of pixels in the image array.
+
+The arrival time of each image is given by ``timestamp`` in a recognised time, usually nanoseconds, from a reference time. ``timestamp`` has a ``units`` attribute string that conforms to the `UDUNITS recommendation <https://cfconventions.org/Data/cf-conventions/cf-conventions-1.11/cf-conventions.html#time-coordinate>`_, for example "nanoseconds since 2024-01-01 00:00:00 +0". The ``timestamp`` variable has
+a ``standard_name`` attribute "time". It's worth mentioning that due to the random nature of cloud sampling, the data in ``timestamp`` will be highly irregular and different from what one may expect from 'usual' time series data.
+
+Note that different probes may not provide image times in exactly the same way and indeed, image arrival time may in some circumstances be difficult to precisely define. However, the ``timestamp`` variable will always give the image arrival time as accurately as possible, a description of how it was determined from the raw buffer data should be included in the ``comment`` or another variable attribute. One may decide to add a ``timestamp_flag`` as an ancillary variable using the `CF flag <https://cfconventions.org/Data/cf-conventions/cf-conventions-1.11/cf-conventions.html#flags>`_ format to quantify the reliability of each time stamp.
+
+Mandatory ``imager/core`` group attributes are;
+
+.. include:: dynamic_content/substitutions.rst
+		:start-after: core_ReqAttrsStart
+		:end-before: core_ReqAttrsStop
+
+The ``group_type`` attribute must contain contain the string "core" as an identifier for compliance checking.
+
+..
+	It is recommended (?) that ``group_type`` be removed from the SPIF mandatory list. It only required by *vocal* and if this is not used then it seems superfluous.
+
+
+.. _Image Data:
+
+Image Data
+----------
+
+Image data has been extracted from the raw binary file with no processing or filtering applied during the extraction process. This is to maintain a accurate copy of the original raw data. Potentially corrupt images, repeated images, and noise are all included. Each image may also contain multiple particles, there has been no processing to split out the multiple particles from a single image. Particle images may be produced with a one dimensional photodiode array or a two dimensional sensor and may be monoscale, greyscale of few or many tonal levels, or possibly colour. To cope with the differing image dimensionalities, images are all flattened to a one dimensional numerical array. Flattened data from each image is appended to the array in order of arrival. For an OAP with a one dimensional photodiode array this means that the images are read across the array, or perpendicular to the air/particle flow direction. A nanosecond resolution timestamp corresponding to the first pixel of an image is given to provide arrival times.
+
+An image illustrating the flattening of a four level greyscale OAP image for storage in the ``<imager>/core`` group is shown :ref:`below <OAP_image_flattening>`;
+
+.. image:: figures/SPIF_OAP-image_flattening.png
+	:name: OAP_image_flattening
+	:alt: Figure illustrating how the image from an OAP is flattened and aligned with respect to the imager/core variables.
+	:align: center
+
+A real 64 diode array image on the far left has been downsampled to a theoretical 16 diode array purely for the purposes of clarity in this illustration. Each row or slice of the image is concatenated in turn onto the end of the image array with other variables in the ``<imager>/core`` group indicating the time and dimensions of each new image.
+
+
+SPIF Extensions
+---------------
+
+The primary purpose of the SPIF standard is consistent storage of raw data, it may be convenient to include supplemental data and/or processed data in the same file. Although additional non-conflicting variables can be added to the <instrument> and <instrument>/core groups additional groups can be added to keep appropriate data variables together. Some recommended groups are given here.
+
+
+Extended example is;
 
 In addition to these mandatory netCDF parameters, a SPIF file can be extended with additional groups, attributes, and (coordinate) variables.
 
@@ -101,85 +187,6 @@ In addition to these mandatory netCDF parameters, a SPIF file can be extended wi
 		:start-after: OptVocabFileStart
 		:end-before: OptVocabFileStop
 
-
-File root
-^^^^^^^^^
-
-There are only two required global attributes. This first of these is ``Conventions``. This must include the text ``SPIF-m.n``, where ``m.n`` are the major and minor versions. Other recognised conventions strings can also be included in a space- (recommended) or comma-separated list.
-
-The second required global attribute is ``imager_groups``. This is used to identify groups of imaging data that conforms to the SPIF structure. It is possible to have multiple groups within the file root and these may or may not contain image data. This attribute makes it easy for users to find those groups. If there are more than one imager group then these should be given as a space- (recommended) or comma-separated list.
-
-.. include:: dynamic_content/substitutions.rst
-	:start-after: root_ReqAttrsStart
-	:end-before: root_ReqAttrsStop
-
-There are many recommended global attributes, users may refer to the `ACDD <https://wiki.esipfed.org/Attribute_Convention_for_Data_Discovery_1-3>`_ which lists some commonly used attributes.
-
-.. include:: dynamic_content/substitutions.rst
-	:start-after: ReqVocabFileStart
-	:end-before: ReqVocabFileStop
-
-
-Imager group
-^^^^^^^^^^^^
-
-The image data from an appropriate instrument is contained within a special group within the SPIF file ``root``. It may make sense to include more than one instrument or an instrument with more than one channel, for example the `SPEC <http://www.specinc.com>`_ `2D-S (Stereo) Probe <http://www.specinc.com/2d-s-stereo-probe-operation>`_ which has two orthogonal OAPs, in the same file. The names of the imager groups are not prescribed but should be descriptive, for example for the 2D-S the imager group names may be ``2DS_horizonal`` and 2DS_vertical``. In this text the imager groups are written as ``<imager-1>``, ``<imager-2>``, etc where the braces indicate that it is not a literal string. The mandatory group attribute ``instrument_name`` and the recommended group attribute ``instrument_long_name`` should contain more complete instrument information.
-
-The imager group contains variables with information about the probe size, resolution, and other data required for interpreting the raw images.
-
-.. include:: dynamic_content/substitutions.rst
-	:start-after: imager_ReqAttrsStart
-	:end-before: imager_ReqAttrsStop
-
-A complete description of mandatory vocabulary of the imager group is given :ref:`here <imager group section>`.
-
-.. include:: dynamic_content/substitutions.rst
-	:start-after: ReqVocabFileStart
-	:end-before: ReqVocabFileStop
-
-
-Imager core group
-^^^^^^^^^^^^^^^^^
-
-The imager ``core`` group is a sub-group of the ``imager`` group and contains the flattened image data. All image data has been extracted from the raw binary file and presented in a more usable form. No filtering is carried out so potentially corrupt images, repeated images, and noise are all included.
-
-The length of the 1-dimensional image array is the product of the number of images, given by the unlimited dimension ``image_num``, and the width and height of each image. Depending on the type of instrument, the width and/or height may be fixed or variable for each image. The maximum value of the coordinate variable ``image_num`` is the number of images in the dataset while the maximum value of ``pixel`` is the total number of pixels in the image array.
-
-The arrival time of each image is given by ``timestamp`` in a recognised time, usually nanoseconds, from a reference time. ``timestamp`` has a ``units`` attribute string that conforms to the `UDUNITS recommendation <https://cfconventions.org/Data/cf-conventions/cf-conventions-1.11/cf-conventions.html#time-coordinate>`_, for example "nanoseconds since 2024-01-01 00:00:00 +0". The ``timestamp`` variable has
-a ``standard_name`` attribute "time". It's worth mentioning that due to the random nature of cloud sampling, the data in ``timestamp`` will be highly irregular and different from what one may expect from time series data.
-
-Note that different probes may not provide image times in exactly the same way and indeed, image arrival time may in some circumstances be difficult to precisely define. However, the ``timestamp`` variable will always give the image arrival time as accurately as possible, a description of how it was determined from the raw buffer data should be included in the ``comment`` or another variable attribute. One may decide to add a ``timestamp_flag`` as an ancillary variable using the `CF flag <https://cfconventions.org/Data/cf-conventions/cf-conventions-1.11/cf-conventions.html#flags>`_ format to quantify the reliability of each time stamp.
-
-Mandatory imager/core group attributes are;
-
-.. include:: dynamic_content/substitutions.rst
-		:start-after: core_ReqAttrsStart
-		:end-before: core_ReqAttrsStop
-
-A complete description of mandatory vocabulary of the imager core group is given :ref:`here <core group section>`.
-
-
-Image Data
-----------
-
-Particle images may be produced with a one dimensional photodiode array or a two dimensional sensor and may be monoscale, grayscale of few or many tonal levels, or possibly colour. To cope with the differing image dimensionalities, images are all flattened to a one dimensional numerical array. Flattened data from each image is appended to the array in order of arrival. A nanosecond resolution timestamp corresponding to the first pixel of an image is given to provide arrival times.
-
-Image data has been extracted from the raw binary file, to maintain a comprehensive copy of the original data, no processing or filtering is applied during the extraction process, so potentially corrupt images, repeated images, and noise are all included. Each image may also contain multiple particles. As the array is entirely raw data, there has been no processing to split out the multiple particles from a single image or filtering to remove corruptions or noise.
-
-
-SPIF Extensions
----------------
-
-Extended example is;
-
-.. include:: dynamic_content/substitutions.rst
-		:start-after: OptVocabFileStart
-		:end-before: OptVocabFileStop
-
-
-
-.. note::
-	Need to complete
 
 
 Using SPIF for other Types of Image Data
@@ -208,8 +215,6 @@ An imaginary example may be storing data from a visible camera and a second that
 	│   └── laser_power
 	│
 	└── reagents
-
-
 
 
 
