@@ -121,6 +121,30 @@ def rst_vars(variables: dict=None,
              **kwargs) -> str:
     """Create restructured text string of variables
 
+    Variable rst uses sphinx-design dropdown boxes
+
+    .. dropdown:: variable name
+      :name: variable name
+      :icon: rows
+      :color: light
+      :animate: fade-in-slide-down
+      :margin: 0
+
+      :bdg-danger:`REQUIRED`
+
+      Datatype:
+         ``dtype``
+
+      Dimensions:
+         ``dimensions``
+
+      Description:
+         descriptive text
+
+      Attributes:
+        * attr 1
+        * attr 2
+
     Args:
         variables:
         level:
@@ -148,20 +172,25 @@ def rst_vars(variables: dict=None,
             continue
 
         name = var["meta"].get("name", 'unknown')
-        sec_quote = '"'
-        text += f'{_esc(name)}\n{sec_quote * len(_esc(name))}\n'
-        text += ':red:`REQUIRED`\n\n' if var["meta"].get("required") else '\n'
-        text += f':Datatype: `{var["meta"]["datatype"]}`\n'
-        text += f':Dimensions: {", ".join(var["dimensions"])}\n'
-        text += (f':Description: {var["meta"]["description"]}\n\n'
+
+        text += f'.. dropdown:: {_esc(name)}\n'
+        text += f'\t:name: {_esc(name)}\n'
+        text += '\t:icon: rows\n'
+        text += '\t:color: light\n'
+        text += '\t:animate: fade-in-slide-down\n'
+        text += '\t:margin: 0\n\n'
+        text += '\t:bdg-danger:`REQUIRED`\n\n' if var["meta"].get("required") else '\n'
+        text += f'\t:Datatype:\n\t\t`{var["meta"]["datatype"]}`\n\n'
+        text += f'\t:Dimensions:\n\t\t{", ".join(var["dimensions"])}\n\n'
+        text += (f'\t:Description:\n\t\t{var["meta"]["description"]}\n\n'
                  if var["meta"].get("description")
-                 else '\n')
+                 else '')
 
         # Add variable attributes with increased indent
         var_attrs = rst_attrs(var.get('attributes', None),
-                              level=level+1,
+                              level=level+2,
                               **kwargs)
-        text += f':Attributes:\n{var_attrs}\n' if var_attrs else '\n'
+        text += f'\t:Attributes:\n{var_attrs}\n' if var_attrs else '\n'
 
     return text
 
