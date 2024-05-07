@@ -25,7 +25,7 @@ Instructions for compiling documentation:
   ```shell
     ~/spif$ conda activate spif
     (spif) ~/spif$ cd docs
-    (spif) ~/spif$ make html
+    (spif) ~/spif$ make html STDFILE=spif_example,spif_extended_example
 ```
 
 - To push html to website, Dave must create build on his machine.
@@ -147,6 +147,7 @@ html_css_files = ['css/custom_text.css']#, 'css/faam.css']
 html_title = f"{project_short_name}: v{release}"
 html_theme_options = {'top_of_page_button': None,
                      }
+html_permalinks_icon = '¶'
 
 
 # -- Options for LaTeX output -------------------------------------------------
