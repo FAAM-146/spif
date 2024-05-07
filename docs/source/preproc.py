@@ -65,7 +65,7 @@ def populate_group_rst(data: dict,
 
     # Write the new file
     with open(grp_filename, 'w') as f:
-        f.write(rst_grp(data, level=level))
+        f.write(rst_grp(data, level=level, **kwargs))
 
     try:
         groups = data['groups']
@@ -214,7 +214,7 @@ if __name__ == '__main__':
     import argparse
 
     # Define commandline options
-    usage = ("make <build> "
+    usage = ("make <target> "
              "STDFILE=definition_filename[,definition_filename-2,...] "
              "STDVER=std_version PRODVER=product_version "
              "PRODDIR=product_path")
